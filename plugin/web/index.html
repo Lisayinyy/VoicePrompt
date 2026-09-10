@@ -1,0 +1,14 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Voice Prompt · 语音工作台</title><link rel="stylesheet" href="/style.css"></head>
+<body><main>
+<header><a class="brand" href="/">◖ Voice Prompt <span>0.4</span></a><span id="connection" class="badge">连接中</span></header>
+<section class="intro"><p class="eyebrow">VOICE → INTENT</p><h1>按下快捷键，<br>把想法说出来。</h1><p>在 MCode、OMP 或 ChatGPT 输入框按 ⌥ 空格说话，再按一次，识别原文自动填入。无需打开本页面。</p></section>
+<section class="card shortcut-card"><div class="card-title"><h2>快捷键与润色</h2><span>说完后自动填入</span></div><p>⌥ 空格：仅语音输入　 ·　 @Voice Prompt 并发送：AI 润色　 ·　 Esc：取消录音</p><div class="controls"><label for="default-mode">@ 后的润色方式</label><select id="default-mode"><option value="clean">轻润色 · 保留说话顺序</option><option value="agent">任务整理 · 理顺目标和限制</option></select><button id="save-mode">保存</button></div><p id="preference-status" role="status">文字进入当前输入框后，由你发送。</p></section><div class="workspace">
+<section class="card"><div class="card-title"><h2>口述原文</h2><span>中文 / English</span></div><textarea id="input" placeholder="例如：帮我把登录页改一下，加个验证码，先别改数据库，做完给我看看。" aria-label="口述原文"></textarea><div class="controls"><select id="mode" aria-label="整理模式"><option value="agent">Agent 指令</option><option value="clean">轻度整理</option><option value="raw">保留原文</option></select><button id="cancel" class="quiet" disabled>取消</button><button id="prepare">整理草稿 ↗</button></div></section>
+<section class="card"><div class="card-title"><h2>待发送草稿</h2><span id="timing">由你检查，再发送</span></div><textarea id="output" placeholder="整理结果会出现在这里。你可以继续编辑。" aria-label="待发送草稿"></textarea><div class="controls"><button id="original" class="quiet" disabled>查看原文</button><button id="copy" disabled>复制草稿</button></div></section>
+</div>
+<p id="notice" role="status" aria-live="polite">录音由 Voice Prompt 的快捷键控制；这个面板用于设置和找回草稿。</p>
+<section class="bottom"><div><h3>刚才说过的，还在这里</h3><p>Voice Prompt 后处理记录只保留在当前服务的内存中，最多 20 条、1 小时。</p></div><button id="latest" class="quiet">导入最近一次 Voice Prompt 口述</button></section>
+<details><summary>如何开始使用</summary><ol><li>打开 Voice Prompt.app，允许麦克风与辅助功能权限。语音引擎与模型已经包含在应用中。</li><li>把光标放到目标输入框，按 ⌥ 空格开始，说完再按一次。面板里的「暂停 / 继续」可中途停顿。</li><li>等待识别原文填入；@Voice Prompt 并发送后才润色。Esc 可取消录音或处理。</li><li>AI 润色需要可用的模型服务；尚未配置时会明确提示并保留原文。</li></ol><p id="provider"></p></details>
+<footer>本地语音识别 · 可编辑草稿 · AI 整理使用你配置的模型</footer>
+</main><script type="module" src="/app.js"></script></body></html>

@@ -1,0 +1,15 @@
+{
+  "name": "voice-prompt",
+  "version": "0.6.5",
+  "description": "Voice Prompt: hotkey dictation with faithful AI prompt polishing",
+  "type": "module",
+  "license": "MIT",
+  "engines": {
+    "node": ">=22"
+  },
+  "omp": {
+    "extensions": [
+      "./omp/extension.mjs"
+    ]
+  }
+}

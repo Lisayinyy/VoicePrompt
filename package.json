@@ -1,0 +1,27 @@
+{
+  "name": "voice-prompt",
+  "version": "0.6.5",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "test": "node --test tests/*.test.mjs",
+    "start": "node plugin/server.mjs serve",
+    "status": "node plugin/server.mjs status",
+    "init": "node plugin/server.mjs init",
+    "pack": "node scripts/pack.mjs"
+  },
+  "description": "Voice Prompt: hotkey dictation with faithful AI prompt polishing",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Lisayinyy/VoicePrompt.git"
+  },
+  "omp": {
+    "extensions": [
+      "./plugin/omp/extension.mjs"
+    ]
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "voice-prompt",
+  "version": "0.6.5",
+  "description": "Voice Prompt: hotkey dictation with faithful AI prompt polishing",
+  "author": {
+    "name": "Voice Prompt contributors"
+  },
+  "license": "MIT",
+  "keywords": [
+    "voice",
+    "dictation",
+    "speech",
+    "prompts",
+    "mcp"
+  ],
+  "homepage": "https://github.com/Lisayinyy/VoicePrompt",
+  "repository": "https://github.com/Lisayinyy/VoicePrompt"
+}
