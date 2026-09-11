@@ -1,0 +1,30 @@
+[
+  {
+    "file": "public-zh.wav",
+    "text": "甚至出现交易几乎停滞的情况。",
+    "durationSeconds": 4.2039375,
+    "coldStart": false,
+    "loadMs": 0,
+    "warmup": false,
+    "inferenceMs": 1187,
+    "peakMemoryMB": 3247,
+    "chunks": 1,
+    "model": "qwen3-asr-1.7b",
+    "languageHint": "auto",
+    "wallMs": 1193
+  },
+  {
+    "file": "public-en-16k.wav",
+    "text": "Uh huh. Oh yeah, yeah. He wasn't even that big when I started listening to him, but and his solo music didn't do overly well, but he did very well when he started writing for other people.",
+    "durationSeconds": 15.05125,
+    "coldStart": false,
+    "loadMs": 0,
+    "warmup": false,
+    "inferenceMs": 1084,
+    "peakMemoryMB": 3463,
+    "chunks": 1,
+    "model": "qwen3-asr-1.7b",
+    "languageHint": "auto",
+    "wallMs": 1086
+  }
+]

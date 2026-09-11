@@ -5,10 +5,10 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { spawnSync } from 'node:child_process';
 import { randomBytes } from 'node:crypto';
-if (process.platform !== 'darwin' || process.arch !== 'arm64') throw new Error('Voice Prompt 0.6.5 runtime supports Apple Silicon macOS only');
+if (process.platform !== 'darwin' || process.arch !== 'arm64') throw new Error('Voice Prompt 0.7.0 runtime supports Apple Silicon macOS only');
 const root = fileURLToPath(new URL('../', import.meta.url)), home = homedir();
 const temporary = await mkdtemp(path.join(tmpdir(), 'voice-prompt-install-'));
-const unpack = spawnSync('/usr/bin/ditto', ['-x', '-k', path.join(root, 'dist/voice-prompt-desktop-0.6.5-macos-arm64.zip'), temporary], { encoding: 'utf8' });
+const unpack = spawnSync('/usr/bin/ditto', ['-x', '-k', path.join(root, 'dist/voice-prompt-desktop-0.7.0-macos-arm64.zip'), temporary], { encoding: 'utf8' });
 if (unpack.status !== 0) throw new Error(unpack.stderr);
 const source = path.join(temporary, 'Voice Prompt.app'), destination = path.join(home, 'Applications/Voice Prompt.app');
 await access(path.join(source, 'Contents/Resources/models/sensevoice-small.gguf'));
@@ -34,6 +34,7 @@ await writeFile(path.join(dir, 'runtime-path'), path.join(resources, 'bin/node')
 const mcode = process.argv.find(a => a.startsWith('--mcode='))?.slice(8);
 if (mcode) {
  if (!path.isAbsolute(mcode)) throw new Error('MCode data directory must be absolute');
+ try { await access(path.join(mcode, 'plugins/voice-prompt')); await cp(path.join(mcode, 'plugins/voice-prompt'), path.join(backup, 'minimax-voice-prompt'), { recursive: true }); } catch (e) { if (e.code !== 'ENOENT') throw e; }
  if (process.argv.includes('--migrate-legacy')) {
   const old = path.join(mcode, 'plugins/handy-voice');
   try { await access(old); await rename(old, path.join(backup, 'legacy-minimax-plugin')); } catch (e) { if (e.code !== 'ENOENT') throw e; }

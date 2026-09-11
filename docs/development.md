@@ -51,7 +51,7 @@ python3 scripts/build-runtime.py /absolute/build-dir /absolute/sensevoice-small.
 npm run pack
 ```
 
-桌面 ZIP 输出到 `dist/voice-prompt-desktop-0.6.5-macos-arm64.zip`，包含应用、Node、识别引擎、模型及第三方声明。`npm run pack` 单独打包 connector，不附带这些桌面组件。
+桌面 ZIP 输出到 `dist/voice-prompt-desktop-0.7.0-macos-arm64.zip`，包含应用、Node、SenseVoice 识别引擎与模型及第三方声明；Qwen 运行环境和模型另行安装。`npm run pack` 单独打包 connector，不附带这些桌面组件。
 
 脚本会验证输入哈希并进行 ad-hoc 签名。面向普通用户分发前，仍需完成可信构建输入准备、Developer ID 签名、公证、安装与更新流程；这些尚未作为公开发布流水线交付。
 

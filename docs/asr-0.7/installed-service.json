@@ -1,0 +1,67 @@
+{
+  "status": {
+    "version": "0.7.0",
+    "product": "Voice Prompt",
+    "speechModel": "qwen3-asr-1.7b",
+    "speechLanguage": "auto",
+    "speechEngine": "mlx-local",
+    "defaultMode": "agent",
+    "service": "ready",
+    "provider": "omp",
+    "model": "OMP configured model",
+    "aiConfigured": true,
+    "pending": 0,
+    "audioBusy": false,
+    "microphone": "managed_by_Voice_Prompt",
+    "history": "memory_only_1_hour_max_20",
+    "modes": [
+      "raw",
+      "clean",
+      "agent"
+    ]
+  },
+  "models": {
+    "models": [
+      {
+        "id": "qwen3-asr-1.7b",
+        "name": "Qwen3-ASR 1.7B",
+        "downloaded": true,
+        "selected": true,
+        "languages": [
+          "zh",
+          "en"
+        ],
+        "engine": "MLX (local Apple Silicon)",
+        "supportsTerms": true
+      },
+      {
+        "id": "sensevoice-small",
+        "name": "SenseVoice Small",
+        "downloaded": true,
+        "selected": false,
+        "languages": [
+          "zh",
+          "en",
+          "yue",
+          "ja",
+          "ko"
+        ],
+        "engine": "transcribe.cpp",
+        "supportsTerms": false
+      }
+    ]
+  },
+  "result": {
+    "text": "甚至出现交易几乎停滞的情况。",
+    "durationSeconds": 4.2039375,
+    "coldStart": false,
+    "loadMs": 0,
+    "warmup": false,
+    "inferenceMs": 3926,
+    "peakMemoryMB": 3247,
+    "chunks": 1,
+    "model": "qwen3-asr-1.7b",
+    "languageHint": "auto",
+    "wallMs": 3930
+  }
+}

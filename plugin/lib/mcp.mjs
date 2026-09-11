@@ -6,7 +6,7 @@ export const toolDefinitions = [
   { name: 'voice_status', description: 'Check the local Voice Prompt companion service and AI provider configuration. Does not assert microphone permission or recording state.', inputSchema: object({}), annotations: { readOnlyHint: true } },
   { name: 'voice_models', description: 'List Voice Prompt speech models and which are downloaded. Does not download models.', inputSchema: object({}), annotations: { readOnlyHint: true } },
   { name: 'voice_prepare_prompt', description: 'Faithfully edit supplied speech transcript into a draft, preserving language and constraints. Never executes the resulting request. AI may use the configured cloud provider; failure returns original with fallback=true.', inputSchema: { ...object({ text: { type: 'string', minLength: 1, maxLength: 16000 }, mode: { type: 'string', enum: ['raw', 'clean', 'agent'] }, terms: { type: 'array', items: { type: 'string', maxLength: 100 }, maxItems: 100 } }), required: ['text'] } },
-  { name: 'voice_transcribe_file', description: 'Transcribe an explicitly supplied local 16 kHz mono 16-bit PCM WAV file using the bundled Voice Prompt speech model. Does not record the microphone.', inputSchema: { ...object({ path: { type: 'string' }, model: { type: 'string' } }), required: ['path'] }, annotations: { readOnlyHint: true } },
+  { name: 'voice_transcribe_file', description: 'Transcribe an explicitly supplied local 16 kHz mono 16-bit PCM WAV file using the selected local Voice Prompt speech model. Does not record the microphone.', inputSchema: { ...object({ path: { type: 'string' }, model: { type: 'string', enum: ['sensevoice-small', 'qwen3-asr-1.7b'] }, language: { type: 'string', enum: ['auto', 'zh', 'en'] }, terms: { type: 'array', items: { type: 'string', maxLength: 100 }, maxItems: 100 } }), required: ['path'] }, annotations: { readOnlyHint: true } },
 ];
 export function startMcp({ input = process.stdin, output = process.stdout, invoke = request } = {}) {
   const pending = new Map(); let buffer = '', initialized = false;
@@ -20,7 +20,7 @@ export function startMcp({ input = process.stdin, output = process.stdout, invok
       if (message.method === 'initialize') {
         initialized = true;
         const supported = ['2025-11-25', '2025-06-18', '2025-03-26', '2024-11-05'];
-        return send({ id, result: { protocolVersion: supported.includes(message.params?.protocolVersion) ? message.params.protocolVersion : '2025-06-18', capabilities: { tools: {} }, serverInfo: { name: 'voice-prompt', version: '0.6.5' } } });
+        return send({ id, result: { protocolVersion: supported.includes(message.params?.protocolVersion) ? message.params.protocolVersion : '2025-06-18', capabilities: { tools: {} }, serverInfo: { name: 'voice-prompt', version: '0.7.0' } } });
       }
       if (message.method === 'ping') return send({ id, result: {} });
       if (!initialized) return send({ id, error: { code: -32000, message: 'Initialize first' } });

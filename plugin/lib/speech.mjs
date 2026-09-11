@@ -2,10 +2,35 @@ import { open, access, readFile, writeFile, mkdtemp, rm } from 'node:fs/promises
 import path from 'node:path';
 import { tmpdir } from 'node:os';
 import { run } from './process.mjs';
+import { qwenWorker } from './qwen-worker.mjs';
+export const QWEN_MODEL = 'qwen3-asr-1.7b';
+export const selectedSpeechModel = config => config.speechModelId || 'sensevoice-small';
+export function speechOptions(config, input = {}) {
+  const model = input.model || selectedSpeechModel(config);
+  if (!['sensevoice-small', QWEN_MODEL].includes(model)) throw new Error('Unsupported speech model');
+  const language = input.language || config.speechLanguage || 'auto';
+  if (!['auto', 'zh', 'en'].includes(language)) throw new Error('Choose auto, zh, or en');
+  const supplied = input.terms || [];
+  if (!Array.isArray(supplied) || supplied.length > 100 || supplied.some(t => typeof t !== 'string' || t.length > 100)) throw new Error('Invalid ASR terms');
+  const terms = [...new Set([...(config.terms || []), ...supplied])].slice(0, 100);
+  return { model, language, terms };
+}
 export async function listModels(config) {
   let downloaded = false;
   try { await access(config.speechModel); await access(config.engineCommand); downloaded = true; } catch {}
-  return [{ id: 'sensevoice-small', name: 'SenseVoice Small', downloaded, languages: ['zh', 'en', 'yue', 'ja', 'ko'], engine: 'transcribe.cpp' }];
+  let qwenReady = false;
+  try { await access(config.asrPython); await access(path.join(config.qwenModelPath, 'model.safetensors')); await access(path.join(config.qwenModelPath, 'config.json')); qwenReady = true; } catch {}
+  return [
+    { id: QWEN_MODEL, name: 'Qwen3-ASR 1.7B', downloaded: qwenReady, selected: selectedSpeechModel(config) === QWEN_MODEL, languages: ['zh', 'en'], engine: 'MLX (local Apple Silicon)', supportsTerms: true },
+    { id: 'sensevoice-small', name: 'SenseVoice Small', downloaded, selected: selectedSpeechModel(config) === 'sensevoice-small', languages: ['zh', 'en', 'yue', 'ja', 'ko'], engine: 'transcribe.cpp', supportsTerms: false },
+  ];
+}
+export function closeSpeech() { qwenWorker.stop(); }
+export async function warmSpeech(config) {
+  if (selectedSpeechModel(config) !== QWEN_MODEL) return { warming: false };
+  if (!(await listModels(config)).find(m => m.id === QWEN_MODEL).downloaded) return { warming: false };
+  await qwenWorker.warm(config);
+  return { warming: false, ready: true };
 }
 export async function validateWav(filename) {
   if (typeof filename !== 'string' || !path.isAbsolute(filename)) throw new Error('Use an absolute WAV path');
@@ -64,7 +89,14 @@ export function splitPcm(wav) {
 }
 export async function transcribe(config, input, signal) {
   await validateWav(input.path);
-  if (input.model && input.model !== 'sensevoice-small') throw new Error('Bundled model is sensevoice-small');
+  const options = speechOptions(config, input);
+  if (options.model === QWEN_MODEL) {
+    if (!(await listModels(config)).find(m => m.id === QWEN_MODEL).downloaded) throw new Error('Qwen runtime is not installed. Select SenseVoice or run the local ASR installer.');
+    const start = performance.now();
+    const result = await qwenWorker.request(config, { path: input.path, language: options.language, terms: options.terms }, signal);
+    const { id, ...details } = result;
+    return { ...details, model: QWEN_MODEL, languageHint: options.language, wallMs: Math.round(performance.now() - start) };
+  }
   const started = performance.now(), dir = await mkdtemp(path.join(tmpdir(), 'voice-prompt-audio-'));
   try {
     const chunks = splitPcm(await readFile(input.path)), texts = [];
@@ -72,7 +104,7 @@ export async function transcribe(config, input, signal) {
       signal?.throwIfAborted();
       const audio = path.join(dir, `${i}.wav`), out = path.join(dir, `${i}.txt`);
       await writeFile(audio, chunks[i], { mode: 0o600 });
-      await run(config.engineCommand, ['--backend', 'cpu_accel', '-m', config.speechModel, '-q', '-o', out, audio], { signal, timeoutMs: 180000 });
+      await run(config.engineCommand, ['--backend', 'cpu_accel', '-m', config.speechModel, ...(options.language === 'auto' ? [] : ['--language', options.language]), '-q', '-o', out, audio], { signal, timeoutMs: 180000 });
       texts.push((await readFile(out, 'utf8')).trim());
     }
     return { text: texts.filter(Boolean).join(' '), model: 'sensevoice-small', chunks: chunks.length, wallMs: Math.round(performance.now() - started) };

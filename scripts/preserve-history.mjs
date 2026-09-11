@@ -9,7 +9,7 @@ let sawOffline = !process.argv.includes("--restart");
 while(Date.now()<deadline) {
   try {
     const status=await request('/api/status');
-    if(sawOffline && status.version==='0.6.5') {
+    if(sawOffline && status.version==='0.7.0') {
       const result=await request('/api/history/restore',{drafts:pending});
       console.log(JSON.stringify(result)); process.exit(0);
     }

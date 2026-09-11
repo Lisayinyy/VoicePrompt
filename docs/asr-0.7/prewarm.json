@@ -1,0 +1,14 @@
+{
+  "warmupMs": 11852,
+  "text": "甚至出现交易几乎停滞的情况。",
+  "durationSeconds": 4.2039375,
+  "coldStart": false,
+  "loadMs": 0,
+  "warmup": false,
+  "inferenceMs": 441,
+  "peakMemoryMB": 3247,
+  "chunks": 1,
+  "model": "qwen3-asr-1.7b",
+  "languageHint": "auto",
+  "wallMs": 442
+}

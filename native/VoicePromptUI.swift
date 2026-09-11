@@ -28,6 +28,10 @@ final class VoiceUI: ObservableObject {
     @Published var polishOnRecord = UserDefaults.standard.bool(forKey: "polishOnRecord")
     @Published var modelReady = false
     @Published var modelSize = "—"
+    @Published var speechModelId = "sensevoice-small"
+    @Published var speechLanguage = "auto"
+    @Published var qwenReady = false
+    var speechModelName: String { speechModelId == "qwen3-asr-1.7b" ? "Qwen3-ASR 1.7B" : "SenseVoice Small" }
     var shortcutLabel: String { shortcut == "controlOption" ? "⌃ ⌥ Space" : shortcut == "optionShift" ? "⌥ ⇧ Space" : "⌥ Space" }
     @Published var seconds = 0.0
     @Published var level = 0.0
@@ -70,6 +74,8 @@ struct VoiceActions {
     var setShortcut: (String) -> Void = { _ in }
     var soundSettings: () -> Void = {}
     var refreshModel: () -> Void = {}
+    var setSpeechModel: (String) -> Void = { _ in }
+    var setSpeechLanguage: (String) -> Void = { _ in }
     var previewOverlay: () -> Void = {}
 }
 enum VPColor {
@@ -184,13 +190,13 @@ struct VoiceRootView: View {
                 Button { model.page = "models" } label: {
                     HStack(spacing: 6) {
                         Image(systemName: model.serviceReady ? "circle.fill" : "clock").font(.system(size: 7))
-                        Text(model.serviceReady ? "SenseVoice Small" : "正在连接…")
+                        Text(model.serviceReady ? model.speechModelName : "正在连接…")
                         Image(systemName: "chevron.down").font(.system(size: 8))
                     }
                 }.buttonStyle(.plain)
                 Spacer()
                 Button("使用指南", action: actions.tutorial).buttonStyle(.plain)
-                Text("·  v0.6.5")
+                Text("·  v" + (Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "0.7.0"))
             }.font(.system(size: 10)).foregroundColor(VPColor.muted).padding(.horizontal, 15).frame(height: 34)
         }
     }
@@ -260,8 +266,14 @@ struct VoiceRootView: View {
                 rule
                 row("取消快捷键", help: "录音或识别时按 Esc，取消本次输入。") { Keycap(text: "Escape") }
             }
-            section("SENSEVOICE SMALL 设置") {
-                row("语言", help: "自动识别中文、英文、粤语、日语和韩语；无需每次切换。") { Text("自动识别").foregroundColor(VPColor.muted) }
+            section(model.speechModelName + " 设置") {
+                row("语言", help: "可以自动识别；固定说一种语言时，也可指定中文或英文。") {
+                    Picker("说话语言", selection: Binding(get: { model.speechLanguage }, set: actions.setSpeechLanguage)) {
+                        Text("自动识别").tag("auto")
+                        Text("中文").tag("zh")
+                        Text("English").tag("en")
+                    }.labelsHidden().frame(width: 206).disabled(model.active)
+                }
             }
             section("声音") {
                 row("麦克风", help: "使用 macOS 当前默认输入设备。") {
@@ -306,7 +318,23 @@ struct VoiceRootView: View {
     }
     var models: some View {
         Group {
-            heading("语音模型", "已经包含在应用里，打开就能开始。")
+            heading("语音模型", "在这台 Mac 上识别，录音无需上传。")
+            section("识别偏好") {
+                row("识别模型") {
+                    Picker("识别模型", selection: Binding(get: { model.speechModelId }, set: actions.setSpeechModel)) {
+                        Text("Qwen · 精准测试版").tag("qwen3-asr-1.7b").disabled(!model.qwenReady)
+                        Text("SenseVoice · 原版").tag("sensevoice-small")
+                    }.labelsHidden().frame(width: 200).disabled(model.active)
+                }
+                rule
+                row("说话语言") {
+                    Picker("说话语言", selection: Binding(get: { model.speechLanguage }, set: actions.setSpeechLanguage)) {
+                        Text("自动识别").tag("auto")
+                        Text("中文").tag("zh")
+                        Text("English").tag("en")
+                    }.labelsHidden().frame(width: 200).disabled(model.active)
+                }
+            }
             HStack {
                 Text("已安装的模型").font(.system(size: 12)).foregroundColor(VPColor.muted)
                 Spacer()
@@ -314,21 +342,21 @@ struct VoiceRootView: View {
             }
             VStack(alignment: .leading, spacing: 13) {
                 HStack {
-                    Text("SenseVoice Small").font(.system(size: 15, weight: .semibold))
+                    Text(model.speechModelName).font(.system(size: 15, weight: .semibold))
                     Label(model.modelReady ? "使用中" : "未就绪", systemImage: model.modelReady ? "checkmark" : "exclamationmark.circle")
                         .font(.system(size: 10, weight: .medium)).padding(.horizontal, 10).padding(.vertical, 4).background(VPColor.pink).clipShape(Capsule())
                     Spacer()
                 }
-                Text("轻量本地识别，自动检测语言。适合中文和英文语音输入。")
+                Text(model.speechModelId == "qwen3-asr-1.7b" ? "本地精准识别，支持中文、英文和术语提示。首次使用需加载模型。" : "轻量本地识别，保留为原版对照。")
                     .font(.system(size: 12)).foregroundColor(VPColor.muted).lineSpacing(4)
                 rule
                 HStack {
-                    Label("5 种语言", systemImage: "globe"); Spacer()
+                    Label("中文 / English", systemImage: "globe"); Spacer()
                     Label(model.modelSize, systemImage: "internaldrive")
                 }.font(.system(size: 11)).foregroundColor(VPColor.muted)
             }.padding(16).background(VPColor.pale.opacity(0.65)).clipShape(RoundedRectangle(cornerRadius: 10))
                 .overlay(RoundedRectangle(cornerRadius: 10).stroke(VPColor.pink.opacity(0.65), lineWidth: 2))
-            Text("模型和语音引擎随 Voice Prompt 安装，无需单独下载。")
+            Text("0.7 测试版 · 模型离线运行。Qwen 连续使用时复用模型，空闲 30 分钟后释放。")
                 .font(.system(size: 11)).foregroundColor(VPColor.muted)
         }
     }
@@ -383,7 +411,7 @@ struct VoiceRootView: View {
         Group {
             heading("Voice Prompt", "说出来，成为清楚的表达。")
             section("关于") {
-                row("版本") { Text("0.6.5").foregroundColor(VPColor.muted) }
+                row("版本") { Text(Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "0.7.0").foregroundColor(VPColor.muted) }
                 rule
                 row("使用指南") { Button("打开", action: actions.tutorial).buttonStyle(SettingsButton()) }
                 rule

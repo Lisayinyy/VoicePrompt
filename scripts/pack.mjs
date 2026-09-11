@@ -8,6 +8,6 @@ await mkdir(dist, { recursive: true });
 const destination = path.join(dist, 'voice-prompt');
 await rm(destination, { recursive: true, force: true });
 await cp(path.join(root, 'plugin'), destination, { recursive: true, dereference: false });
-const result = spawnSync('/usr/bin/ditto', ['-c', '-k', '--keepParent', destination, path.join(dist, 'voice-prompt-connector-0.6.5.zip')], { stdio: 'inherit' });
+const result = spawnSync('/usr/bin/ditto', ['-c', '-k', '--keepParent', destination, path.join(dist, 'voice-prompt-connector-0.7.0.zip')], { stdio: 'inherit' });
 if (result.status !== 0) throw new Error('Packaging failed');
-console.log(path.join(dist, 'voice-prompt-connector-0.6.5.zip'));
+console.log(path.join(dist, 'voice-prompt-connector-0.7.0.zip'));

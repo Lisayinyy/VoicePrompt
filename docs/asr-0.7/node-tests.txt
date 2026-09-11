@@ -1,0 +1,220 @@
+TAP version 13
+# Subtest: recording waits for startup warmup and then reuses the ready process
+ok 1 - recording waits for startup warmup and then reuses the ready process
+  ---
+  duration_ms: 3.120875
+  type: 'test'
+  ...
+# Subtest: model defaults, language override and ASR vocabulary are validated before inference
+ok 2 - model defaults, language override and ASR vocabulary are validated before inference
+  ---
+  duration_ms: 0.821959
+  type: 'test'
+  ...
+# Subtest: worker reuses a model and cancellation kills it; next utterance starts cleanly
+ok 3 - worker reuses a model and cancellation kills it; next utterance starts cleanly
+  ---
+  duration_ms: 1.686542
+  type: 'test'
+  ...
+# Subtest: timeout recovers; idle model releases; model-path changes retire previous process
+ok 4 - timeout recovers; idle model releases; model-path changes retire previous process
+  ---
+  duration_ms: 47.296708
+  type: 'test'
+  ...
+# Subtest: missing Qwen reports unavailable without silently using the old model
+ok 5 - missing Qwen reports unavailable without silently using the old model
+  ---
+  duration_ms: 4.015666
+  type: 'test'
+  ...
+# Subtest: model settings reject unavailable models and expose a successful selection in status
+ok 6 - model settings reject unavailable models and expose a successful selection in status
+  ---
+  duration_ms: 0.89875
+  type: 'test'
+  ...
+# Subtest: raw mode makes no model call and preserves Chinese and English
+ok 7 - raw mode makes no model call and preserves Chinese and English
+  ---
+  duration_ms: 0.726625
+  type: 'test'
+  ...
+# Subtest: invalid cleanup cannot silently remove a number, code identifier, or negation
+ok 8 - invalid cleanup cannot silently remove a number, code identifier, or negation
+  ---
+  duration_ms: 1.192334
+  type: 'test'
+  ...
+# Subtest: AI failure preserves the original while explicit cancellation yields no draft
+ok 9 - AI failure preserves the original while explicit cancellation yields no draft
+  ---
+  duration_ms: 0.535625
+  type: 'test'
+  ...
+# Subtest: OpenAI-compatible adapter sends a text-only request and reads real HTTP completion
+ok 10 - OpenAI-compatible adapter sends a text-only request and reads real HTTP completion
+  ---
+  duration_ms: 20.16975
+  type: 'test'
+  ...
+# Subtest: Transcription-compatible endpoint authenticates, rejects browser cross-origin calls, and stores a draft
+ok 11 - Transcription-compatible endpoint authenticates, rejects browser cross-origin calls, and stores a draft
+  ---
+  duration_ms: 19.550167
+  type: 'test'
+  ...
+# Subtest: superseded request never appears in history, even if provider ignores abort
+ok 12 - superseded request never appears in history, even if provider ignores abort
+  ---
+  duration_ms: 2.345541
+  type: 'test'
+  ...
+# Subtest: cancel by request id suppresses completion and history
+ok 13 - cancel by request id suppresses completion and history
+  ---
+  duration_ms: 1.962666
+  type: 'test'
+  ...
+# Subtest: MCP speaks JSON-RPC, returns tool errors, and handles malformed input
+ok 14 - MCP speaks JSON-RPC, returns tool errors, and handles malformed input
+  ---
+  duration_ms: 1.0005
+  type: 'test'
+  ...
+# Subtest: WAV validation accepts correct audio and rejects stereo/truncated files
+ok 15 - WAV validation accepts correct audio and rejects stereo/truncated files
+  ---
+  duration_ms: 6.36825
+  type: 'test'
+  ...
+# Subtest: process runner preserves UTF-8 across chunks and terminates on cancellation
+ok 16 - process runner preserves UTF-8 across chunks and terminates on cancellation
+  ---
+  duration_ms: 43.07575
+  type: 'test'
+  ...
+# Subtest: OMP preserves edits made during cleanup and still offers the saved draft
+ok 17 - OMP preserves edits made during cleanup and still offers the saved draft
+  ---
+  duration_ms: 0.933834
+  type: 'test'
+  ...
+# Subtest: OMP cancels pending cleanup when switching sessions and ignores late output
+ok 18 - OMP cancels pending cleanup when switching sessions and ignores late output
+  ---
+  duration_ms: 0.41475
+  type: 'test'
+  ...
+# Subtest: OMP keeps multiline supplied transcripts intact before AI processing
+ok 19 - OMP keeps multiline supplied transcripts intact before AI processing
+  ---
+  duration_ms: 0.148
+  type: 'test'
+  ...
+# Subtest: project vocabulary is opt-in and is passed without reading other project files
+ok 20 - project vocabulary is opt-in and is passed without reading other project files
+  ---
+  duration_ms: 2.925708
+  type: 'test'
+  ...
+# Subtest: long WAV chunks preserve every PCM byte and remain below engine limit
+ok 21 - long WAV chunks preserve every PCM byte and remain below engine limit
+  ---
+  duration_ms: 9.118375
+  type: 'test'
+  ...
+# Subtest: fresh installation reports no AI backend and preserves text honestly
+ok 22 - fresh installation reports no AI backend and preserves text honestly
+  ---
+  duration_ms: 1.738
+  type: 'test'
+  ...
+# Subtest: OMP voice-prompt entry polishes direct dictation without executing a task
+ok 23 - OMP voice-prompt entry polishes direct dictation without executing a task
+  ---
+  duration_ms: 0.130042
+  type: 'test'
+  ...
+# Subtest: update recovery retains original expiry, isolates desktop and never calls AI
+ok 24 - update recovery retains original expiry, isolates desktop and never calls AI
+  ---
+  duration_ms: 10.744791
+  type: 'test'
+  ...
+# Subtest: direct capture is exclusive, owner scoped and acknowledged after editor insertion
+ok 25 - direct capture is exclusive, owner scoped and acknowledged after editor insertion
+  ---
+  duration_ms: 2.12925
+  type: 'test'
+  ...
+# Subtest: cancel suppresses late transcripts and timeout allows a new recording after native cancellation
+ok 26 - cancel suppresses late transcripts and timeout allows a new recording after native cancellation
+  ---
+  duration_ms: 0.349292
+  type: 'test'
+  ...
+# Subtest: OMP shortcut writes directly through editor API and preserves an existing mention
+ok 27 - OMP shortcut writes directly through editor API and preserves an existing mention
+  ---
+  duration_ms: 300.359083
+  type: 'test'
+  ...
+# Subtest: OMP never overwrites edits made while recording
+ok 28 - OMP never overwrites edits made while recording
+  ---
+  duration_ms: 302.476458
+  type: 'test'
+  ...
+# Subtest: OMP session switch cancels recording and never routes text to the next session
+ok 29 - OMP session switch cancels recording and never routes text to the next session
+  ---
+  duration_ms: 252.144541
+  type: 'test'
+  ...
+# Subtest: Git import and standalone connector resolve their MCP launchers
+ok 30 - Git import and standalone connector resolve their MCP launchers
+  ---
+  duration_ms: 12.016458
+  type: 'test'
+  ...
+# Subtest: README local links resolve in the published source tree
+ok 31 - README local links resolve in the published source tree
+  ---
+  duration_ms: 4.988792
+  type: 'test'
+  ...
+# Subtest: Explicit polishing follows the configured preference
+ok 32 - Explicit polishing follows the configured preference
+  ---
+  duration_ms: 28.262667
+  type: 'test'
+  ...
+# Subtest: Prompt.ai Worker voice route handles raw mode without a model or credentials
+ok 33 - Prompt.ai Worker voice route handles raw mode without a model or credentials
+  ---
+  duration_ms: 0.726458
+  type: 'test'
+  ...
+# Subtest: Worker protects negative constraints after AI editing
+ok 34 - Worker protects negative constraints after AI editing
+  ---
+  duration_ms: 0.571208
+  type: 'test'
+  ...
+# Subtest: desktop Prompt.ai adapter calls the real Worker contract; rejects legacy optimizer responses
+ok 35 - desktop Prompt.ai adapter calls the real Worker contract; rejects legacy optimizer responses
+  ---
+  duration_ms: 9.314708
+  type: 'test'
+  ...
+1..35
+# tests 35
+# suites 0
+# pass 35
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 929.406333

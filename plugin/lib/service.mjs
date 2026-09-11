@@ -3,7 +3,7 @@ import { createDirectCapture } from './direct-capture.mjs';
 import { readFile } from 'node:fs/promises';
 import { randomUUID, timingSafeEqual } from 'node:crypto';
 import { prepare, validateInput } from './prepare.mjs';
-import { listModels, transcribe } from './speech.mjs';
+import { listModels, transcribe, selectedSpeechModel, closeSpeech, warmSpeech } from './speech.mjs';
 import { validateConfig, savePreferences } from './config.mjs';
 
 export const TRANSCRIPT_MARKER = 'VOICE_PROMPT_TRANSCRIPT\n';
@@ -58,9 +58,16 @@ export function createService(config, dependencies = {}) {
     } finally { jobs.delete(id); if (sessions.get(session) === id) sessions.delete(session); }
   }
   async function dispatch(route, input, signal) {
+    if (route === '/api/asr/warm') return warmSpeech(config);
     if (route.startsWith("/api/capture/")) return directCapture(route.slice("/api/capture/".length), input);
-    if (route === '/api/status') return { version: '0.6.5', product: 'Voice Prompt', defaultMode: config.defaultMode || 'clean', service: 'ready', provider: config.provider, model: config.model || (config.provider === 'omp' ? 'OMP configured model' : null), aiConfigured: config.provider !== 'unconfigured', pending: jobs.size, audioBusy, microphone: 'managed_by_Voice_Prompt', history: 'memory_only_1_hour_max_20', modes: ['raw', 'clean', 'agent'] };
-    if (route === '/api/preferences') { const saved = await (dependencies.savePreferences || savePreferences)(input); Object.assign(config, saved); return saved; }
+    if (route === '/api/status') return { version: '0.7.0', product: 'Voice Prompt', speechModel: selectedSpeechModel(config), speechLanguage: config.speechLanguage || 'auto', speechEngine: selectedSpeechModel(config) === 'qwen3-asr-1.7b' ? 'mlx-local' : 'transcribe.cpp', defaultMode: config.defaultMode || 'clean', service: 'ready', provider: config.provider, model: config.model || (config.provider === 'omp' ? 'OMP configured model' : null), aiConfigured: config.provider !== 'unconfigured', pending: jobs.size, audioBusy, microphone: 'managed_by_Voice_Prompt', history: 'memory_only_1_hour_max_20', modes: ['raw', 'clean', 'agent'] };
+    if (route === '/api/preferences') {
+      if (audioBusy && (input.speechModelId || input.speechLanguage)) throw new Error('Wait until transcription finishes');
+      if (input.speechModelId && !(await models(config, signal)).some(m => m.id === input.speechModelId && m.downloaded)) throw new Error('Selected speech model is not installed');
+      const saved = await (dependencies.savePreferences || savePreferences)(input);
+      if (saved.speechModelId && saved.speechModelId !== selectedSpeechModel(config)) closeSpeech();
+      Object.assign(config, saved); return saved;
+    }
     if (route === '/api/models') return { models: await models(config, signal) };
     if (route === '/api/prepare') return makeDraft(input, signal);
     if (route === '/api/history/restore') {
@@ -128,8 +135,9 @@ export function createService(config, dependencies = {}) {
       return send(200, await dispatch(url.pathname, input, controller.signal));
     } catch (error) { send(controller.signal.aborted ? 499 : 400, { error: { message: error.message } }); }
   });
-  server.on('close', () => { for (const job of jobs.values()) job.abort(new Error('Service stopped')); for (const timer of expirations.values()) clearTimeout(timer); expirations.clear(); drafts.length = 0; });
-  return { server, dispatch, listDrafts, close: async () => {
+  server.on('close', () => { closeSpeech(); for (const job of jobs.values()) job.abort(new Error('Service stopped')); for (const timer of expirations.values()) clearTimeout(timer); expirations.clear(); drafts.length = 0; });
+  return { server, dispatch, listDrafts, warmup: () => warmSpeech(config), close: async () => {
+    closeSpeech();
     for (const job of jobs.values()) job.abort(new Error('Service stopped'));
     server.closeAllConnections(); await new Promise(resolve => server.close(resolve));
   } };

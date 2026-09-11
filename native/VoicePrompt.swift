@@ -60,6 +60,8 @@ final class VoicePrompt: NSObject, NSApplicationDelegate {
         setShortcut: { [weak self] in self?.setShortcut($0) },
         soundSettings: { NSWorkspace.shared.open(URL(string: "x-apple.systempreferences:com.apple.preference.sound?input")!) },
         refreshModel: { [weak self] in self?.refreshModel() },
+        setSpeechModel: { [weak self] in self?.setSpeechPreference("speechModelId", $0) },
+        setSpeechLanguage: { [weak self] in self?.setSpeechPreference("speechLanguage", $0) },
         previewOverlay: { [weak self] in
             guard let self, self.recorder == nil, self.processing == nil, self.pasteTransaction == nil, !self.starting else { return }
             self.display(.preview, dismissAfter: 5)
@@ -157,12 +159,27 @@ final class VoicePrompt: NSObject, NSApplicationDelegate {
     }
     func refreshModel() {
         let fm = FileManager.default
-        let model = config["speechModel"] as? String ?? resources.appendingPathComponent("models/sensevoice-small.gguf").path
-        let engine = config["engineCommand"] as? String ?? resources.appendingPathComponent("bin/voice-asr").path
+        ui.speechModelId = config["speechModelId"] as? String ?? "sensevoice-small"
+        ui.speechLanguage = config["speechLanguage"] as? String ?? "auto"
+        let qwen = ui.speechModelId == "qwen3-asr-1.7b"
+        let qwenRoot = config["qwenModelPath"] as? String ?? home.appendingPathComponent(".local/share/voice-prompt/models/qwen3-asr-1.7b-8bit").path
+        let python = config["asrPython"] as? String ?? home.appendingPathComponent(".local/share/voice-prompt/asr-venv/bin/python").path
+        ui.qwenReady = fm.isReadableFile(atPath: qwenRoot + "/model.safetensors") && fm.isExecutableFile(atPath: python)
+        let model = qwen ? qwenRoot + "/model.safetensors" : (config["speechModel"] as? String ?? resources.appendingPathComponent("models/sensevoice-small.gguf").path)
+        let engine = qwen ? python : (config["engineCommand"] as? String ?? resources.appendingPathComponent("bin/voice-asr").path)
         ui.modelReady = fm.isReadableFile(atPath: model) && fm.isExecutableFile(atPath: engine)
         if let size = (try? fm.attributesOfItem(atPath: model))?[.size] as? NSNumber {
             ui.modelSize = ByteCountFormatter.string(fromByteCount: size.int64Value, countStyle: .file)
         } else { ui.modelSize = "未找到模型" }
+    }
+    func setSpeechPreference(_ key: String, _ value: String) {
+        guard !ui.active, !starting else { return }
+        Task { @MainActor in
+            do {
+                _ = try await call("/api/preferences", [key: value])
+                config[key] = value; refreshModel(); ui.message = ""
+            } catch { ui.message = "识别设置未保存：\(error.localizedDescription)" }
+        }
     }
     @objc func showMain() { window.makeKeyAndOrderFront(nil); NSApp.activate(ignoringOtherApps: true) }
     func applicationShouldHandleReopen(_ sender: NSApplication, hasVisibleWindows flag: Bool) -> Bool { showMain(); return true }
@@ -268,6 +285,7 @@ final class VoicePrompt: NSObject, NSApplicationDelegate {
         } }
     }
     func begin(_ requested: String) {
+        Task { @MainActor in _ = try? await call("/api/asr/warm", [:]) }
         do {
             let dir = home.appendingPathComponent(".config/voice-prompt/audio")
             try FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true, attributes: [.posixPermissions: 0o700])

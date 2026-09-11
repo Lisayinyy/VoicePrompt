@@ -1,0 +1,72 @@
+{
+  "hardware": "Apple M2 Pro / 16GB",
+  "scope": "public smoke samples, not user accuracy benchmark",
+  "results": [
+    {
+      "file": "public-zh.wav",
+      "language": "zh",
+      "text": "甚至出现交易几乎停滞的情况",
+      "model": "sensevoice-small",
+      "chunks": 1,
+      "wallMs": 2434
+    },
+    {
+      "file": "public-en-16k.wav",
+      "language": "en",
+      "text": "oh yeah yeah he wasn't even that big when i started listening to him but and his solo music didn't do overly well but he did very well when he started writing for other people",
+      "model": "sensevoice-small",
+      "chunks": 1,
+      "wallMs": 676
+    },
+    {
+      "file": "public-zh.wav",
+      "language": "zh",
+      "text": "甚至出现交易几乎停滞的情况",
+      "model": "sensevoice-small",
+      "chunks": 1,
+      "wallMs": 306
+    },
+    {
+      "file": "public-zh.wav",
+      "language": "zh",
+      "text": "甚至出现交易几乎停滞的情况。",
+      "durationSeconds": 4.2039375,
+      "coldStart": true,
+      "loadMs": 17871,
+      "inferenceMs": 27786,
+      "peakMemoryMB": 3229,
+      "chunks": 1,
+      "model": "qwen3-asr-1.7b",
+      "languageHint": "zh",
+      "wallMs": 28047
+    },
+    {
+      "file": "public-en-16k.wav",
+      "language": "en",
+      "text": "Uh huh. Oh yeah, yeah. He wasn't even that big when I started listening to him, but and his solo music didn't do overly well, but he did very well when he started writing for other people.",
+      "durationSeconds": 15.05125,
+      "coldStart": false,
+      "loadMs": 0,
+      "inferenceMs": 1186,
+      "peakMemoryMB": 3463,
+      "chunks": 1,
+      "model": "qwen3-asr-1.7b",
+      "languageHint": "en",
+      "wallMs": 1187
+    },
+    {
+      "file": "public-zh.wav",
+      "language": "zh",
+      "text": "甚至出现交易几乎停滞的情况。",
+      "durationSeconds": 4.2039375,
+      "coldStart": false,
+      "loadMs": 0,
+      "inferenceMs": 302,
+      "peakMemoryMB": 3247,
+      "chunks": 1,
+      "model": "qwen3-asr-1.7b",
+      "languageHint": "zh",
+      "wallMs": 303
+    }
+  ]
+}

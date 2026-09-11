@@ -10,7 +10,10 @@ try {
   else if (command === 'init') { await initConfig(); console.log(`Created configuration: ${configPath()}\nStart: node server.mjs serve\nOpen review panel: node server.mjs open`); }
   else if (command === 'serve') {
     const config = await initConfig(), service = createService(config);
-    service.server.listen(config.port, '127.0.0.1', () => console.error(`Voice Prompt listening on http://127.0.0.1:${config.port} (local authentication required)`));
+    service.server.listen(config.port, '127.0.0.1', () => {
+      console.error(`Voice Prompt listening on http://127.0.0.1:${config.port} (local authentication required)`);
+      void service.warmup().catch(() => console.error('Local ASR warmup unavailable; the next recording can retry.'));
+    });
     service.server.on('error', error => { console.error(error.message); process.exitCode = 1; });
     for (const signal of ['SIGINT', 'SIGTERM']) process.once(signal, async () => { await service.close(); process.exit(0); });
   } else if (command === 'open') {
