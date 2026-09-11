@@ -24,7 +24,7 @@ fetch_checked() {
 }
 mkdir -p "$root/dist"
 echo '1/4 Downloading verified desktop app (about 268 MiB)'
-fetch_checked 'https://github.com/Lisayinyy/VoicePrompt/releases/download/v0.7.0-beta.2/voice-prompt-desktop-0.7.0-macos-arm64.zip' "$root/dist/voice-prompt-desktop-0.7.0-macos-arm64.zip" '2578f276e61f07c7934a12f9f7348c97f8b1802e7f9839a65402242020115543'
+fetch_checked 'https://github.com/Lisayinyy/VoicePrompt/releases/download/v0.7.0-beta.3/voice-prompt-desktop-0.7.0-macos-arm64.zip' "$root/dist/voice-prompt-desktop-0.7.0-macos-arm64.zip" 'ee066a2f8a9f71e6fed2c2f505c7be6a5404ba96f769ddfe22ef569bc1f3b89a'
 /usr/bin/ditto -x -k "$root/dist/voice-prompt-desktop-0.7.0-macos-arm64.zip" "$stage/desktop"
 app="$stage/desktop/Voice Prompt.app"
 /usr/bin/codesign --verify --deep --strict "$app"

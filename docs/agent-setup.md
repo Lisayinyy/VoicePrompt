@@ -16,7 +16,7 @@ Agent 将使用你已授权的终端/文件工具安装，用可用的桌面工�
 ## 给 Agent 的执行步骤
 
 1. 使用插件内 `skills/voice-prompt/references/setup.md`，检查系统和现有安装。只 @ 名称时先做只读检查；用户明确要求安装后继续。已经可用的安装不要重复覆盖。
-2. 从 [v0.7.0-beta.2 内测发布页](https://github.com/Lisayinyy/VoicePrompt/releases/tag/v0.7.0-beta.2) 下载 `voice-prompt-setup-0.7.0.zip` 与 `SHA256SUMS`，校验 setup ZIP，解压到用户可写的独立工作目录。不要改写已导入插件的只读目录。发布页的 SHA256SUMS 与 HTTPS 发布来源一起使用。
+2. 从 [v0.7.0-beta.3 内测发布页](https://github.com/Lisayinyy/VoicePrompt/releases/tag/v0.7.0-beta.3) 下载 `voice-prompt-setup-0.7.0.zip` 与 `SHA256SUMS`，校验 setup ZIP，解压到用户可写的独立工作目录。不要改写已导入插件的只读目录。发布页的 SHA256SUMS 与 HTTPS 发布来源一起使用。
 3. 阅读解压后的 `VoicePrompt/scripts/setup-colleague.sh`。先执行 `sh scripts/setup-colleague.sh --check`，再执行 `sh scripts/setup-colleague.sh --install`。这是宿主 Agent 在已获授权任务中运行安装流程，不是插件导入钩子。
 4. 安装器会校验桌面包、验证代码签名、备份并安装应用、自动准备固定版本的 uv/Python/MLX，下载并校验 Qwen，最后选择新模型。脚本不会更改 AI 账号，也不会绕过 macOS 权限。模型下载失败时保留缓存，解决网络问题后重试。
 5. 打开 `~/Applications/Voice Prompt.app`，让用户处理必要的系统授权。辅助功能显示允许还不代表写入成功，需要最后的真实输入测试。

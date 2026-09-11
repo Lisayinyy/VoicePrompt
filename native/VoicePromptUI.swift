@@ -30,6 +30,7 @@ final class VoiceUI: ObservableObject {
     @Published var liveText = ""
     @Published var liveHint = "停顿时显示识别文字"
     @Published var previewBusy = false
+    @Published var overlayDark = false
     @Published var modelReady = false
     @Published var modelSize = "—"
     @Published var speechModelId = "sensevoice-small"
@@ -443,7 +444,7 @@ struct VoiceHistoryRow: View {
 // The waveform itself is the interface: transparent window, no containing surface.
 enum RecordingLayout {
     static let previewWidth: CGFloat = 440
-    static let previewHeight: CGFloat = 170
+    static let previewHeight: CGFloat = 148
     static let windowWidth: CGFloat = 220
     static let windowHeight: CGFloat = 88
 }
@@ -511,21 +512,18 @@ struct VoiceRecordingView: View {
     var previewTime: Double? = nil
     @State private var hovered = false
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    var ink: Color { model.overlayDark ? Color(white: 0.96) : Color(white: 0.10) }
     var showsTranscript: Bool { model.livePreviewEnabled && [.listening, .paused, .transcribing, .polishing].contains(model.phase) }
     var recording: Bool { model.phase == .listening || model.phase == .paused }
     var showControls: Bool { hovered || previewHover || model.phase == .paused || NSWorkspace.shared.isVoiceOverEnabled }
     var body: some View {
         VStack(spacing: 2) {
             if showsTranscript {
-                VStack(spacing: 7) {
-                    Text(model.liveText.isEmpty ? "说句话，文字会出现在这里" : String(model.liveText.suffix(180)))
+                VStack(spacing: 0) {
+                    Text(String(model.liveText.suffix(180)))
                         .font(.system(size: 15, weight: .medium)).lineSpacing(3).lineLimit(3)
                         .multilineTextAlignment(.center).frame(maxWidth: .infinity, minHeight: 54)
-                        .foregroundColor(Color(white: 0.98))
-                        .shadow(color: .black.opacity(0.65), radius: 2, y: 1)
-                    Text(model.previewBusy ? "正在识别 · 不写入输入框" : model.liveHint)
-                        .font(.system(size: 10)).foregroundColor(Color(white: 0.93))
-                        .shadow(color: .black.opacity(0.65), radius: 2, y: 1)
+                        .foregroundColor(ink)
                 }.padding(.horizontal, 20).padding(.bottom, 6)
                     .accessibilityElement(children: .combine)
             }
@@ -541,23 +539,26 @@ struct VoiceRecordingView: View {
                         .allowsHitTesting(showControls).accessibilityHidden(!showControls)
                 } else if model.phase != .preview {
                     HStack(spacing: 6) {
-                        Text(status).font(.system(size: 11, weight: .medium)).lineLimit(1)
+                        if model.phase == .polishing {
+                            Text("正在润色").font(.system(size: 10, weight: .regular))
+                        }
                         if model.phase == .saved || model.phase == .error {
                             if model.phase == .saved {
                                 control("arrow.down.to.line", "点中目标输入框，再点这里重新填入", actions.retryInsertion)
                             }
                             control("arrow.up.right", "查看原因与权限设置", model.pasteGranted ? actions.settings : actions.accessibility)
-                        } else if model.active {
+                        } else if model.active && showControls {
                             control("xmark", "取消 · Esc", actions.cancel)
                         }
                     }.help(model.phase == .saved ? model.insertionHint : status)
+                        .accessibilityLabel(status)
                 }
             }.frame(height: 24)
+                .foregroundColor(ink)
         }.frame(width: showsTranscript ? RecordingLayout.previewWidth : RecordingLayout.windowWidth, height: showsTranscript ? RecordingLayout.previewHeight : RecordingLayout.windowHeight)
             .contentShape(Rectangle()).onHover { hovered = $0 }
             .animation(reduceMotion ? nil : .easeInOut(duration: 0.16), value: showControls)
-            .foregroundColor(Color(white: 0.48))
-            .preferredColorScheme(.light)
+            .preferredColorScheme(model.overlayDark ? .dark : .light)
     }
     func control(_ icon: String, _ title: String, _ action: @escaping () -> Void) -> some View {
         Button(action: action) {

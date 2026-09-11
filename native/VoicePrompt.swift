@@ -8,6 +8,7 @@ final class VoicePrompt: NSObject, NSApplicationDelegate {
     let resources = Bundle.main.resourceURL!
     let home = FileManager.default.homeDirectoryForCurrentUser
     let ui = VoiceUI()
+    let appAppearance = VoiceAppAppearance()
     var config: [String: Any] = [:]
     var service: Process?
     var item: NSStatusItem!
@@ -101,7 +102,7 @@ final class VoicePrompt: NSObject, NSApplicationDelegate {
             captureTimer = Timer.scheduledTimer(withTimeInterval: 0.2, repeats: true) { [weak self] _ in self?.pollCapture() }
         } catch { ui.message = "启动未完成：\(error.localizedDescription)" }
         refresh = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { [weak self] _ in
-            guard let self else { return }; self.refreshPermissions(); self.recoverHistoryAfterUpdate()
+            guard let self else { return }; self.refreshPermissions(); self.recoverHistoryAfterUpdate(); self.refreshOverlayAppearance()
             self.ui.entries.removeAll { Date().timeIntervalSince($0.created) > 3600 }
         }
         showMain()
@@ -258,7 +259,28 @@ final class VoicePrompt: NSObject, NSApplicationDelegate {
         let handle = try FileHandle(forWritingTo: log); try handle.seekToEnd(); child.standardError = handle; child.standardOutput = handle
         try child.run(); service = child
     }
+    func refreshOverlayAppearance() {
+        // Explicit in-app preferences take priority over native/system chrome.
+        var dark = NSApp.effectiveAppearance.bestMatch(from: [.darkAqua, .aqua]) == .darkAqua
+        if let app = NSWorkspace.shared.frontmostApplication,
+           let bundle = app.bundleIdentifier, bundle != Bundle.main.bundleIdentifier {
+            let preferences = UserDefaults.standard.persistentDomain(forName: bundle) ?? [:]
+            if let preference = appAppearance.preference(for: bundle) {
+                dark = preference.isDark(systemDark: dark)
+            } else if let style = preferences["AppleInterfaceStyle"] as? String,
+               ["dark", "light"].contains(style.lowercased()) {
+                dark = style.lowercased() == "dark"
+            } else if preferences["NSRequiresAquaSystemAppearance"] as? Bool == true {
+                dark = false
+            } else if let url = app.bundleURL,
+                      Bundle(url: url)?.object(forInfoDictionaryKey: "NSRequiresAquaSystemAppearance") as? Bool == true {
+                dark = false
+            }
+        }
+        if ui.overlayDark != dark { ui.overlayDark = dark }
+    }
     func display(_ phase: VoicePhase, dismissAfter seconds: Double? = nil) {
+        refreshOverlayAppearance()
         dismiss?.cancel(); ui.phase = phase
         let expanded = ui.livePreviewEnabled && [.listening, .paused, .transcribing, .polishing].contains(phase)
         panel.setContentSize(NSSize(width: expanded ? RecordingLayout.previewWidth : RecordingLayout.windowWidth, height: expanded ? RecordingLayout.previewHeight : RecordingLayout.windowHeight))
