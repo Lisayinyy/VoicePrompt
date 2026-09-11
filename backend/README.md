@@ -19,6 +19,8 @@
 
 额度文件保存于 `/var/lib/voice-prompt/usage.json`，包含日期和次数，不包含录音、原文、润色结果或密钥。计数在重启后保留；文件损坏时服务拒绝启动，不能静默重置额度。暂不支持多进程或多服务器共享计数。
 
+正式域名配置、执行顺序与验收工具见 [HTTPS 实施手册](HTTPS.md)。
+
 ## 安装及验证
 
 将仓库中的 `backend/`、`plugin/lib/worker-voice.mjs`、`plugin/lib/voice-policy.mjs` 放到 `/opt/voice-prompt`，下载官方 Node.js Linux x64 包并核对官方 SHA-256，再以 root 执行 `backend/install.sh`（传入 `NODE_ARCHIVE` 和 `NODE_SHA256`）。环境文件和客户列表在更新时保留。

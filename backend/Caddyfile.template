@@ -1,0 +1,39 @@
+{
+    admin 127.0.0.1:2019
+    servers {
+        strict_sni_host
+    }
+}
+
+__VOICE_PROMPT_DOMAIN__ {
+    # No access log, credentials or model keys belong in this file.
+    request_body {
+        max_size 65536
+    }
+
+    @health {
+        method GET
+        path /healthz
+    }
+    handle @health {
+        reverse_proxy 127.0.0.1:8787
+    }
+
+    @polish {
+        method POST
+        path /voice/prepare
+    }
+    handle @polish {
+        reverse_proxy 127.0.0.1:8787 {
+            # Deliberately no automatic retries for possibly billable POSTs.
+            transport http {
+                dial_timeout 3s
+                response_header_timeout 40s
+            }
+        }
+    }
+
+    handle {
+        respond 404
+    }
+}
