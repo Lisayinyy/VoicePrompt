@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "name": "voice-prompt",
+  "displayName": "Voice Prompt",
+  "version": "0.7.1",
+  "description": "将口述整理成清晰的 AI 提问草稿，保留原意与限制；配合 Voice Prompt 桌面应用使用快捷键语音输入、实时预览和发送前润色",
+  "author": "Voice Prompt contributors",
+  "icon": "icon.png",
+  "category": "Productivity",
+  "exampleQueries": [
+    "检查 Voice Prompt 是否已准备好语音输入",
+    "整理这段口述：嗯，请检查登录页，不要修改数据库，保留版本 2.0",
+    "帮我完成 Voice Prompt 首次安装，并开启录音后自动润色"
+  ],
+  "apps": [],
+  "mcpServers": ["voice-prompt.mcp.json"],
+  "skills": ["skills/voice-prompt/SKILL.md"]
+}

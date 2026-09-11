@@ -1,6 +1,9 @@
 import { request } from './client.mjs';
 import { setupStatus } from './setup-status.mjs';
 import { randomUUID } from 'node:crypto';
+import { readFileSync } from 'node:fs';
+
+const runtimeVersion = JSON.parse(readFileSync(new URL('../package.json', import.meta.url), 'utf8')).version;
 
 const object = properties => ({ type: 'object', properties, additionalProperties: false });
 export const toolDefinitions = [
@@ -22,7 +25,7 @@ export function startMcp({ input = process.stdin, output = process.stdout, invok
       if (message.method === 'initialize') {
         initialized = true;
         const supported = ['2025-11-25', '2025-06-18', '2025-03-26', '2024-11-05'];
-        return send({ id, result: { protocolVersion: supported.includes(message.params?.protocolVersion) ? message.params.protocolVersion : '2025-06-18', capabilities: { tools: {} }, serverInfo: { name: 'voice-prompt', version: '0.7.0' } } });
+        return send({ id, result: { protocolVersion: supported.includes(message.params?.protocolVersion) ? message.params.protocolVersion : '2025-06-18', capabilities: { tools: {} }, serverInfo: { name: 'voice-prompt', version: runtimeVersion } } });
       }
       if (message.method === 'ping') return send({ id, result: {} });
       if (!initialized) return send({ id, error: { code: -32000, message: 'Initialize first' } });

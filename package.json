@@ -11,7 +11,8 @@
     "start": "node plugin/server.mjs serve",
     "status": "node plugin/server.mjs status",
     "init": "node plugin/server.mjs init",
-    "pack": "node scripts/pack.mjs"
+    "pack": "node scripts/pack.mjs",
+    "pack:minimax": "python3 scripts/pack-minimax.py"
   },
   "description": "Voice Prompt: hotkey dictation with faithful AI prompt polishing",
   "license": "MIT",

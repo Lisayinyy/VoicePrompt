@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "mcpServers": {
+    "voice-prompt": {
+      "type": "stdio",
+      "command": "sh",
+      "args": ["./mcp-launch.sh"],
+      "description": "连接本机 Voice Prompt 桌面应用，检查组件并整理已提供的口述内容；首次安装请使用随包 Skill 引导",
+      "timeout": 180000
+    }
+  }
+}
