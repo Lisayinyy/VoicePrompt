@@ -1,31 +1,44 @@
-import { cp, mkdir, readFile, writeFile, readdir, stat } from 'node:fs/promises';
+// Explicit local installation of the exact MiniMax V1 submission artifact.
+// This is not an import lifecycle hook and never grants macOS permissions.
+import { mkdir, readFile, rename, lstat, mkdtemp, rm } from 'node:fs/promises';
 import path from 'node:path';
+import { tmpdir } from 'node:os';
 import { fileURLToPath } from 'node:url';
+import { spawnSync } from 'node:child_process';
 const root = fileURLToPath(new URL('../', import.meta.url));
 const data = process.argv[2];
 if (!data || !path.isAbsolute(data)) throw new Error('Pass the verified active MiniMax data directory as an absolute path');
 const destination = path.join(data, 'plugins/voice-prompt');
+let existing = false;
 try {
-  const existing = JSON.parse(await readFile(path.join(destination, '.minimax-plugin/plugin.json'), 'utf8'));
-  if (existing.name !== 'voice-prompt' || existing.author !== 'Voice Prompt contributors') throw new Error('Refusing to replace another plugin');
+  const st = await lstat(destination);
+  if (!st.isDirectory() || st.isSymbolicLink()) throw new Error('Refusing a linked or non-directory plugin destination');
+  const manifest = JSON.parse(await readFile(path.join(destination, '.minimax-plugin/plugin.json'), 'utf8'));
+  if (manifest.name !== 'voice-prompt' || manifest.author !== 'Voice Prompt contributors') throw new Error('Refusing to replace another plugin');
+  existing = true;
 } catch (error) { if (error.code !== 'ENOENT') throw error; }
-const source = path.join(root, 'plugin');
-await mkdir(destination, { recursive: true });
-for (const name of ['mcp-launch.sh', 'server.mjs', 'lib', 'asr', 'web', 'skills', 'LICENSE', 'README.md']) await cp(path.join(source, name), path.join(destination, name), { recursive: true });
-const iconRoot = path.join(data, '.builtin-skills/plugin-creator/assets');
-const light = path.join(iconRoot, 'category-icons/productivity'), dark = path.join(iconRoot, 'category-icons-dark/productivity');
-const choices = (await readdir(light)).filter(name => name.endsWith('.png'));
-if (!choices.length) throw new Error('Missing MiniMax built-in icon pool');
-const choice = choices[Math.floor(Math.random() * choices.length)];
-let preserveIcon = false;
-try { await stat(path.join(destination, 'icon.png')); await stat(path.join(destination, 'icon-dark.png')); preserveIcon = true; } catch {}
-if (!preserveIcon) {
-await stat(path.join(dark, choice));
-await cp(path.join(light, choice), path.join(destination, 'icon.png'));
-await cp(path.join(dark, choice), path.join(destination, 'icon-dark.png'));
-await writeFile(path.join(destination, 'ATTRIBUTION.md'), `Local icon pair copied from the active MiniMax Code built-in plugin-creator productivity pool: ${choice}. These assets are only used in this local installation and are not included in the portable community ZIP.\n`);
+const temporary = await mkdtemp(path.join(tmpdir(), 'voice-prompt-mcode-build-'));
+let stage;
+try {
+  const build = spawnSync('python3', [path.join(root, 'scripts/pack-minimax.py'), '--output', temporary], { encoding: 'utf8' });
+  if (build.status !== 0) throw new Error('MiniMax packaging failed: ' + build.stderr);
+  const report = JSON.parse(build.stdout);
+  await mkdir(path.dirname(destination), { recursive: true });
+  // Staging on the same filesystem allows rename and retains the current plugin on failure.
+  stage = await mkdtemp(path.join(path.dirname(destination), '.voice-prompt-stage-'));
+  const extract = spawnSync('python3', ['-c', 'import zipfile,sys; zipfile.ZipFile(sys.argv[1]).extractall(sys.argv[2])', report.archive, stage], { encoding: 'utf8' });
+  if (extract.status !== 0) throw new Error('MiniMax extraction failed: ' + extract.stderr);
+  let backup;
+  if (existing) {
+    const backupRoot = path.join(data, 'voice-prompt-backups');
+    await mkdir(backupRoot, { recursive: true, mode: 0o700 });
+    backup = path.join(backupRoot, `plugin-${new Date().toISOString().replaceAll(':', '-')}-${process.pid}`);
+    await rename(destination, backup);
+  }
+  try { await rename(stage, destination); stage = undefined; }
+  catch (error) { if (backup) await rename(backup, destination); throw error; }
+  console.log(JSON.stringify({ installed: destination, version: report.version, artifactSha256: report.sha256, backup: backup || null, next: 'Reconnect the Voice Prompt MCP in MiniMax Code. This does not update the desktop app or publish to the marketplace.' }, null, 2));
+} finally {
+  if (stage) await rm(stage, { recursive: true, force: true });
+  await rm(temporary, { recursive: true, force: true });
 }
-await writeFile(path.join(destination, 'voice-prompt.mcp.json'), JSON.stringify({ schemaVersion: 1, mcpServers: { 'voice-prompt': { type: 'stdio', command: 'sh', args: ['./mcp-launch.sh'], description: 'Local Voice Prompt companion bridge', timeout: 180000 } } }, null, 2) + '\n');
-await mkdir(path.join(destination, '.minimax-plugin'), { recursive: true });
-await writeFile(path.join(destination, '.minimax-plugin/plugin.json'), JSON.stringify({ schemaVersion: 1, name: 'voice-prompt', displayName: 'Voice Prompt', version: '0.7.0', description: '快捷键语音输入并自动填入；可开启录音后润色，或 @Voice Prompt 整理已发送的文字。', author: 'Voice Prompt contributors', icon: 'icon.png', darkIcon: 'icon-dark.png', category: 'Productivity', exampleQueries: ['检查 Voice Prompt 是否已连接', '把这段口述整理成 Agent 指令，保留原意和限制', '转录我指定的 WAV 音频文件'], apps: [], mcpServers: ['voice-prompt.mcp.json'], skills: ['skills/voice-prompt/SKILL.md'], hooks: [] }, null, 2) + '\n');
-console.log(`Installed local MiniMax plugin: ${destination}\nIcon pair: ${choice}`);

@@ -83,3 +83,30 @@ with zipfile.ZipFile(source) as src, zipfile.ZipFile(target,'w') as dst:
     await rm(directory, { recursive: true, force: true });
   }
 });
+
+test('local MiniMax installer installs the submission bytes and preserves the previous plugin', async () => {
+  const directory = await mkdtemp(path.join(tmpdir(), 'voice-minimax-install-test-'));
+  try {
+    const data = path.join(directory, 'mcode');
+    const install = () => {
+      const result = spawnSync(process.execPath, ['scripts/install-mcode.mjs', data], { cwd: root, encoding: 'utf8' });
+      assert.equal(result.status, 0, result.stderr);
+      return JSON.parse(result.stdout);
+    };
+    const first = install();
+    assert.equal(first.backup, null);
+    const artifact = JSON.parse(run('scripts/pack-minimax.py', '--output', directory));
+    assert.equal(first.artifactSha256, artifact.sha256);
+    run('-c', `import zipfile,pathlib,sys
+with zipfile.ZipFile(sys.argv[1]) as z:
+ for name in z.namelist():
+  assert z.read(name)==(pathlib.Path(sys.argv[2])/name).read_bytes(), name
+`, artifact.archive, first.installed);
+    const second = install();
+    assert.ok(second.backup);
+    assert.equal(await readFile(path.join(second.backup, 'package.json'), 'utf8'), await readFile(path.join(first.installed, 'package.json'), 'utf8'));
+    const manifest = JSON.parse(await readFile(path.join(first.installed, '.minimax-plugin/plugin.json'), 'utf8'));
+    assert.ok(!('darkIcon' in manifest) && !('hooks' in manifest));
+    assert.equal(JSON.parse(await readFile(path.join(first.installed, 'package.json'), 'utf8')).version, manifest.version);
+  } finally { await rm(directory, { recursive: true, force: true }); }
+});

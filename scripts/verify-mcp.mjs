@@ -24,7 +24,10 @@ try {
     const response = await call('tools/call', { name: 'voice_prepare_prompt', arguments: { text: '嗯，请检查登录页面，不要修改数据库，保留版本 2.0。', mode: 'agent' } });
     if (response.error || response.result?.isError) throw new Error('MCP polishing call failed');
     const draft = JSON.parse(response.result.content[0].text);
-    if (draft.fallback || !draft.text?.includes('2.0') || !draft.text?.includes('数据库')) throw new Error('MCP returned fallback or lost test constraints');
+    if (draft.fallback || !draft.text?.includes('2.0') || !draft.text?.includes('数据库')) {
+      const diagnosis = { fallback: Boolean(draft.fallback), numberPreserved: Boolean(draft.text?.includes('2.0')), constraintPreserved: Boolean(draft.text?.includes('数据库')), elapsedMs: draft.elapsedMs };
+      throw new Error('MCP polishing verification failed: ' + JSON.stringify(diagnosis));
+    }
     console.log(JSON.stringify({ polishingVerified: true, text: draft.text, elapsedMs: draft.elapsedMs }));
   }
 } finally { clearTimeout(timer); child.stdin.end(); child.kill(); }
