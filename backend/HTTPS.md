@@ -5,10 +5,12 @@
 ## 当前部署进度
 
 - 用户确定采用个人备案主体；腾讯云备案控制台显示 `voiceprompt.work` 未备案
-- 已验证的 Caddy v2.11.4 位于服务器 `/opt/voice-prompt-caddy/caddy`，配置暂存 `/etc/voice-prompt/Caddyfile.pending`，`caddy validate` 成功
+- 已验证的 Caddy v2.11.4 位于服务器 `/opt/voice-prompt-caddy/caddy`，配置暂存 `/etc/voice-prompt-caddy/Caddyfile.pending`，独立低权限用户 `voiceprompt-caddy` 下 `caddy validate` 成功
+- `backend/voice-prompt-caddy.service` 已安装到服务器并通过 `systemd-analyze verify`，状态 disabled；尚未安装正式 Caddyfile，未启动。证书状态目录与模型密钥目录隔离，代理用户无需读取模型密钥
 - 原业务服务 `voice-prompt` 保持 active，`127.0.0.1:8787/healthz` 返回正确服务身份；80/443 尚未监听
 - 没有将桌面客户端切换至未就绪的公网地址，原 SSH 隧道路径保持可用
 - 腾讯云要求轻量服务器累计购买至少三个月（含续费），备案期间剩余至少一个月；需在资源控制台核实资格与续费报价，不将旧单月价格当作续费报价
+- 续费弹窗现已核实：两个月 70 元，到期日从 2026-10-11 延至 2026-12-11；尚未确认订单或支付，等待新增支出授权，报价可能变化
 - 备案提交、公共证书、外网验收、插件市场提交均未完成
 
 备案资源规则来源：[腾讯云备案云资源](https://cloud.tencent.com/document/product/243/18908)。个人主体资料应直接录入官方备案平台，不提交到本仓库。
@@ -44,7 +46,7 @@ caddy validate --config ./Caddyfile.ready --adapter caddyfile
 
 DNS 的 A 记录指向核实后的服务器公网地址；没有验证 IPv6 就不发布 AAAA。放行 TCP 80/443，保持 8787 与 2019 不对公网开放。SSH 来源限制需要避免断掉当前管理会话。
 
-域名及备案条件就绪后，备份现有 `/etc/caddy/Caddyfile`，将已验证的配置安装为该文件，再用官方 systemd 服务启动/重载。不要把 Node 模型 Key、客户 Token 或发布者 SSH Key 放入 Caddyfile。代理把客户 Authorization 传给回环后端验证；模型 Key 仍仅在后端配置中。
+本部署使用仓库内 `backend/voice-prompt-caddy.service`，路径固定为 `/etc/voice-prompt-caddy/Caddyfile`，不与系统其他 Caddy 实例混用。域名及备案条件就绪后，先备份已有正式配置（如存在），再将已验证的 pending 配置安装为正式文件，运行 `systemctl enable --now voice-prompt-caddy`。后续配置修改先 validate，再 reload；检查进程状态和证书错误，不把命令成功当作公网验收。不要把 Node 模型 Key、客户 Token 或发布者 SSH Key 放入 Caddyfile。代理把客户 Authorization 传给回环后端验证；模型 Key 仍仅在后端配置中。
 
 配置的 40 秒响应头超时高于当前 30 秒上游调用超时。没有自动重试可能已计费的 POST。HTTP 自动跳转仅用于普通导航，业务客户端必须从一开始使用 HTTPS，不能先把凭据发至 HTTP。
 

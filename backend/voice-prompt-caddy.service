@@ -1,0 +1,38 @@
+[Unit]
+Description=Voice Prompt HTTPS reverse proxy
+After=network-online.target voice-prompt.service
+Wants=network-online.target
+ConditionPathExists=/etc/voice-prompt-caddy/Caddyfile
+
+[Service]
+Type=notify
+User=voiceprompt-caddy
+Group=voiceprompt-caddy
+Environment=XDG_DATA_HOME=/var/lib/voice-prompt-caddy
+Environment=XDG_CONFIG_HOME=/var/lib/voice-prompt-caddy/config
+ExecStartPre=/opt/voice-prompt-caddy/caddy validate --config /etc/voice-prompt-caddy/Caddyfile --adapter caddyfile
+ExecStart=/opt/voice-prompt-caddy/caddy run --config /etc/voice-prompt-caddy/Caddyfile --adapter caddyfile
+ExecReload=/opt/voice-prompt-caddy/caddy reload --config /etc/voice-prompt-caddy/Caddyfile --adapter caddyfile
+Restart=on-failure
+RestartSec=5s
+TimeoutStopSec=5s
+StateDirectory=voice-prompt-caddy
+StateDirectoryMode=0700
+UMask=0077
+AmbientCapabilities=CAP_NET_BIND_SERVICE
+CapabilityBoundingSet=CAP_NET_BIND_SERVICE
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+RestrictSUIDSGID=true
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
+LimitNOFILE=1048576
+MemoryMax=256M
+TasksMax=128
+
+[Install]
+WantedBy=multi-user.target
