@@ -12,10 +12,15 @@ export async function handleVoiceRequest(request, env, fetchModel = fetch) {
     raw = prompt.trim();
     if (mode === 'raw') return send(200, { schema: 'prompt-ai-voice/1', optimized: raw, raw, fallback: false, warnings: [], mode });
     if (!env.MINIMAX_API_KEY) throw new Error('Model is not configured');
-    const response = await fetchModel('https://api.minimaxi.com/v1/chat/completions', {
+    const endpoint = new URL(env.MINIMAX_BASE_URL || 'https://api.minimaxi.com/v1');
+    if (endpoint.protocol !== 'https:' || endpoint.username || endpoint.password || endpoint.search || endpoint.hash) throw new Error('Invalid model endpoint');
+    const model = env.MINIMAX_MODEL || 'MiniMax-M2.7';
+    const response = await fetchModel(endpoint.href.replace(/\/$/, '') + '/chat/completions', {
       method: 'POST', signal: AbortSignal.any([request.signal, AbortSignal.timeout(30000)]),
+      redirect: 'error',
       headers: { 'content-type': 'application/json', authorization: `Bearer ${env.MINIMAX_API_KEY}` },
-      body: JSON.stringify({ model: 'MiniMax-M2.7', temperature: 0, max_tokens: 2048,
+      body: JSON.stringify({ model, temperature: 0, max_tokens: 2048, reasoning_split: true,
+        ...(model === 'MiniMax-M3' ? { thinking: { type: 'disabled' } } : {}),
         messages: [{ role: 'system', content: systemPrompt(mode, terms) }, { role: 'user', content: JSON.stringify({ transcript: raw }) }] }),
     });
     if (!response.ok) throw new Error('Model request failed');

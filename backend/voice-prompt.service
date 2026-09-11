@@ -1,0 +1,31 @@
+[Unit]
+Description=Voice Prompt private polishing backend
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=voiceprompt
+Group=voiceprompt
+WorkingDirectory=/opt/voice-prompt
+EnvironmentFile=/etc/voice-prompt/backend.env
+ExecStart=/opt/voice-prompt-node/bin/node /opt/voice-prompt/backend/server.mjs
+Restart=on-failure
+RestartSec=5
+StateDirectory=voice-prompt
+StateDirectoryMode=0700
+UMask=0077
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+RestrictSUIDSGID=true
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
+MemoryMax=384M
+TasksMax=64
+
+[Install]
+WantedBy=multi-user.target

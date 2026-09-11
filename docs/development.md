@@ -12,6 +12,7 @@
 | `skills/` | 仓库根插件的 Agent 行为说明 |
 | `plugin/skills/` | 独立 connector 打包所用的同一份 Skill |
 | `worker/` | 可嵌入 Prompt.ai 的最小语音润色 Worker 入口 |
+| `backend/` | 带鉴权和持久化用量上限的私有 Ubuntu 后端；[部署说明](../backend/README.md) |
 | `tests/` | Node 单元测试与 Swift 行为测试 |
 | `scripts/` | 构建、打包、安装与验证 |
 | `media/` | 已剪辑宣传片、封面与动效预览 |
@@ -69,7 +70,7 @@ node scripts/install.mjs --omp --mcode=/absolute/path/to/minimax-data
 
 ## 与 Prompt.ai 结合
 
-`worker/index.mjs` 是 `/voice/prepare` 最小路由，复用 `plugin/lib/worker-voice.mjs` 的策略，不包含网站原来的扩写产品。Worker 使用 `MINIMAX_API_KEY`，当前适配代码中固定了服务端模型；部署者需要按自己的服务能力检查端点与模型配置。
+`worker/index.mjs` 是 `/voice/prepare` 最小路由，复用 `plugin/lib/worker-voice.mjs` 的策略，不包含网站原来的扩写产品。Worker 使用 `MINIMAX_API_KEY`；可通过 `MINIMAX_BASE_URL` 和 `MINIMAX_MODEL` 配置服务端端点与模型。需要按自己的额度和服务权限验证。`backend/` 在此策略外增加客户端身份验证、限流和持久化用量上限，默认关闭模型调用。
 
 对外暴露前，在父 Worker 中加入身份验证、速率限制与消费配额。仓库没有部署该服务，也没有提供公共额度。客户端只有收到 `prompt-ai-voice/1` 响应并通过保真检查后，才采用润色结果。
 
