@@ -16,13 +16,19 @@ Voice Prompt 把随口说出的想法，整理成可以交给 Agent 的清楚需
 
 **当前版本：0.7.0，内测版。** 桌面端基础功能支持 Apple Silicon Mac、macOS 13 及以上；新增 Qwen 本地识别使用固定版本的 MLX，需要 **macOS 15 及以上**。本仓库提供源代码与 Agent connector；语音模型、桌面二进制和个人 AI 登录信息不包含在 Git 源码中。目前没有公开市场上架或“一次导入就自动安装全部桌面依赖”的承诺。
 
+## 实时识别预览（beta.2）
+
+录音时，声波上方会显示最近说的内容：停顿后更新，连续说话时隔几秒刷新。预览保持原语言，不润色、不写入输入框。说完后仍用完整录音重新识别，再按设置润色和填入。可在“通用 → 实时识别预览”关闭。
+
+这属于分段预览，不是逐字流式识别；首次模型加载时仍可能等待。预览采用最近约 12 秒音频，长口述会滚动显示，最终文本以结束后的完整识别为准。
+
 ## 0.7.0 更新
 
 新增 **Qwen3-ASR 1.7B 8-bit** 本地识别，可在模型页选择中文、English 或自动识别；配置的产品名与术语会作为识别提示。整段录音统一处理，模型预加载并在连续录音间复用，空闲 30 分钟后释放。原有 SenseVoice 仍可切回。
 
 已有桌面端和 Qwen 环境的用户：点中输入框，按 `Option + Space` 开始，再按一次结束。开启“录音后自动润色”后，识别结果先经 AI 整理再尝试填入，由你确认发送。OMP 专用录音入口仍使用 `Ctrl + Alt + Space`，写入原始转录，可再用 `Ctrl + Shift + V` 润色。
 
-**同事首次使用：导入后发送 `@Voice Prompt 帮我完成首次安装并开启录音后 AI 润色`。** Agent 可按插件内指南下载 [内测桌面包与安装工具包](https://github.com/Lisayinyy/VoicePrompt/releases/tag/v0.7.0-beta.1)，自动准备应用、Python/MLX 和约 2.46 GB 的 Qwen 模型。需要宿主允许终端/文件操作；系统授权和个人 AI 配置由用户完成。导入本身不运行安装器。[Agent 安装指南](docs/agent-setup.md) · [测试指南](docs/beta-0.7.md)
+**同事首次使用：导入后发送 `@Voice Prompt 帮我完成首次安装并开启录音后 AI 润色`。** Agent 可按插件内指南下载 [内测桌面包与安装工具包](https://github.com/Lisayinyy/VoicePrompt/releases/tag/v0.7.0-beta.2)，自动准备应用、Python/MLX 和约 2.46 GB 的 Qwen 模型。需要宿主允许终端/文件操作；系统授权和个人 AI 配置由用户完成。导入本身不运行安装器。[Agent 安装指南](docs/agent-setup.md) · [测试指南](docs/beta-0.7.md)
 
 [版本记录](CHANGELOG.md) · [本机测试结果](docs/asr-0.7/RESULTS.md) · [下一阶段计划](research/asr-2026-09-11/NEXT-VERSION.md)
 

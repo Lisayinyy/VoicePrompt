@@ -26,6 +26,10 @@ final class VoiceUI: ObservableObject {
     @Published var holdToTalk = UserDefaults.standard.bool(forKey: "holdToTalk")
     @Published var autoInsert = UserDefaults.standard.object(forKey: "autoInsert") as? Bool ?? true
     @Published var polishOnRecord = UserDefaults.standard.bool(forKey: "polishOnRecord")
+    @Published var livePreviewEnabled = UserDefaults.standard.object(forKey: "livePreviewEnabled") as? Bool ?? true
+    @Published var liveText = ""
+    @Published var liveHint = "停顿时显示识别文字"
+    @Published var previewBusy = false
     @Published var modelReady = false
     @Published var modelSize = "—"
     @Published var speechModelId = "sensevoice-small"
@@ -260,6 +264,9 @@ struct VoiceRootView: View {
                     }.labelsHidden().frame(width: 206).disabled(model.active)
                 }
                 rule
+                row("实时识别预览", help: "停顿时更新原语言文字，连续说话时分段刷新；录音过程中不写入输入框。") {
+                    Toggle("实时识别预览", isOn: $model.livePreviewEnabled).labelsHidden().toggleStyle(.switch).controlSize(.small).disabled(model.active)
+                }
                 row("按住说话", help: "按住语音快捷键录音，松开后自动识别。关闭时按一下开始，再按一下结束。") {
                     Toggle("按住说话", isOn: $model.holdToTalk).labelsHidden().toggleStyle(.switch).controlSize(.small).disabled(model.active)
                 }
@@ -435,6 +442,8 @@ struct VoiceHistoryRow: View {
 }
 // The waveform itself is the interface: transparent window, no containing surface.
 enum RecordingLayout {
+    static let previewWidth: CGFloat = 440
+    static let previewHeight: CGFloat = 170
     static let windowWidth: CGFloat = 220
     static let windowHeight: CGFloat = 88
 }
@@ -502,10 +511,24 @@ struct VoiceRecordingView: View {
     var previewTime: Double? = nil
     @State private var hovered = false
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    var showsTranscript: Bool { model.livePreviewEnabled && [.listening, .paused, .transcribing, .polishing].contains(model.phase) }
     var recording: Bool { model.phase == .listening || model.phase == .paused }
     var showControls: Bool { hovered || previewHover || model.phase == .paused || NSWorkspace.shared.isVoiceOverEnabled }
     var body: some View {
         VStack(spacing: 2) {
+            if showsTranscript {
+                VStack(spacing: 7) {
+                    Text(model.liveText.isEmpty ? "说句话，文字会出现在这里" : String(model.liveText.suffix(180)))
+                        .font(.system(size: 15, weight: .medium)).lineSpacing(3).lineLimit(3)
+                        .multilineTextAlignment(.center).frame(maxWidth: .infinity, minHeight: 54)
+                        .foregroundColor(Color(white: 0.98))
+                        .shadow(color: .black.opacity(0.65), radius: 2, y: 1)
+                    Text(model.previewBusy ? "正在识别 · 不写入输入框" : model.liveHint)
+                        .font(.system(size: 10)).foregroundColor(Color(white: 0.93))
+                        .shadow(color: .black.opacity(0.65), radius: 2, y: 1)
+                }.padding(.horizontal, 20).padding(.bottom, 6)
+                    .accessibilityElement(children: .combine)
+            }
             VoiceWaveform(level: model.level, phase: model.phase, previewTime: previewTime)
             ZStack {
                 if recording {
@@ -530,7 +553,7 @@ struct VoiceRecordingView: View {
                     }.help(model.phase == .saved ? model.insertionHint : status)
                 }
             }.frame(height: 24)
-        }.frame(width: RecordingLayout.windowWidth, height: RecordingLayout.windowHeight)
+        }.frame(width: showsTranscript ? RecordingLayout.previewWidth : RecordingLayout.windowWidth, height: showsTranscript ? RecordingLayout.previewHeight : RecordingLayout.windowHeight)
             .contentShape(Rectangle()).onHover { hovered = $0 }
             .animation(reduceMotion ? nil : .easeInOut(duration: 0.16), value: showControls)
             .foregroundColor(Color(white: 0.48))

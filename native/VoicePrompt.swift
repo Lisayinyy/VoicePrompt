@@ -20,6 +20,10 @@ final class VoicePrompt: NSObject, NSApplicationDelegate {
     var gesture = VoiceHotkey()
     var escape: EventHotKeyRef?
     var processing: Task<Void, Never>?
+    var livePreview: Task<Void, Never>?
+    var livePreviewID: UUID?
+    var livePreviewFile: URL?
+    var previewCadence = VoicePreviewCadence()
     var generation = UUID()
     var target: NSRunningApplication?
     var targetWindow: AXUIElement?
@@ -85,6 +89,7 @@ final class VoicePrompt: NSObject, NSApplicationDelegate {
         ui.$holdToTalk.dropFirst().sink { UserDefaults.standard.set($0, forKey: "holdToTalk") }.store(in: &subscriptions)
         ui.$autoInsert.dropFirst().sink { UserDefaults.standard.set($0, forKey: "autoInsert") }.store(in: &subscriptions)
         ui.$polishOnRecord.dropFirst().sink { UserDefaults.standard.set($0, forKey: "polishOnRecord") }.store(in: &subscriptions)
+        ui.$livePreviewEnabled.dropFirst().sink { UserDefaults.standard.set($0, forKey: "livePreviewEnabled") }.store(in: &subscriptions)
         ui.$sounds.dropFirst().sink { UserDefaults.standard.set($0, forKey: "sounds") }.store(in: &subscriptions)
         do {
             try setupService()
@@ -255,6 +260,8 @@ final class VoicePrompt: NSObject, NSApplicationDelegate {
     }
     func display(_ phase: VoicePhase, dismissAfter seconds: Double? = nil) {
         dismiss?.cancel(); ui.phase = phase
+        let expanded = ui.livePreviewEnabled && [.listening, .paused, .transcribing, .polishing].contains(phase)
+        panel.setContentSize(NSSize(width: expanded ? RecordingLayout.previewWidth : RecordingLayout.windowWidth, height: expanded ? RecordingLayout.previewHeight : RecordingLayout.windowHeight))
         let screen = NSScreen.screens.first(where: { NSMouseInRect(NSEvent.mouseLocation, $0.frame, false) }) ?? NSScreen.main
         if let frame = screen?.visibleFrame { panel.setFrameOrigin(NSPoint(x: frame.midX - panel.frame.width / 2, y: frame.minY + 22)) }
         panel.orderFrontRegardless()
@@ -293,6 +300,7 @@ final class VoicePrompt: NSObject, NSApplicationDelegate {
             let r = try AVAudioRecorder(url: url, settings: [AVFormatIDKey: kAudioFormatLinearPCM, AVSampleRateKey: 16000.0, AVNumberOfChannelsKey: 1, AVLinearPCMBitDepthKey: 16, AVLinearPCMIsFloatKey: false, AVLinearPCMIsBigEndianKey: false])
             r.isMeteringEnabled = true
             guard r.record() else { throw NSError(domain: "Voice Prompt", code: 1, userInfo: [NSLocalizedDescriptionKey: "无法开始录音，请检查麦克风。"] ) }
+            previewCadence = VoicePreviewCadence(); ui.liveText = ""; ui.liveHint = "停顿时显示识别文字"; ui.previewBusy = false
             recorder = r; file = url; mode = requested; pendingInsertion = false; ui.seconds = 0; ui.level = 0; ui.message = ""; ui.lastFallback = false
             item.button?.image = NSImage(systemSymbolName: "mic.fill", accessibilityDescription: "正在录音")
             RegisterEventHotKey(53, 0, EventHotKeyID(signature: 0x5650524d, id: 3), GetApplicationEventTarget(), 0, &escape)
@@ -300,30 +308,71 @@ final class VoicePrompt: NSObject, NSApplicationDelegate {
             meter = Timer.scheduledTimer(withTimeInterval: 0.08, repeats: true) { [weak self] _ in
                 guard let self, let recorder = self.recorder else { return }
                 self.ui.seconds = recorder.currentTime
-                if recorder.isRecording { recorder.updateMeters(); self.ui.level = max(0, min(1, (Double(recorder.averagePower(forChannel: 0)) + 50) / 50)) }
+                if recorder.isRecording { recorder.updateMeters(); self.ui.level = max(0, min(1, (Double(recorder.averagePower(forChannel: 0)) + 50) / 50))
+                    self.previewCadence.observe(time: recorder.currentTime, power: recorder.averagePower(forChannel: 0))
+                }
+                self.requestLivePreview(forced: !recorder.isRecording)
             }
             limit = Timer.scheduledTimer(withTimeInterval: 300, repeats: false) { [weak self] _ in self?.finish() }
         } catch { updateCapture("error", error: error.localizedDescription); ui.message = error.localizedDescription; display(.error, dismissAfter: 6) }
     }
     @objc func pause() {
         guard let r = recorder else { return }
-        if r.isRecording { r.pause(); ui.level = 0; display(.paused) }
+        if r.isRecording { r.pause(); ui.level = 0; display(.paused); requestLivePreview(forced: true) }
         else if r.record() { display(.listening) }
+    }
+    func requestLivePreview(forced: Bool = false) {
+        guard ui.livePreviewEnabled, livePreview == nil, let recorder, let file,
+              previewCadence.shouldRequest(time: recorder.currentTime, forced: forced) else { return }
+        let seconds = recorder.currentTime
+        let audio: Data
+        do { audio = try VoiceLiveAudio.snapshot(Data(contentsOf: file, options: .mappedIfSafe), recordedSeconds: seconds) }
+        catch { return } // A fresh recorder may not have flushed a full half-second yet.
+        previewCadence.submitted(time: seconds)
+        let current = generation, requestID = UUID()
+        livePreviewID = requestID; ui.previewBusy = true
+        livePreview = Task { @MainActor in
+            let snapshot = file.deletingLastPathComponent().appendingPathComponent("preview-" + requestID.uuidString + ".wav")
+            self.livePreviewFile = snapshot
+            defer {
+                if self.livePreviewFile == snapshot { self.livePreviewFile = nil }
+                try? FileManager.default.removeItem(at: snapshot)
+                if self.livePreviewID == requestID { self.livePreview = nil; self.livePreviewID = nil; self.ui.previewBusy = false }
+            }
+            do {
+                try audio.write(to: snapshot, options: .atomic)
+                try FileManager.default.setAttributes([.posixPermissions: 0o600], ofItemAtPath: snapshot.path)
+                let result = try await self.call("/api/transcribe", ["path": snapshot.path])
+                try Task.checkCancellation()
+                guard self.generation == current, self.recorder != nil else { return }
+                if let text = result["text"] as? String, !text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                    self.ui.liveText = text
+                    self.ui.liveHint = "实时预览 · 结束后校准"
+                }
+            } catch {
+                guard self.generation == current, self.recorder != nil, !Task.isCancelled else { return }
+                self.ui.liveHint = "预览暂不可用 · 结束后仍会识别"
+            }
+        }
     }
     @objc func finish() {
         guard let r = recorder, let audio = file else { return }
         r.stop(); recorder = nil; limit?.invalidate(); limit = nil; meter?.invalidate(); meter = nil
         play("Pop")
-        let current = generation, chosen = mode
+        let current = generation, chosen = mode, outstandingPreview = livePreview
         display(.transcribing); updateCapture("transcribing")
         processing = Task { @MainActor in
             defer { try? FileManager.default.removeItem(at: audio) }
             do {
+                // Finish the short in-flight preview first, preserving the warm model.
+                // Previews never enter history, prepare, capture/update, clipboard or editor APIs.
+                await outstandingPreview?.value
+                try Task.checkCancellation()
                 let transcript = try await self.call("/api/transcribe", ["path": audio.path])
                 try Task.checkCancellation()
                 guard current == self.generation else { return }
                 guard let raw = transcript["text"] as? String, !raw.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else { throw NSError(domain: "Voice Prompt", code: 2, userInfo: [NSLocalizedDescriptionKey: "刚才没有听清，可以再说一次。"] ) }
-                self.rawDraft = raw
+                self.rawDraft = raw; self.ui.liveText = raw
                 if chosen != "raw" { self.display(.polishing) }
                 var request: [String: Any] = ["text": raw, "session": "desktop", "id": current.uuidString]
                 request["mode"] = chosen
@@ -391,6 +440,8 @@ final class VoicePrompt: NSObject, NSApplicationDelegate {
         pasteTransaction?.restore(); pasteTransaction = nil
         updateCapture("cancelled")
         gesture = VoiceHotkey()
+        if let livePreviewFile { try? FileManager.default.removeItem(at: livePreviewFile) }; livePreviewFile = nil
+        livePreview?.cancel(); livePreview = nil; livePreviewID = nil; ui.liveText = ""; ui.previewBusy = false
         generation = UUID(); starting = false; recorder?.stop(); recorder = nil; processing?.cancel(); processing = nil
         limit?.invalidate(); limit = nil; meter?.invalidate(); meter = nil
         if let file { try? FileManager.default.removeItem(at: file) }; file = nil
@@ -595,6 +646,8 @@ final class VoicePrompt: NSObject, NSApplicationDelegate {
     }
     @objc func quit() { NSApp.terminate(nil) }
     func applicationWillTerminate(_ notification: Notification) {
+        livePreview?.cancel()
+        if let livePreviewFile { try? FileManager.default.removeItem(at: livePreviewFile) }
         generation = UUID(); recorder?.stop(); processing?.cancel(); limit?.invalidate(); meter?.invalidate(); refresh?.invalidate(); captureTimer?.invalidate(); dismiss?.cancel()
         if let file { try? FileManager.default.removeItem(at: file) }
         pasteTransaction?.restore(); pasteTransaction = nil

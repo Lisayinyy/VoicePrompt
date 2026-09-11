@@ -11,6 +11,8 @@ For setup, initialization or missing-component requests, read [the Agent setup w
 
 Keep daily instructions short: the default Option+Space starts, the same key finishes. The General page offers three shortcut presets and optional push-to-talk (hold to record, release to finish); if customized, follow the shortcut shown there. The native app has a one-page first-use guide and a compact recording panel; pause/resume lives in that panel. General, History, Models, Advanced, AI Polishing and About are in the native window, not a required web page.
 
+While recording, live transcription preview is enabled by default: brief pauses or periodic refreshes show recent speech in the original language above the waveform. Preview text is provisional, is not AI-polished and never enters the input box. The completed recording is transcribed again before normal polishing/insertion. Users can turn this off in 通用 → 实时识别预览. It is not cross-language translation or token-by-token streaming.
+
 For normal dictation: focus the destination input, press Option+Space, speak, then press Option+Space again. The Voice Prompt desktop app records and transcribes locally, then automatically pastes into the captured input and restores the previous clipboard when no newer copy has occurred, without sending Enter. With automatic polishing disabled, ordinary dictation is raw; a leading literal @voice-prompt or @Voice Prompt in the readable focused editor requests polishing before insertion. Escape cancels recording or processing; the floating panel provides pause/resume. The desktop app and its models must be present; a connector alone cannot provide operating-system hotkeys or microphone permissions.
 
 ## Direct input without clipboard

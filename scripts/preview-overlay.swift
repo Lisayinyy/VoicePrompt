@@ -16,9 +16,11 @@ import SwiftUI
         for (name, phase) in cases {
             let model = VoiceUI()
             model.phase = phase; model.level = 0.72; model.seconds = 18
+            model.livePreviewEnabled = true; model.liveText = "我想做一个简洁的产品介绍页面，手机上也能看"; model.liveHint = "实时预览 · 结束后校准"
             model.insertionConfirmed = true
             let host = NSHostingView(rootView: VoiceRecordingView(model: model, actions: VoiceActions(), previewHover: name == "recording-hover", previewTime: 0.6))
-            let rect = NSRect(x: 0, y: 0, width: RecordingLayout.windowWidth, height: RecordingLayout.windowHeight)
+            let expanded = [.listening, .paused, .transcribing, .polishing].contains(phase)
+            let rect = NSRect(x: 0, y: 0, width: expanded ? RecordingLayout.previewWidth : RecordingLayout.windowWidth, height: expanded ? RecordingLayout.previewHeight : RecordingLayout.windowHeight)
             host.frame = rect
             let window = NSWindow(contentRect: rect, styleMask: [.borderless], backing: .buffered, defer: false)
             window.isOpaque = false; window.backgroundColor = .clear; window.contentView = host
