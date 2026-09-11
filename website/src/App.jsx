@@ -17,7 +17,7 @@ export function App(){
  <main id="main">
  <section className="hero" aria-labelledby="hero-title">
  <div className="ribbon" aria-hidden="true"><img src="/hero-ribbon.png" alt=""/><div className="ribbon-labels"><span>捕捉想法</span><span>理解意图</span><span>生成清晰的 Prompt</span></div></div>
- <div className="hero-copy"><h1 id="hero-title">想法说出来<br/><span>Prompt 自然清晰</span></h1><p className="lead">用自然的语言记录你的想法，Voice Prompt 将它整理成<br className="wide-break"/>清晰的 Prompt，让你更从容地开始创作</p><div className="actions"><button className="button dark" onClick={()=>show('download')}>下载 macOS 内测版 <ArrowRight/></button><button className="text-button" onClick={()=>show('guide')}>MiniMax Code 使用指南 <ArrowRight/></button></div><p className="hint">按下快捷键，开始说话</p></div>
+ <div className="hero-copy"><h1 id="hero-title">说出想法<br/><span>让表达更清晰</span></h1><p className="lead">用自然的语言记录你的想法，Voice Prompt 将它整理成<br className="wide-break"/>清晰的 Prompt，让你更从容地开始创作</p><div className="actions"><button className="button dark" onClick={()=>show('download')}>下载 macOS 内测版 <ArrowRight/></button><button className="text-button" onClick={()=>show('guide')}>MiniMax Code 使用指南 <ArrowRight/></button></div><p className="hint">按下快捷键，开始说话</p></div>
  </section>
  <section className="demo" aria-label="语音润色示例">
  <div className="demo-heading"><strong>示例</strong><div className="rule"/><span>等待确认发送</span></div>

@@ -4,3 +4,7 @@
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
 @media(min-width:1101px){.hero{padding-left:74px;min-height:573px}h1{font-size:82px;letter-spacing:-4px}.lead{font-size:21px}.ribbon{width:840px;right:-72px;height:555px}.ribbon-labels{right:105px}.demo,.about{max-width:1180px}}
 .ribbon img{mix-blend-mode:darken}
+
+/* Scoped headline refinement */
+h1{font-weight:600;letter-spacing:-2px;line-height:1.22}
+@media(max-width:760px){h1{letter-spacing:-1px}}
