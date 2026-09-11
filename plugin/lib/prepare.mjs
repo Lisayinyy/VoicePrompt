@@ -2,6 +2,7 @@ import { mkdtemp, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { run } from './process.mjs';
+import { providerKey } from './provider-key.mjs';
 
 import { validateInput, systemPrompt, protectDraft } from './voice-policy.mjs';
 export { validateInput, systemPrompt, guard } from './voice-policy.mjs';
@@ -11,7 +12,7 @@ export async function callModel(config, system, text, signal, context = {}) {
   if (config.provider === 'prompt-ai') {
     const url = new URL(config.baseUrl.replace(/\/$/, '') + '/voice/prepare');
     if (url.protocol !== 'https:' && !(url.protocol === 'http:' && ['localhost', '127.0.0.1', '[::1]'].includes(url.hostname))) throw new Error('Use HTTPS for remote providers');
-    const key = process.env[config.apiKeyEnv];
+    const key = await providerKey(config);
     const response = await fetch(url, { method: 'POST', redirect: 'error', signal,
       headers: { 'content-type': 'application/json', ...(key ? { authorization: `Bearer ${key}` } : {}) },
       body: JSON.stringify({ prompt: text, mode: context.mode || 'clean', terms: context.terms || [] }),
@@ -26,7 +27,7 @@ export async function callModel(config, system, text, signal, context = {}) {
     const url = new URL(config.baseUrl.replace(/\/$/, '') + '/chat/completions');
     if (url.protocol !== 'https:' && !(url.protocol === 'http:' && ['localhost', '127.0.0.1', '[::1]'].includes(url.hostname))) throw new Error('Use HTTPS for remote providers');
     if (!config.model) throw new Error('Configure model');
-    const key = process.env[config.apiKeyEnv];
+    const key = await providerKey(config);
     const response = await fetch(url, {
       method: 'POST', redirect: 'error', signal,
       headers: { 'content-type': 'application/json', ...(key ? { authorization: `Bearer ${key}` } : {}) },
