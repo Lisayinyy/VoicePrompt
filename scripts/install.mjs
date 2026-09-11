@@ -6,7 +6,10 @@ import { fileURLToPath } from 'node:url';
 import { spawnSync } from 'node:child_process';
 import { randomBytes } from 'node:crypto';
 if (process.platform !== 'darwin' || process.arch !== 'arm64') throw new Error('Voice Prompt 0.7.0 runtime supports Apple Silicon macOS only');
-const root = fileURLToPath(new URL('../', import.meta.url)), home = homedir();
+const root = fileURLToPath(new URL('../', import.meta.url));
+const testRoot = process.argv.find(a => a.startsWith('--test-root='))?.slice(12);
+if (testRoot && (!path.isAbsolute(testRoot) || !path.resolve(testRoot).startsWith(path.resolve(tmpdir()) + path.sep))) throw new Error('Test root must be an absolute temporary directory');
+const home = testRoot || homedir();
 const temporary = await mkdtemp(path.join(tmpdir(), 'voice-prompt-install-'));
 const unpack = spawnSync('/usr/bin/ditto', ['-x', '-k', path.join(root, 'dist/voice-prompt-desktop-0.7.0-macos-arm64.zip'), temporary], { encoding: 'utf8' });
 if (unpack.status !== 0) throw new Error(unpack.stderr);
@@ -14,7 +17,7 @@ const source = path.join(temporary, 'Voice Prompt.app'), destination = path.join
 await access(path.join(source, 'Contents/Resources/models/sensevoice-small.gguf'));
 const check = spawnSync('/usr/bin/codesign', ['--verify', '--deep', '--strict', source], { encoding: 'utf8' });
 if (check.status !== 0) throw new Error(check.stderr);
-if (spawnSync('/usr/bin/pgrep', ['-x', 'VoicePrompt']).status === 0) throw new Error('Quit Voice Prompt before updating it');
+if (!testRoot && spawnSync('/usr/bin/pgrep', ['-x', 'VoicePrompt']).status === 0) throw new Error('Quit Voice Prompt before updating it');
 const dir = path.join(home, '.config/voice-prompt'), backup = path.join(dir, 'backups', new Date().toISOString().replaceAll(':', '-'));
 await mkdir(backup, { recursive: true, mode: 0o700 }); await mkdir(path.dirname(destination), { recursive: true });
 try { await lstat(destination); await rename(destination, path.join(backup, 'Voice Prompt.app')); } catch (e) { if (e.code !== 'ENOENT') throw e; }

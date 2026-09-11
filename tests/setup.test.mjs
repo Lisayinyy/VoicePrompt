@@ -1,0 +1,34 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { mkdtemp, mkdir, writeFile, readFile, rm, readdir } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
+import path from 'node:path';
+import { setupStatus } from '../plugin/lib/setup-status.mjs';
+
+test('first-use inspection works without desktop/config and never creates files', async t => {
+  const home = await mkdtemp(path.join(tmpdir(), 'voice-empty-')); t.after(() => rm(home, { recursive: true }));
+  const result = await setupStatus({ home, config: {}, system: 'darwin', machine: 'arm64' });
+  assert.equal(result.desktopInstalled, false); assert.equal(result.pythonInstalled, false);
+  assert.equal(result.weightsPresent, false); assert.equal(result.aiProviderConfigured, false);
+  assert.deepEqual(await readdir(home), []);
+});
+test('readiness separates installed files from actual inference, AI and input verification', async t => {
+  const home = await mkdtemp(path.join(tmpdir(), 'voice-setup-')); t.after(() => rm(home, { recursive: true }));
+  const app = path.join(home, 'Applications/Voice Prompt.app/Contents');
+  await mkdir(path.join(app, 'Resources/bin'), { recursive: true }); await mkdir(path.join(app, 'MacOS'));
+  await writeFile(path.join(app, 'Resources/bin/node'), 'fixture'); await writeFile(path.join(app, 'MacOS/VoicePrompt'), 'fixture');
+  await writeFile(path.join(app, 'Resources/components.json'), JSON.stringify({ version: '0.7.0' }));
+  const config = { provider: 'omp', token: 'private-token-must-never-appear', speechModelId: 'qwen3-asr-1.7b' };
+  const result = await setupStatus({ home, config, system: 'darwin', machine: 'arm64' });
+  assert.equal(result.desktopInstalled, true); assert.equal(result.desktopVersion, '0.7.0');
+  assert.equal(result.weightsPresent, false); assert.equal(result.aiProviderConfigured, true);
+  assert.ok(!JSON.stringify(result).includes(config.token)); assert.match(result.verification, /Does not verify/);
+  const unsupported = await setupStatus({ home, config, system: 'win32', machine: 'x64' });
+  assert.equal(unsupported.supportedHardware, false);
+});
+test('both import formats include the same first-use instructions without the desktop runtime', async () => {
+  const root = new URL('../', import.meta.url);
+  const a = await readFile(new URL('skills/voice-prompt/references/setup.md', root), 'utf8');
+  const b = await readFile(new URL('plugin/skills/voice-prompt/references/setup.md', root), 'utf8');
+  assert.equal(a, b);
+});

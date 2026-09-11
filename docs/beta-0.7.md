@@ -6,7 +6,7 @@
 
 这次内测重点是本地语音识别效果。Qwen 方案需要 Apple Silicon Mac、macOS 15+；已在 M2 Pro / 16GB 上做本机样本验证，其他机型尚未验证。约 2.46 GB 模型之外还需要 Python/MLX 环境与缓存空间。桌面基础功能和 SenseVoice 仍以 macOS 13+ 为构建目标。
 
-**仓库导入 ≠ 安装桌面语音输入。** 目前没有公开桌面安装器，不能把此版本当成任意同事一键安装的正式产品。首次准备需要开发者按下方步骤构建；已经配置过的测试者可以直接看“开始测试”。Windows、Linux 和 Intel Mac 暂不在本次测试范围内。
+**仓库导入 ≠ 安装桌面语音输入。** 已提供内测桌面包和 Agent 安装工具包，首次可发送 `@Voice Prompt 帮我完成首次安装并开启录音后 AI 润色`，详见 [Agent 安装指南](agent-setup.md)。它仍不是任意同事导入即用的正式产品；以下保留开发者从源码构建方式。已经配置过的测试者可以直接看“开始测试”。Windows、Linux 和 Intel Mac 暂不在本次测试范围内。
 
 ## 首次准备（开发者）
 
@@ -65,4 +65,4 @@ macOS / 芯片 / 内存：
 >
 > 支持 MiniMax Code 和 OMP，欢迎 Apple Silicon Mac、macOS 15+ 的同事参与测试，重点想听听识别准确度、等待时间和填入体验的反馈
 >
-> 目前首次安装需要准备桌面应用和模型，单独导入 MCP 插件还不能录音，安装步骤与代码在这里：https://github.com/Lisayinyy/VoicePrompt
+> 首次安装可让 MiniMax Code 的 Agent 按内置指南准备桌面应用和模型，需要允许工具操作并完成系统授权，步骤与代码在这里：https://github.com/Lisayinyy/VoicePrompt

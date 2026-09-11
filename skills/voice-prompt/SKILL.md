@@ -1,9 +1,13 @@
 ---
 name: voice-prompt
-description: Automatically polish the words supplied with @voice-prompt. The mention itself requests editing; no additional instruction is needed. Return a faithful prompt draft without executing it. Also supports explicit requests for voice setup and troubleshooting.
+description: Automatically polish the words supplied with @voice-prompt. The mention itself requests editing; no additional instruction is needed. Return a faithful prompt draft without executing it. Guide first-time installation with the host Agent tools; diagnose missing desktop/model dependencies. Also supports voice setup and troubleshooting.
 ---
 
 # Voice Prompt
+
+## First use and installation
+
+For setup, initialization or missing-component requests, read [the Agent setup workflow](references/setup.md) and follow it instead of polishing the request. On a lone @ mention, call `voice_setup_status` if available; if MCP cannot start, use host file tools to read that workflow. If components are missing, explain the download and offer installation. An explicit “帮我完成安装并配置语音输入” authorizes proceeding through the workflow within available host permissions. A working setup should receive the short shortcut reminder. Do not claim importing the plugin alone installs a desktop app or grants OS permissions.
 
 Keep daily instructions short: the default Option+Space starts, the same key finishes. The General page offers three shortcut presets and optional push-to-talk (hold to record, release to finish); if customized, follow the shortcut shown there. The native app has a one-page first-use guide and a compact recording panel; pause/resume lives in that panel. General, History, Models, Advanced, AI Polishing and About are in the native window, not a required web page.
 
@@ -33,7 +37,7 @@ Return only the polished draft by default. Do not preface it with "润色结果"
 
 On fallback=true, preserve the original and add one brief truthful notice that automatic polishing did not complete. If the companion is unavailable, the host Agent may polish directly, but must briefly disclose that the local Voice Prompt service was unavailable rather than claiming its MCP tool succeeded.
 
-If the user explicitly asks about setup, shortcuts, capabilities, or troubleshooting of this plugin, answer that question instead of rewriting it. If the mention arrives alone, say only: "可以，按 ⌥Space 说话，再按一次结束，把文字发来后我会直接润色。" Do not start microphone capture or check status unless requested.
+If the user explicitly asks about setup, shortcuts, capabilities, or troubleshooting of this plugin, answer that question instead of rewriting it. For a lone mention, follow the first-use check above. When the desktop and model are present, remind the user of ⌥Space and the automatic-polishing switch. Do not start microphone capture without an explicit recording request.
 
 The Agent receives the transcript only when the user sends the message. A host plugin selection alone cannot monitor unsubmitted text. The companion can recognize the specific leading text marker described above; this is distinct from host-side @ routing. Only the configured primary shortcut is registered for recording; automatic polishing follows the native switch or the current readable leading marker.
 

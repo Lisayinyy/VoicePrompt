@@ -98,7 +98,7 @@ test('MCP speaks JSON-RPC, returns tool errors, and handles malformed input', as
   const messages = received.trim().split('\n').map(JSON.parse);
   assert.equal(messages[0].error.code, -32700);
   assert.equal(messages.find(m => m.id === 1).result.protocolVersion, '2025-06-18');
-  assert.equal(messages.find(m => m.id === 2).result.tools.length, 4);
+  assert.equal(messages.find(m => m.id === 2).result.tools.length, 5);
   assert.equal(messages.find(m => m.id === 3).result.isError, true);
   input.end();
 });

@@ -9,4 +9,4 @@
 - OMP、MiniMax Code connector 和桌面版本统一为 0.7.0，保留原有热键与 AI 润色设置
 - 提供依赖锁定、固定模型 revision 与 SHA-256 校验的本地准备脚本、测试结果与内测指南
 
-分发状态：源码内测版，Qwen 依赖单独准备；未发布一键桌面安装器或市场正式版本。Qwen 固定 MLX 运行环境要求 Apple Silicon / macOS 15+。
+新增 Agent 首次安装指南、无桌面服务依赖的组件检查及校验下载的安装工具包，发布开发内测桌面包；Qwen 在首次准备时另行下载。未发布已公证的一键安装器或市场正式版本。Qwen 固定 MLX 运行环境要求 Apple Silicon / macOS 15+。

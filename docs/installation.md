@@ -6,7 +6,7 @@
 
 - **已经安装 Voice Prompt.app：** 启动它，再按下文导入 MiniMax Code connector。
 - **只想先验证文字润色：** 安装 Node.js 22+，运行源码服务，并使用下面的开发 MCP 配置。不需要录音模型。
-- **从零体验快捷键语音输入：** 当前需要在 Apple Silicon Mac 上构建桌面运行包，步骤见 [开发文档](development.md)。本仓库暂未发布可下载的桌面安装器，导入插件不会自动下载模型或申请系统权限。
+- **从零体验快捷键语音输入：** 在 Apple Silicon Mac / macOS 15+ 上，优先使用 [Agent 安装指南](agent-setup.md) 和内测 Release 桌面包；也可按 [开发文档](development.md) 自行构建。导入插件本身不会自动下载模型或申请系统权限。
 
 0.7.0 新增 Qwen 本地识别，具体环境要求、安装命令和验收方式见 [0.7 内测指南](beta-0.7.md)。
 

@@ -1,8 +1,10 @@
 import { request } from './client.mjs';
+import { setupStatus } from './setup-status.mjs';
 import { randomUUID } from 'node:crypto';
 
 const object = properties => ({ type: 'object', properties, additionalProperties: false });
 export const toolDefinitions = [
+  { name: 'voice_setup_status', description: 'Read-only first-use check, available even before the desktop companion starts. Reports installed components and setup guide, never downloads or changes permissions.', inputSchema: object({}), annotations: { readOnlyHint: true } },
   { name: 'voice_status', description: 'Check the local Voice Prompt companion service and AI provider configuration. Does not assert microphone permission or recording state.', inputSchema: object({}), annotations: { readOnlyHint: true } },
   { name: 'voice_models', description: 'List Voice Prompt speech models and which are downloaded. Does not download models.', inputSchema: object({}), annotations: { readOnlyHint: true } },
   { name: 'voice_prepare_prompt', description: 'Faithfully edit supplied speech transcript into a draft, preserving language and constraints. Never executes the resulting request. AI may use the configured cloud provider; failure returns original with fallback=true.', inputSchema: { ...object({ text: { type: 'string', minLength: 1, maxLength: 16000 }, mode: { type: 'string', enum: ['raw', 'clean', 'agent'] }, terms: { type: 'array', items: { type: 'string', maxLength: 100 }, maxItems: 100 } }), required: ['text'] } },
@@ -33,6 +35,10 @@ export function startMcp({ input = process.stdin, output = process.stdout, invok
       if (pending.has(id)) return send({ id, error: { code: -32600, message: 'Duplicate request id' } });
       const abort = new AbortController(); pending.set(id, abort);
       try {
+        if (definition.name === 'voice_setup_status') {
+          const result = await setupStatus();
+          return send({ id, result: { content: [{ type: 'text', text: JSON.stringify(result) }], isError: false } });
+        }
         const route = { voice_status: '/api/status', voice_models: '/api/models', voice_prepare_prompt: '/api/prepare', voice_transcribe_file: '/api/transcribe' }[definition.name];
         const payload = definition.name === 'voice_prepare_prompt' ? { ...args, session: `mcp:${process.pid}:${randomUUID()}` } : args;
         const result = await invoke(route, ['voice_status', 'voice_models'].includes(definition.name) ? undefined : payload, { signal: abort.signal });

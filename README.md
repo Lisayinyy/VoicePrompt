@@ -22,7 +22,7 @@ Voice Prompt 把随口说出的想法，整理成可以交给 Agent 的清楚需
 
 已有桌面端和 Qwen 环境的用户：点中输入框，按 `Option + Space` 开始，再按一次结束。开启“录音后自动润色”后，识别结果先经 AI 整理再尝试填入，由你确认发送。OMP 专用录音入口仍使用 `Ctrl + Alt + Space`，写入原始转录，可再用 `Ctrl + Shift + V` 润色。
 
-**第一次使用的同事请先看 [内测安装与测试指南](docs/beta-0.7.md)**：Git 导入只安装 connector；桌面应用、约 2.46 GB 的 Qwen 模型及本地 Python/MLX 环境需要另行准备。当前未发布一键桌面安装器，不能仅导入仓库就开始录音。
+**同事首次使用：导入后发送 `@Voice Prompt 帮我完成首次安装并开启录音后 AI 润色`。** Agent 可按插件内指南下载 [内测桌面包与安装工具包](https://github.com/Lisayinyy/VoicePrompt/releases/tag/v0.7.0-beta.1)，自动准备应用、Python/MLX 和约 2.46 GB 的 Qwen 模型。需要宿主允许终端/文件操作；系统授权和个人 AI 配置由用户完成。导入本身不运行安装器。[Agent 安装指南](docs/agent-setup.md) · [测试指南](docs/beta-0.7.md)
 
 [版本记录](CHANGELOG.md) · [本机测试结果](docs/asr-0.7/RESULTS.md) · [下一阶段计划](research/asr-2026-09-11/NEXT-VERSION.md)
 
@@ -57,7 +57,7 @@ Voice Prompt 把随口说出的想法，整理成可以交给 Agent 的清楚需
 
 ## 在 MiniMax Code 中导入
 
-先准备并启动 **Voice Prompt.app**，再添加 connector；桌面端的准备方式见 [安装指南](docs/installation.md)。如果只有本仓库源码，可以先运行文字服务做开发验证，完整快捷键录音还需要构建桌面运行包。
+先准备并启动 **Voice Prompt.app**，再添加 connector；桌面端的准备方式见 [安装指南](docs/installation.md)。首次使用可以让 Agent 按 [安装指南](docs/agent-setup.md) 下载内测桌面包并完成安装，不必自行编译。也可以只运行源码文字服务做开发验证。
 
 1. 打开 MiniMax Code 的 **Plugins**。
 2. 选择 **Create → Import plugin from a Git repository**。
@@ -86,7 +86,7 @@ Voice Prompt 把随口说出的想法，整理成可以交给 Agent 的清楚需
 
 - **安装了但没 @：** 不会因此让 Agent 自动整理每一条消息；桌面全局听写仍可独立使用。
 - **@ 并附上文字：** 本次消息进入润色流程，不会执行文字里的开发任务。
-- **只 @ 名称：** 不会自动打开麦克风；录音由桌面快捷键启动。
+- **只 @ 名称：** 首次检查安装状态，缺少组件时引导安装；不会自动录音或下载数 GB 文件。明确要求安装后，Agent 才执行准备流程。
 - **询问如何使用插件：** 会回答使用问题，而不是把问题误当成待润色文本。
 
 MiniMax Code 中的富文本插件标签，和桌面应用读取到的字面 `@voice-prompt` 标记不是同一个机制。想让每次语音输入都先润色，应打开桌面自动润色开关，不能依赖宿主标签被桌面应用识别。
@@ -131,6 +131,7 @@ flowchart LR
 
 | MCP 工具 | 用途 |
 | --- | --- |
+| `voice_setup_status` | 首次使用的只读组件检查，不要求桌面服务已启动 |
 | `voice_status` | 查看本地服务与 AI 配置状态；不是麦克风实测 |
 | `voice_models` | 查看识别模型是否就绪 |
 | `voice_prepare_prompt` | 将已有文字整理为保留原意的 Prompt |
@@ -166,7 +167,7 @@ Node.js 22 及以上；JavaScript 核心无需安装 npm 依赖。Swift 桌面�
 
 当前已包含本地服务认证、会话隔离、取消与回退、输入目标检查以及对应测试。真实 MiniMax Code 的 MCP 润色已有本机演示；界面导入预览、源码检查、模型转写与物理麦克风 / 自动填入测试应分别看待。
 
-桌面构建目前使用开发用 ad-hoc 签名，尚无 Developer ID 公证；本仓库不提供已公证的一键安装器。Windows、Linux、Intel Mac 和所有输入框兼容性尚未验证。
+桌面构建目前使用开发用 ad-hoc 签名，尚无 Developer ID 公证；内测 Release 提供桌面包和由 Agent 执行的安装工具包，但不属于已公证的一键安装器。Windows、Linux、Intel Mac 和所有输入框兼容性尚未验证。
 
 ## 许可
 
