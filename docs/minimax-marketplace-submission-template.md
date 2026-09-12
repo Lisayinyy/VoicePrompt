@@ -42,6 +42,7 @@ Use these as copy-ready draft values. Confirm the account, email, and contact fi
 | Privacy / data policy URL | https://github.com/Lisayinyy/VoicePrompt/blob/main/minimax/data-and-permissions.md |
 | Installation guide URL | https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/agent-setup.md |
 | Public material index | https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/minimax-marketplace-public-materials.md |
+| Submission packet | https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/minimax-submission-packet-2026-09-12.md |
 | Clean-machine test report | https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/minimax-clean-machine-test-report.md |
 | Automated clean preflight report | https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/minimax-clean-preflight-report.json |
 | Frontend/backend integration plan | https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/frontend-backend-integration-plan.md |
