@@ -135,7 +135,7 @@ npm run preflight:minimax-submit
 status: passed
 public links: 20/20 passed, 1 skipped self-report link
 clean preflight: passed
-tests: 51/51 passed
+tests: 53/53 passed
 ```
 
 ## 12. 提交后命令

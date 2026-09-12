@@ -133,7 +133,7 @@ npm test
 - package validation：`localPreflight` 为 `passed`
 - automated clean preflight：`status` 为 `passed`
 - public link check：20 个公开链接通过，1 个自报告链接跳过
-- test suite：51 项通过
+- test suite：53 项通过
 
 ## 10. 提交前人工确认
 
