@@ -81,6 +81,7 @@ dist/minimax/voice-prompt-minimax-0.7.1.zip
 | Clean-machine 报告 | https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/minimax-clean-machine-test-report.md |
 | 自动隔离预检报告 | https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/minimax-clean-preflight-report.json |
 | 公开链接检查 | https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/minimax-public-link-check.json |
+| 人工确认字段 | https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/minimax-submission-human-fields.md |
 
 ## 4. 一句话介绍
 
@@ -131,7 +132,7 @@ npm test
 
 - package validation：`localPreflight` 为 `passed`
 - automated clean preflight：`status` 为 `passed`
-- public link check：13 个公开链接通过，1 个自报告链接跳过
+- public link check：14 个公开链接通过，1 个自报告链接跳过
 - test suite：48 项通过
 
 ## 10. 提交前人工确认
