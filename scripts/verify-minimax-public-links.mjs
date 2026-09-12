@@ -9,7 +9,6 @@ const out = process.argv[3] || path.join(root, 'docs/minimax-public-link-check.j
 const text = await readFile(source, 'utf8');
 const skippedUrls = new Set([
   'https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/minimax-public-link-check.json',
-  'https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/minimax-submission-record-template.md',
 ]);
 const urls = [...new Set([...text.matchAll(/https:\/\/[^\s)`|]+/g)].map(m => m[0]))].filter(url => !skippedUrls.has(url));
 if (!urls.length) throw new Error('No public links found in ' + source);
