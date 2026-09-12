@@ -25,7 +25,7 @@ This means Voice Prompt is not only an MCP package. The marketplace plugin is th
 
 | Component | Current State | Marketplace Meaning | Next Action |
 | --- | --- | --- | --- |
-| Public website | Local React/Vite site exists; public Sites deployment is not verified live | Needed as product home, download, privacy, and support reference | Finish HTTPS public deployment or use GitHub pages/release URLs as temporary public references |
+| Public website | Local React/Vite site exists; public Sites deployment is not verified live | Needed as product home, download, privacy, and support reference | Publish through GitHub Pages as the immediate HTTPS fallback; keep Sites as optional later hosting |
 | MiniMax plugin ZIP | `dist/minimax/voice-prompt-minimax-0.7.1.zip` validates locally | Candidate upload package, not marketplace-approved | Keep as current candidate until clean-machine test or code changes require a version bump |
 | Local MCP | Stdio tools expose setup/status/models/prompt prep/file transcription | Lets MiniMax Code call `@Voice Prompt`; cannot record microphone by itself | Keep claims precise: `@` checks or refines supplied text; shortcut records through desktop app |
 | Desktop app | Required for hotkey, recording, preview, and input injection | Required companion for full voice input | Verify install and permissions on a clean Mac |
@@ -109,7 +109,7 @@ Do not expose local desktop service ports, Node plaintext port `8787`, Caddy adm
 
 ## 6. Immediate Execution Order
 
-1. Decide the temporary public website route: fix Sites push, or publish through another verified HTTPS host.
+1. Publish the GitHub Pages HTTPS fallback and verify the URL.
 2. Start the HTTPS backend only after domain/备案/resource constraints are acceptable.
 3. Generate a beta customer token and test cloud polish through HTTPS.
 4. Update the desktop app default setup to point beta users to the hosted API option.
