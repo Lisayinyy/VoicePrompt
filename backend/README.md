@@ -33,4 +33,14 @@
 
 开发者可用 SSH 将本机回环端口转发到服务器 `127.0.0.1:8787`，用于本人私有测试。该路径依赖开发者 SSH 密钥，不是给同事分发的连接方式；正式客户端应使用 HTTPS 和各自的客户令牌。
 
+## Remote Preflight
+
+For the current Tencent Cloud beta host, use the read-only preflight before changing any public HTTPS setting:
+
+```sh
+scripts/check-remote-backend.sh
+```
+
+The script checks service state, listening ports, loopback `/healthz`, pending Caddy config validation, and the Caddy systemd unit. It does not copy files, start services, open firewall ports, print secrets, or expose the API.
+
 MiniMax 端点和型号可在环境文件中配置；初始候选为官方 OpenAI 兼容端点与 MiniMax-M3，并关闭思考以减少润色延迟。实际可用性和额度需用被授权的账户实测。[官方接口说明](https://platform.minimaxi.com/docs/api-reference/text-openai-api)

@@ -102,7 +102,7 @@ Do not expose local desktop service ports, Node plaintext port `8787`, Caddy adm
 | Package shape | Local package validation JSON and SHA-256 | Ready for candidate 0.7.1; revalidated 2026-09-12 |
 | Public docs | GitHub public links checked | Ready; public website included in link check |
 | Product website | HTTPS page opens publicly | Ready via GitHub Pages: https://lisayinyy.github.io/VoicePrompt/; latest publish workflow succeeded; Sites remains optional and blocked by source push HTTP 400 |
-| Hosted API | HTTPS `/healthz`, authenticated `/readyz`, real polish | Pending; 2026-09-12 public check returned timeout / empty reply / `ECONNRESET`; see `docs/backend-public-api-status.md` |
+| Hosted API | HTTPS `/healthz`, authenticated `/readyz`, real polish | Pending; backend loopback is healthy and pending Caddy config validates, but public Caddy is inactive and 80/443 are not listening; see `docs/backend-public-api-status.md` |
 | Desktop install | Clean-machine macOS install and permission flow | Pending |
 | Marketplace form | Submitted form and submission ID | Pending |
 | Marketplace visibility | MiniMax Code market can install it from a fresh account | Pending after review |
