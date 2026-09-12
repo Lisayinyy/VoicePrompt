@@ -1,0 +1,7 @@
+node_modules/
+dist/
+.sites-runtime/
+.git.sites-publish-backup/
+voice-prompt-site.tar.gz
+*.log
+.DS_Store

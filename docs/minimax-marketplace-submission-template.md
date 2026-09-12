@@ -43,6 +43,7 @@ Use these as copy-ready draft values. Confirm the account, email, and contact fi
 | Installation guide URL | https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/agent-setup.md |
 | Public material index | https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/minimax-marketplace-public-materials.md |
 | Clean-machine test report | https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/minimax-clean-machine-test-report.md |
+| Website URL | Pending live deployment; expected Sites URL is https://voice-prompt.lisayyyin.chatgpt.site |
 
 ## 3. Example Queries
 
@@ -180,6 +181,6 @@ Immediate next actions:
 
 1. Confirm whether the form should use personal developer name or Voice Prompt contributors.
 2. Decide whether the first submission is local MCP + Skill only, or whether to wait for hosted MCP.
-3. Publish the latest repository changes so the GitHub public URLs resolve to this exact candidate.
+3. Complete the public website deployment and replace the pending website URL with a verified live URL.
 4. Run one clean-machine installation test and capture evidence.
 5. Submit the form only after the selected package and support docs match the actual user journey.

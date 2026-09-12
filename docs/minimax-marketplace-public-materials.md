@@ -40,7 +40,9 @@ Link check on 2026-09-12: the repository, submission template, public material i
 
 Website URL:
 
-TODO: replace with the final public website URL after deployment.
+Expected Sites URL: https://voice-prompt.lisayyyin.chatgpt.site
+
+Deployment status on 2026-09-12: Sites project created and local build/archive completed, but production deployment is not yet live because the Sites source repository rejected Git push with HTTP 400. Do not submit this as a verified live website until a deployment succeeds and returns a production URL.
 
 Candidate ZIP:
 
