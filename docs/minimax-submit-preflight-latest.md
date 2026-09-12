@@ -1,13 +1,13 @@
 # Voice Prompt · MiniMax Submit Preflight Latest Evidence
 
-Generated at: 2026-09-12T05:40:31.801203+00:00
+Generated at: 2026-09-12T05:42:35.924521+00:00
 
 ## Result
 
 | Field | Value |
 | --- | --- |
 | Status | passed |
-| Git head | `212d210` |
+| Git head | `7a61bf2` |
 | Upload ZIP | `dist/submission/voice-prompt-minimax-0.7.1/voice-prompt-minimax-0.7.1.zip` |
 | SHA-256 | `acb14dfb3465ee3c0c17868d45e0f234ec37d439b7ee9a6896ace9e78a23d072` |
 | Submission bundle | `dist/submission/voice-prompt-minimax-0.7.1` |
@@ -41,9 +41,9 @@ npm run record:minimax-submission -- --submission-id <ID> --submitter-email <EMA
 
 | Step | Status | Elapsed ms | Command |
 | --- | ---: | ---: | --- |
-| Package validation | 0 | 348 | `python3 scripts/pack-minimax.py --validate dist/minimax/voice-prompt-minimax-0.7.1.zip` |
-| Automated clean preflight | 0 | 600 | `/opt/homebrew/Cellar/node/25.8.0/bin/node scripts/verify-minimax-clean-preflight.mjs` |
-| Build submission bundle | 0 | 878 | `/opt/homebrew/Cellar/node/25.8.0/bin/node scripts/make-minimax-submission-bundle.mjs` |
-| Submission readiness audit | 0 | 165 | `/opt/homebrew/Cellar/node/25.8.0/bin/node scripts/verify-minimax-submission-readiness.mjs` |
-| Public link check | 0 | 12915 | `/opt/homebrew/Cellar/node/25.8.0/bin/node scripts/verify-minimax-public-links.mjs` |
-| Test suite | 0 | 3723 | `npm test` |
+| Package validation | 0 | 372 | `python3 scripts/pack-minimax.py --validate dist/minimax/voice-prompt-minimax-0.7.1.zip` |
+| Automated clean preflight | 0 | 586 | `/opt/homebrew/Cellar/node/25.8.0/bin/node scripts/verify-minimax-clean-preflight.mjs` |
+| Build submission bundle | 0 | 1006 | `/opt/homebrew/Cellar/node/25.8.0/bin/node scripts/make-minimax-submission-bundle.mjs` |
+| Submission readiness audit | 0 | 342 | `/opt/homebrew/Cellar/node/25.8.0/bin/node scripts/verify-minimax-submission-readiness.mjs` |
+| Public link check | 0 | 12651 | `/opt/homebrew/Cellar/node/25.8.0/bin/node scripts/verify-minimax-public-links.mjs` |
+| Test suite | 0 | 3715 | `npm test` |

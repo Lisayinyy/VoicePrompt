@@ -21,6 +21,7 @@ const files = [
 ];
 const docs = [
   'docs/mcode-submit-console.md',
+  'docs/mcode-submission-handoff.md',
   'docs/mcode-form-fill-plan.json',
   'docs/mcode-marketplace-action-plan.md',
   'docs/minimax-submission-packet-2026-09-12.md',
@@ -70,6 +71,7 @@ const manifest = {
   website: 'https://lisayinyy.github.io/VoicePrompt/',
   sourceRepository: 'https://github.com/Lisayinyy/VoicePrompt',
   submitConsole: 'docs/mcode-submit-console.md',
+  submissionHandoff: 'docs/mcode-submission-handoff.md',
   formFillPlan: 'docs/mcode-form-fill-plan.json',
   mcodeActionPlan: 'docs/mcode-marketplace-action-plan.md',
   submissionPacket: 'docs/minimax-submission-packet-2026-09-12.md',
@@ -101,6 +103,7 @@ const submissionIndex = {
   uploadZip: path.join(bundleRoot, manifest.uploadFile),
   sha256: manifest.sha256,
   submitConsole: path.join(bundleRoot, manifest.submitConsole),
+  submissionHandoff: path.join(bundleRoot, manifest.submissionHandoff),
   formFillPlan: path.join(bundleRoot, manifest.formFillPlan),
   mcodeActionPlan: path.join(bundleRoot, manifest.mcodeActionPlan),
   finalFormFill: path.join(bundleRoot, manifest.finalFormFill),

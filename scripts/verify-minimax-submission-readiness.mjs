@@ -10,6 +10,8 @@ const root = process.env.VOICE_PROMPT_SUBMISSION_AUDIT_ROOT
   : defaultRoot;
 const mustExist = [
   'docs/mcode-submit-console.md',
+  'docs/mcode-submission-handoff.md',
+  'docs/mcode-submission-handoff.md',
   'docs/mcode-form-fill-plan.json',
   'docs/mcode-marketplace-action-plan.md',
   'docs/minimax-live-form-field-map.md',
@@ -27,6 +29,7 @@ const mustExist = [
 ];
 const docsToScan = [
   'docs/mcode-submit-console.md',
+  'docs/mcode-submission-handoff.md',
   'docs/mcode-form-fill-plan.json',
   'docs/mcode-marketplace-action-plan.md',
   'docs/minimax-live-form-quick-fill.md',
@@ -43,6 +46,7 @@ const docsToScan = [
 ];
 const requiredSnippets = [
   ['docs/mcode-submit-console.md', '上传 ZIP 和点击提交会把插件包、联系邮箱和表单内容发送给 MiniMax / 飞书'],
+  ['docs/mcode-submission-handoff.md', '当前尚未提交 MiniMax / Mcode 表单，尚无官方 submission_id'],
   ['docs/mcode-form-fill-plan.json', 'READ_FROM_PRIVATE_DRAFT'],
   ['docs/mcode-marketplace-action-plan.md', '尚未正式提交表单，也没有官方 submission_id'],
   ['docs/mcode-marketplace-action-plan.md', '真实提交邮箱不要默认写进 GitHub 文档'],

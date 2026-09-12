@@ -1,9 +1,10 @@
 {
   "status": "passed",
-  "generatedAt": "2026-09-12T05:40:03.387Z",
+  "generatedAt": "2026-09-12T05:42:07.738Z",
   "scope": "Submission-material consistency audit only. This does not submit the plugin or prove marketplace approval.",
   "checkedFiles": [
     "docs/mcode-submit-console.md",
+    "docs/mcode-submission-handoff.md",
     "docs/mcode-form-fill-plan.json",
     "docs/mcode-marketplace-action-plan.md",
     "docs/minimax-live-form-quick-fill.md",
@@ -20,6 +21,8 @@
   ],
   "requiredArtifacts": [
     "docs/mcode-submit-console.md",
+    "docs/mcode-submission-handoff.md",
+    "docs/mcode-submission-handoff.md",
     "docs/mcode-form-fill-plan.json",
     "docs/mcode-marketplace-action-plan.md",
     "docs/minimax-live-form-field-map.md",
