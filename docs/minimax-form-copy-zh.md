@@ -87,7 +87,8 @@ Voice Prompt 需要以下权限配合桌面应用使用：
 
 1. 确认提交账号和支持邮箱
 2. 确认作者字段使用 Lisa Yin 还是 Voice Prompt contributors
-3. 上传 `dist/minimax/voice-prompt-minimax-0.7.1.zip`
-4. 附上官网、安装说明、数据说明、公开材料索引
-5. 完成真实 clean-machine 测试报告；自动隔离预检报告已生成
-6. 保存 MiniMax 返回的 submission_id、提交邮箱、区域、客户端和任何 Release/MR 链接
+3. 可先运行 `node scripts/make-minimax-submission-bundle.mjs` 生成本地提交材料包
+4. 上传 `dist/submission/voice-prompt-minimax-0.7.1/voice-prompt-minimax-0.7.1.zip` 或原始 `dist/minimax/voice-prompt-minimax-0.7.1.zip`
+5. 附上官网、安装说明、数据说明、公开材料索引
+6. 完成真实 clean-machine 测试报告；自动隔离预检报告已生成
+7. 保存 MiniMax 返回的 submission_id、提交邮箱、区域、客户端和任何 Release/MR 链接

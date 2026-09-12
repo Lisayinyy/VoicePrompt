@@ -33,6 +33,23 @@ Do not upload these older or incomplete artifacts:
 - the raw `minimax/` directory
 - the raw repository root
 
+
+## 1A. Local Submission Bundle
+
+Generate a local folder containing the upload ZIP, checksum, validation report, form copy, and review references:
+
+```sh
+node scripts/make-minimax-submission-bundle.mjs
+```
+
+Current output folder:
+
+```text
+dist/submission/voice-prompt-minimax-0.7.1
+```
+
+The bundle is ignored by Git because it contains the local upload ZIP. Use it for manual form upload, not as a public source directory.
+
 ## 2. Copy-Paste Form Content
 
 Use the Chinese form copy here:
@@ -104,6 +121,7 @@ Run from the repository root immediately before submission:
 ```sh
 python3 scripts/pack-minimax.py --validate dist/minimax/voice-prompt-minimax-0.7.1.zip
 node scripts/verify-minimax-clean-preflight.mjs
+node scripts/make-minimax-submission-bundle.mjs
 npm test
 ```
 
