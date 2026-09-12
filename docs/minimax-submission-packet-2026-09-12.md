@@ -92,6 +92,7 @@ Still to fill manually in the form:
 | Clean-machine report | https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/minimax-clean-machine-test-report.md |
 | Automated clean preflight | https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/minimax-clean-preflight-report.json |
 | Backend public API status | https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/backend-public-api-status.md |
+| Public link check | https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/minimax-public-link-check.json |
 
 ## 4. Claims That Are Safe For This Submission
 
@@ -122,6 +123,7 @@ Run from the repository root immediately before submission:
 python3 scripts/pack-minimax.py --validate dist/minimax/voice-prompt-minimax-0.7.1.zip
 node scripts/verify-minimax-clean-preflight.mjs
 node scripts/make-minimax-submission-bundle.mjs
+node scripts/verify-minimax-public-links.mjs
 npm test
 ```
 
@@ -129,6 +131,7 @@ Expected current results:
 
 - package validation: `localPreflight` is `passed`;
 - clean preflight: `status` is `passed`;
+- public link check: 11 public links passed;
 - test suite: 48 tests passed.
 
 ## 6. Final Human Checks

@@ -1,0 +1,90 @@
+{
+  "date": "2026-09-12T04:46:56.517Z",
+  "source": "docs/minimax-submission-packet-2026-09-12.md",
+  "skipped": [
+    "https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/minimax-public-link-check.json"
+  ],
+  "status": "passed",
+  "total": 11,
+  "passed": 11,
+  "failed": 0,
+  "results": [
+    {
+      "url": "https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/minimax-form-copy-zh.md",
+      "ok": true,
+      "status": 200,
+      "finalUrl": "https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/minimax-form-copy-zh.md",
+      "elapsedMs": 1040
+    },
+    {
+      "url": "https://github.com/Lisayinyy/VoicePrompt",
+      "ok": true,
+      "status": 200,
+      "finalUrl": "https://github.com/Lisayinyy/VoicePrompt",
+      "elapsedMs": 969
+    },
+    {
+      "url": "https://lisayinyy.github.io/VoicePrompt/",
+      "ok": true,
+      "status": 200,
+      "finalUrl": "https://lisayinyy.github.io/VoicePrompt/",
+      "elapsedMs": 917
+    },
+    {
+      "url": "https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/minimax-marketplace-public-materials.md",
+      "ok": true,
+      "status": 200,
+      "finalUrl": "https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/minimax-marketplace-public-materials.md",
+      "elapsedMs": 213
+    },
+    {
+      "url": "https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/minimax-marketplace-submission-template.md",
+      "ok": true,
+      "status": 200,
+      "finalUrl": "https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/minimax-marketplace-submission-template.md",
+      "elapsedMs": 220
+    },
+    {
+      "url": "https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/agent-setup.md",
+      "ok": true,
+      "status": 200,
+      "finalUrl": "https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/agent-setup.md",
+      "elapsedMs": 208
+    },
+    {
+      "url": "https://github.com/Lisayinyy/VoicePrompt/blob/main/minimax/data-and-permissions.md",
+      "ok": true,
+      "status": 200,
+      "finalUrl": "https://github.com/Lisayinyy/VoicePrompt/blob/main/minimax/data-and-permissions.md",
+      "elapsedMs": 205
+    },
+    {
+      "url": "https://github.com/Lisayinyy/VoicePrompt/blob/main/minimax/ASSET-RIGHTS.md",
+      "ok": true,
+      "status": 200,
+      "finalUrl": "https://github.com/Lisayinyy/VoicePrompt/blob/main/minimax/ASSET-RIGHTS.md",
+      "elapsedMs": 208
+    },
+    {
+      "url": "https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/minimax-clean-machine-test-report.md",
+      "ok": true,
+      "status": 200,
+      "finalUrl": "https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/minimax-clean-machine-test-report.md",
+      "elapsedMs": 205
+    },
+    {
+      "url": "https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/minimax-clean-preflight-report.json",
+      "ok": true,
+      "status": 200,
+      "finalUrl": "https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/minimax-clean-preflight-report.json",
+      "elapsedMs": 208
+    },
+    {
+      "url": "https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/backend-public-api-status.md",
+      "ok": true,
+      "status": 200,
+      "finalUrl": "https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/backend-public-api-status.md",
+      "elapsedMs": 206
+    }
+  ]
+}
