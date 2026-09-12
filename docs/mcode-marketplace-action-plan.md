@@ -133,6 +133,7 @@ npm run record:minimax-submission -- \
 
 ## 8. 下一步执行顺序
 
+0. 运行 `npm run mcode:submit-status` 查看当前提交状态。
 1. 你给出提交邮箱。
 2. 我把邮箱写入本地提交 payload 和最终填写稿；如果你不想公开邮箱，我只保留本地版本，不推到 GitHub。
 3. 再跑一次 `npm run preflight:minimax-submit`。

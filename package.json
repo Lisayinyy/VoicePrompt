@@ -17,7 +17,8 @@
     "preflight:minimax-submit": "node scripts/preflight-minimax-submit.mjs",
     "set:minimax-contact": "node scripts/set-minimax-submission-contact.mjs",
     "prepare:minimax-private-submission": "node scripts/prepare-minimax-private-submission.mjs",
-    "verify:minimax-submission-readiness": "node scripts/verify-minimax-submission-readiness.mjs"
+    "verify:minimax-submission-readiness": "node scripts/verify-minimax-submission-readiness.mjs",
+    "mcode:submit-status": "node scripts/mcode-submit-status.mjs"
   },
   "description": "Voice Prompt: hotkey dictation with faithful AI prompt polishing",
   "license": "MIT",

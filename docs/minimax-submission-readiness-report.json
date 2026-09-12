@@ -1,6 +1,6 @@
 {
   "status": "passed",
-  "generatedAt": "2026-09-12T05:36:53.763Z",
+  "generatedAt": "2026-09-12T05:38:15.202Z",
   "scope": "Submission-material consistency audit only. This does not submit the plugin or prove marketplace approval.",
   "checkedFiles": [
     "docs/mcode-submit-console.md",

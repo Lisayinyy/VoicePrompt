@@ -5,6 +5,14 @@
 
 ## 1. 先确认状态
 
+快速查看当前提交状态：
+
+```sh
+npm run mcode:submit-status
+```
+
+再跑完整提交前检查：
+
 ```sh
 npm run preflight:minimax-submit
 ```
