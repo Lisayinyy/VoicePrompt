@@ -44,6 +44,7 @@ Use these as copy-ready draft values. Confirm the account, email, and contact fi
 | Public material index | https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/minimax-marketplace-public-materials.md |
 | Clean-machine test report | https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/minimax-clean-machine-test-report.md |
 | Frontend/backend integration plan | https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/frontend-backend-integration-plan.md |
+| Backend public API status | https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/backend-public-api-status.md |
 | Website URL | Verified public website: https://lisayinyy.github.io/VoicePrompt/ . Sites target remains optional because Sites source push returned HTTP 400. |
 
 ## 3. Example Queries
