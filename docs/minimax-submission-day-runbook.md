@@ -47,7 +47,13 @@ https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/minimax-marketplace-publ
 
 ## 4. 提交前最后命令
 
-在仓库根目录运行：
+在仓库根目录优先运行一键自检：
+
+```sh
+npm run preflight:minimax-submit
+```
+
+它会依次执行 ZIP 校验、自动隔离 clean preflight、提交材料包生成、公开链接检查和测试套件。需要拆开排查时，再逐条运行：
 
 ```sh
 python3 scripts/pack-minimax.py --validate dist/minimax/voice-prompt-minimax-0.7.1.zip
