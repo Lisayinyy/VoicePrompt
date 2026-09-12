@@ -15,6 +15,7 @@ const mustExist = [
   'docs/minimax-form-payload.json',
   'docs/minimax-submission-human-fields.md',
   'docs/minimax-submission-record-template.md',
+  'docs/minimax-review-response-template.md',
   'docs/minimax-submit-preflight-latest.md',
   'dist/submission/voice-prompt-minimax-0.7.1/voice-prompt-minimax-0.7.1.zip',
   'dist/submission/voice-prompt-minimax-0.7.1/docs/mcode-marketplace-action-plan.md',
@@ -31,6 +32,7 @@ const docsToScan = [
   'docs/minimax-submission-readiness.md',
   'docs/minimax-submission.md',
   'docs/minimax-submit-preflight-latest.md',
+  'docs/minimax-review-response-template.md',
 ];
 const requiredSnippets = [
   ['docs/mcode-marketplace-action-plan.md', '尚未正式提交表单，也没有官方 submission_id'],
@@ -40,6 +42,7 @@ const requiredSnippets = [
   ['docs/minimax-form-final-fill.md', '提交邮箱 | TODO'],
   ['docs/minimax-form-payload.json', 'TODO: actual submitter email'],
   ['docs/minimax-submit-preflight-latest.md', '20 / 20 passed; 1 skipped self-report link'],
+  ['docs/minimax-review-response-template.md', '当前 0.7.1 上架候选包不包含发布者统一付费的共享云端润色额度'],
 ];
 const forbiddenPatterns = [
   [/48\/48|48 项|48 tests|tests 48/g, 'stale 48-test count'],

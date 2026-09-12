@@ -18,6 +18,7 @@ const requiredFiles = [
   'docs/minimax-form-payload.json',
   'docs/minimax-submission-human-fields.md',
   'docs/minimax-submission-record-template.md',
+  'docs/minimax-review-response-template.md',
   'docs/minimax-submit-preflight-latest.md',
   'docs/minimax-submission-execution-template.md',
   'docs/minimax-submission-packet-2026-09-12.md',
@@ -39,6 +40,7 @@ async function createAuditFixture(overrides = {}) {
   await writeFile(path.join(dir, 'docs/minimax-live-form-quick-fill.md'), overrides['docs/minimax-live-form-quick-fill.md'] ?? 'Contact email | TODO: real submitter email\n');
   await writeFile(path.join(dir, 'docs/minimax-form-final-fill.md'), overrides['docs/minimax-form-final-fill.md'] ?? '提交邮箱 | TODO\n');
   await writeFile(path.join(dir, 'docs/minimax-submit-preflight-latest.md'), overrides['docs/minimax-submit-preflight-latest.md'] ?? '20 / 20 passed; 1 skipped self-report link\n');
+  await writeFile(path.join(dir, 'docs/minimax-review-response-template.md'), overrides['docs/minimax-review-response-template.md'] ?? '当前 0.7.1 上架候选包不包含发布者统一付费的共享云端润色额度\n');
   await writeFile(path.join(dir, 'docs/minimax-form-payload.json'), overrides['docs/minimax-form-payload.json'] ?? JSON.stringify({
     status: 'pre-submit; not submitted',
     submitterEmail: 'TODO: actual submitter email',

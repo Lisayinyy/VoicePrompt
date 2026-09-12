@@ -30,6 +30,7 @@
 | 最终填写稿 | 已整理 | `docs/minimax-form-final-fill.md` |
 | 提交后记录模板 | 已整理 | `docs/minimax-submission-record-template.md` |
 | 提交材料审计 | 已通过 | `docs/minimax-submission-readiness-report.json` |
+| 审核回复模板 | 已整理 | `docs/minimax-review-response-template.md` |
 
 ## 3. Mcode 表单填写顺序
 
