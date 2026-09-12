@@ -37,7 +37,7 @@ Use these links when the latest changes have been pushed to GitHub:
 | Clean-machine test report | https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/minimax-clean-machine-test-report.md |
 | Frontend/backend integration plan | https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/frontend-backend-integration-plan.md |
 
-Link check on 2026-09-12: the repository, submission template, public material index, clean-machine test report, installation guide, data and permission statement, asset rights statement, and changelog returned HTTP 200 from GitHub. Recheck the newly added integration plan URL after pushing this document change. The final website URL is still pending public deployment.
+Link check on 2026-09-12: the repository, submission template, public material index, clean-machine test report, installation guide, data and permission statement, asset rights statement, changelog, and frontend/backend integration plan returned HTTP 200 from GitHub. The final website URL is still pending public deployment.
 
 Website URL:
 
