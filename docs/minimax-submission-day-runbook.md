@@ -75,7 +75,18 @@ npm test
 
 ## 6. 提交后马上记录
 
-提交成功后，把这些内容写入 `docs/minimax-submission-record-template.md` 或复制成正式记录文件：
+提交成功后，优先运行脚本生成正式记录：
+
+```sh
+npm run record:minimax-submission -- \
+  --submission-id <官方返回的ID> \
+  --submitter-email <提交邮箱> \
+  --support-email <支持邮箱> \
+  --author "Lisa Yin" \
+  --operation "new plugin"
+```
+
+如果表单返回了记录链接，再加 `--submission-url <链接>`。如果当前 shell 提示找不到 `node`，先用 `/usr/bin/env PATH=/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin npm run record:minimax-submission -- ...`。也可以手动把这些内容写入 `docs/minimax-submission-record-template.md` 或复制成正式记录文件：
 
 - submission_id 或官方 receipt
 - 提交时间
