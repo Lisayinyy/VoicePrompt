@@ -109,7 +109,7 @@ Do not expose local desktop service ports, Node plaintext port `8787`, Caddy adm
 
 ## 6. Immediate Execution Order
 
-1. Publish the GitHub Pages HTTPS fallback and verify the URL.
+1. Keep the verified GitHub Pages website current; repair Sites only if a Sites URL is required later.
 2. Start the HTTPS backend only after domain/备案/resource constraints are acceptable.
 3. Generate a beta customer token and test cloud polish through HTTPS.
 4. Update the desktop app default setup to point beta users to the hosted API option.

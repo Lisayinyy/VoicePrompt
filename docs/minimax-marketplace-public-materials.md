@@ -41,11 +41,9 @@ Link check on 2026-09-12: the repository, submission template, public material i
 
 Website URL:
 
-GitHub Pages fallback target: https://lisayinyy.github.io/VoicePrompt/
+Verified public website: https://lisayinyy.github.io/VoicePrompt/
 
-Expected Sites URL: https://voice-prompt.lisayyyin.chatgpt.site
-
-Deployment status on 2026-09-12: Sites project created and local build/archive completed, but production deployment is not yet live because the Sites source repository rejected Git push with HTTP 400. Do not submit this as a verified live website until a deployment succeeds and returns a production URL.
+Sites status on 2026-09-12: Sites project was created and local build/archive completed, but production deployment through Sites is not live because the Sites source repository rejected Git push with HTTP 400. Use the verified GitHub Pages URL for marketplace materials unless Sites is later repaired.
 
 Candidate ZIP:
 
