@@ -177,6 +177,30 @@ Node.js 22 及以上；JavaScript 核心无需安装 npm 依赖。Swift 桌面�
 
 桌面构建目前使用开发用 ad-hoc 签名，尚无 Developer ID 公证；内测 Release 提供桌面包和由 Agent 执行的安装工具包，但不属于已公证的一键安装器。Windows、Linux、Intel Mac 和所有输入框兼容性尚未验证。
 
+## 维护者：Mcode 上架提交
+
+MiniMax Code / Mcode 插件市场提交材料已经集中在 [Mcode 提交控制台](docs/mcode-submit-console.md)。交给他人操作时使用 [Mcode 上架交接说明](docs/mcode-submission-handoff.md)。机器可读填表计划见 [mcode-form-fill-plan.json](docs/mcode-form-fill-plan.json)。
+
+提交前查看当前状态：
+
+```sh
+npm run mcode:submit-status
+```
+
+正式填表前，先生成本地私有邮箱草稿，不要把真实邮箱写入公开仓库：
+
+```sh
+npm run prepare:minimax-private-submission -- --submitter-email <提交邮箱>
+```
+
+然后运行完整检查：
+
+```sh
+npm run preflight:minimax-submit
+```
+
+当前候选包是 `dist/submission/voice-prompt-minimax-0.7.1/voice-prompt-minimax-0.7.1.zip`。提交后拿到官方 submission id，再用 `npm run record:minimax-submission` 生成记录。
+
 ## 许可
 
 项目源代码使用 [MIT License](LICENSE)。SenseVoiceSmall、transcribe.cpp、ggml、Node.js 等上游组件遵循各自许可；模型不因本项目使用 MIT 而改变许可。见 [第三方声明](licenses/THIRD-PARTY.md)。
