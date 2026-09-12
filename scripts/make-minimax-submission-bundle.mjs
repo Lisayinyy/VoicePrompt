@@ -20,6 +20,7 @@ const files = [
   `voice-prompt-minimax-${version}.validation.json`,
 ];
 const docs = [
+  'docs/mcode-marketplace-action-plan.md',
   'docs/minimax-submission-packet-2026-09-12.md',
   'docs/minimax-submission-execution-template.md',
   'docs/minimax-submission-human-fields.md',
@@ -64,6 +65,7 @@ const manifest = {
   version,
   website: 'https://lisayinyy.github.io/VoicePrompt/',
   sourceRepository: 'https://github.com/Lisayinyy/VoicePrompt',
+  mcodeActionPlan: 'docs/mcode-marketplace-action-plan.md',
   submissionPacket: 'docs/minimax-submission-packet-2026-09-12.md',
   executionTemplate: 'docs/minimax-submission-execution-template.md',
   humanFields: 'docs/minimax-submission-human-fields.md',
@@ -90,6 +92,7 @@ const submissionIndex = {
   purpose: 'Local MiniMax Code marketplace submission package for Voice Prompt',
   uploadZip: path.join(bundleRoot, manifest.uploadFile),
   sha256: manifest.sha256,
+  mcodeActionPlan: path.join(bundleRoot, manifest.mcodeActionPlan),
   finalFormFill: path.join(bundleRoot, manifest.finalFormFill),
   liveFormFieldMap: path.join(bundleRoot, manifest.liveFormFieldMap),
   liveFormQuickFill: path.join(bundleRoot, manifest.liveFormQuickFill),
@@ -122,6 +125,12 @@ const submitNow = [
   '```',
   '',
   '## 2. 复制表单字段',
+  '',
+  '先看主控清单：',
+  '',
+  '```text',
+  manifest.mcodeActionPlan,
+  '```',
   '',
   '优先打开：',
   '',
@@ -175,5 +184,5 @@ const submitNow = [
   '',
 ].join('\n');
 await writeFile(path.join(targetDir, 'SUBMIT-NOW.md'), submitNow);
-await writeFile(path.join(targetDir, 'README.md'), `# Voice Prompt MiniMax Submission Bundle\n\nCreated: ${manifest.createdAt}\n\nUpload \`${manifest.uploadFile}\` in the MiniMax Code marketplace form.\n\nSHA-256: \`${manifest.sha256}\`\n\nStart with \`SUBMIT-NOW.md\`. Use \`${manifest.finalFormFill}\` as the final field-by-field form sheet, \`${manifest.submissionPacket}\` as the single-page checklist, \`${manifest.executionTemplate}\` as the step-by-step submission template, \`${manifest.humanFields}\` for fields that need human confirmation, \`${manifest.submissionDayRunbook}\` for the submission-day runbook, and \`${manifest.chineseFormCopy}\` for copy-paste form fields.\n\nThis bundle is not a marketplace approval record. Save the submission ID after the form returns one.\n`);
+await writeFile(path.join(targetDir, 'README.md'), `# Voice Prompt MiniMax Submission Bundle\n\nCreated: ${manifest.createdAt}\n\nUpload \`${manifest.uploadFile}\` in the MiniMax Code marketplace form.\n\nSHA-256: \`${manifest.sha256}\`\n\nStart with \`SUBMIT-NOW.md\`. Use \`${manifest.mcodeActionPlan}\` as the main Mcode marketplace action plan, \`${manifest.finalFormFill}\` as the final field-by-field form sheet, \`${manifest.submissionPacket}\` as the single-page checklist, \`${manifest.executionTemplate}\` as the step-by-step submission template, \`${manifest.humanFields}\` for fields that need human confirmation, \`${manifest.submissionDayRunbook}\` for the submission-day runbook, and \`${manifest.chineseFormCopy}\` for copy-paste form fields.\n\nThis bundle is not a marketplace approval record. Save the submission ID after the form returns one.\n`);
 console.log(JSON.stringify({ targetDir: bundleRoot, ...manifest, submissionIndex: 'SUBMISSION-INDEX.json', submitNow: 'SUBMIT-NOW.md' }, null, 2));

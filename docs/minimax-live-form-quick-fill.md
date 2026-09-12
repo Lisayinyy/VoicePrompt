@@ -44,7 +44,7 @@ Expected output:
 
 ```text
 status: passed
-public links: 19 / 19 passed
+public links: 20 / 20 passed
 clean preflight: passed
 test suite: passed
 ```

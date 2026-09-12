@@ -133,7 +133,7 @@ npm run preflight:minimax-submit
 
 ```text
 status: passed
-public links: 15/15 passed, 1 skipped self-report link
+public links: 20/20 passed, 1 skipped self-report link
 clean preflight: passed
 tests: 48/48 passed
 ```
