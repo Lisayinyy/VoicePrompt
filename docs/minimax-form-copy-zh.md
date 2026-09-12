@@ -21,6 +21,7 @@
 | 数据与权限说明 | https://github.com/Lisayinyy/VoicePrompt/blob/main/minimax/data-and-permissions.md |
 | 公开材料索引 | https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/minimax-marketplace-public-materials.md |
 | 提交包索引 | https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/minimax-submission-packet-2026-09-12.md |
+| 提交记录模板 | https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/minimax-submission-record-template.md |
 | 后端公网 API 状态 | https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/backend-public-api-status.md |
 
 ## 一句话介绍

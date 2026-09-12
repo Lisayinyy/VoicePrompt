@@ -48,6 +48,7 @@ Use these as copy-ready draft values. Confirm the account, email, and contact fi
 | Frontend/backend integration plan | https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/frontend-backend-integration-plan.md |
 | Backend public API status | https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/backend-public-api-status.md |
 | Public link check | https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/minimax-public-link-check.json |
+| Submission record template | https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/minimax-submission-record-template.md |
 | Chinese form copy | https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/minimax-form-copy-zh.md |
 | Website URL | Verified public website: https://lisayinyy.github.io/VoicePrompt/ . Sites target remains optional because Sites source push returned HTTP 400. |
 

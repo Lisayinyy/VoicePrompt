@@ -40,6 +40,7 @@ Use these links when the latest changes have been pushed to GitHub:
 | Frontend/backend integration plan | https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/frontend-backend-integration-plan.md |
 | Backend public API status | https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/backend-public-api-status.md |
 | Public link check | https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/minimax-public-link-check.json |
+| Submission record template | https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/minimax-submission-record-template.md |
 | Chinese form copy | https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/minimax-form-copy-zh.md |
 
 Link check on 2026-09-12: the repository, submission template, public material index, clean-machine test report, automated clean preflight report, submission packet, installation guide, data and permission statement, asset rights statement, changelog, frontend/backend integration plan, backend public API status, Chinese form copy, public link check report, and public website returned HTTP 200 after the latest push.

@@ -7,8 +7,11 @@ const root = fileURLToPath(new URL('../', import.meta.url));
 const source = process.argv[2] || path.join(root, 'docs/minimax-submission-packet-2026-09-12.md');
 const out = process.argv[3] || path.join(root, 'docs/minimax-public-link-check.json');
 const text = await readFile(source, 'utf8');
-const selfReportUrl = 'https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/minimax-public-link-check.json';
-const urls = [...new Set([...text.matchAll(/https:\/\/[^\s)`|]+/g)].map(m => m[0]))].filter(url => url !== selfReportUrl);
+const skippedUrls = new Set([
+  'https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/minimax-public-link-check.json',
+  'https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/minimax-submission-record-template.md',
+]);
+const urls = [...new Set([...text.matchAll(/https:\/\/[^\s)`|]+/g)].map(m => m[0]))].filter(url => !skippedUrls.has(url));
 if (!urls.length) throw new Error('No public links found in ' + source);
 const results = [];
 for (const url of urls) {
@@ -30,7 +33,7 @@ for (const url of urls) {
 const report = {
   date: new Date().toISOString(),
   source: path.relative(root, source),
-  skipped: [selfReportUrl],
+  skipped: [...skippedUrls],
   status: results.every(r => r.ok) ? 'passed' : 'failed',
   total: results.length,
   passed: results.filter(r => r.ok).length,

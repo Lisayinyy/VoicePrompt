@@ -93,6 +93,7 @@ Still to fill manually in the form:
 | Automated clean preflight | https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/minimax-clean-preflight-report.json |
 | Backend public API status | https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/backend-public-api-status.md |
 | Public link check | https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/minimax-public-link-check.json |
+| Submission record template | https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/minimax-submission-record-template.md |
 
 ## 4. Claims That Are Safe For This Submission
 
