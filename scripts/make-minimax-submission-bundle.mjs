@@ -32,6 +32,7 @@ const docs = [
   'docs/minimax-clean-machine-test-report.md',
   'docs/minimax-clean-preflight-report.json',
   'docs/minimax-public-link-check.json',
+  'docs/minimax-submit-preflight-latest.md',
   'docs/minimax-submission-record-template.md',
   'docs/backend-public-api-status.md',
   'docs/frontend-backend-integration-plan.md',
@@ -70,6 +71,7 @@ const manifest = {
   formPayload: 'docs/minimax-form-payload.json',
   automatedCleanPreflight: 'docs/minimax-clean-preflight-report.json',
   publicLinkCheck: 'docs/minimax-public-link-check.json',
+  latestPreflightEvidence: 'docs/minimax-submit-preflight-latest.md',
   submissionRecordTemplate: 'docs/minimax-submission-record-template.md',
   doNotClaim: [
     'Marketplace approval is complete',
@@ -89,6 +91,7 @@ const submissionIndex = {
   runbook: path.join(bundleRoot, manifest.submissionDayRunbook),
   humanFields: path.join(bundleRoot, manifest.humanFields),
   publicLinkCheck: path.join(bundleRoot, manifest.publicLinkCheck),
+  latestPreflightEvidence: path.join(bundleRoot, manifest.latestPreflightEvidence),
   recordTemplate: path.join(bundleRoot, manifest.submissionRecordTemplate),
   submitNow: path.join(bundleRoot, 'SUBMIT-NOW.md'),
   stillNeeds: ['submitter email', 'support email', 'official submission_id after form submission'],

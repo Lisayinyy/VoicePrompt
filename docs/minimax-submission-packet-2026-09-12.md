@@ -98,6 +98,7 @@ Still to fill manually in the form:
 | Automated clean preflight | https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/minimax-clean-preflight-report.json |
 | Backend public API status | https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/backend-public-api-status.md |
 | Public link check | https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/minimax-public-link-check.json |
+| Latest submit preflight evidence | https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/minimax-submit-preflight-latest.md |
 | Submission record template | https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/minimax-submission-record-template.md |
 
 ## 4. Claims That Are Safe For This Submission
@@ -137,7 +138,7 @@ Expected current results:
 
 - package validation: `localPreflight` is `passed`;
 - clean preflight: `status` is `passed`;
-- public link check: 17 public links passed;
+- public link check: 18 public links passed;
 - test suite: 48 tests passed.
 
 ## 6. Final Human Checks
