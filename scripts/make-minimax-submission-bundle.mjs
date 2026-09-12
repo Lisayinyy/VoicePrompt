@@ -21,6 +21,7 @@ const files = [
 ];
 const docs = [
   'docs/minimax-submission-packet-2026-09-12.md',
+  'docs/minimax-submission-execution-template.md',
   'docs/minimax-form-copy-zh.md',
   'docs/minimax-marketplace-submission-template.md',
   'docs/minimax-marketplace-public-materials.md',
@@ -55,6 +56,7 @@ const manifest = {
   website: 'https://lisayinyy.github.io/VoicePrompt/',
   sourceRepository: 'https://github.com/Lisayinyy/VoicePrompt',
   submissionPacket: 'docs/minimax-submission-packet-2026-09-12.md',
+  executionTemplate: 'docs/minimax-submission-execution-template.md',
   chineseFormCopy: 'docs/minimax-form-copy-zh.md',
   automatedCleanPreflight: 'docs/minimax-clean-preflight-report.json',
   doNotClaim: [

@@ -32,6 +32,7 @@ Use these links when the latest changes have been pushed to GitHub:
 | Asset rights | https://github.com/Lisayinyy/VoicePrompt/blob/main/minimax/ASSET-RIGHTS.md |
 | Release notes | https://github.com/Lisayinyy/VoicePrompt/blob/main/CHANGELOG.md |
 | Submission template | https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/minimax-marketplace-submission-template.md |
+| Submission execution template | https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/minimax-submission-execution-template.md |
 | Submission packet | https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/minimax-submission-packet-2026-09-12.md |
 | HTTPS plan | https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/https-and-mcp-release-plan.md |
 | Commercial launch audit | https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/commercial-launch-plan-2026-09-12.md |
@@ -43,7 +44,7 @@ Use these links when the latest changes have been pushed to GitHub:
 | Submission record template | https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/minimax-submission-record-template.md |
 | Chinese form copy | https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/minimax-form-copy-zh.md |
 
-Link check on 2026-09-12: the repository, submission template, public material index, clean-machine test report, automated clean preflight report, submission packet, installation guide, data and permission statement, asset rights statement, changelog, frontend/backend integration plan, backend public API status, Chinese form copy, public link check report, and public website returned HTTP 200 after the latest push.
+Link check on 2026-09-12: the repository, submission template, submission execution template, public material index, clean-machine test report, automated clean preflight report, submission packet, installation guide, data and permission statement, asset rights statement, changelog, frontend/backend integration plan, backend public API status, Chinese form copy, public link check report, and public website returned HTTP 200 after the latest push.
 
 Website URL:
 
