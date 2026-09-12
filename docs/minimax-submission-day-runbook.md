@@ -15,6 +15,20 @@
 
 如果没有查到既有 CN 插件记录，操作类型填“新增插件”。如果 MiniMax 后台已有 `voice-prompt` 记录，改成“更新插件”，并补维护权证明。
 
+
+## 1A. 如果已经知道邮箱，先写入材料
+
+如果提交邮箱和支持邮箱已经确定，先运行：
+
+```sh
+npm run set:minimax-contact -- \
+  --submitter-email <提交邮箱> \
+  --support-email <支持邮箱> \
+  --author "Lisa Yin"
+```
+
+如果支持邮箱与提交邮箱一致，可以省略 `--support-email`。这个命令会同步更新最终表单 Markdown、结构化 JSON payload 和人工确认字段。
+
 ## 2. 上传文件
 
 上传这个 ZIP：
