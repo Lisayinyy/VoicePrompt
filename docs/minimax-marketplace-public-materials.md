@@ -1,0 +1,116 @@
+# Voice Prompt Marketplace Public Materials
+
+Date: 2026-09-12
+Status: draft public material index for MiniMax Code submission
+
+This page collects the links and statements needed for a MiniMax Code marketplace review. It should be updated whenever the candidate ZIP, website, or public documentation changes.
+
+## Product Summary
+
+Voice Prompt turns spoken thoughts into clear AI prompt drafts. It is designed for desktop agent workflows where users want to press a shortcut, speak naturally, preview the transcript, optionally polish it with AI, and insert the final text into the focused input field for review before sending.
+
+Current candidate scope:
+
+| Area | Status |
+| --- | --- |
+| macOS desktop voice input | Beta candidate |
+| Local ASR | Supported through local Qwen setup on Apple Silicon Mac |
+| MiniMax Code plugin | Local MCP + Skill candidate |
+| Public hosted cloud polish | Not yet claimed for this candidate |
+| Marketplace submission | Not submitted yet |
+
+## Public Links For The Form
+
+Use these links when the latest changes have been pushed to GitHub:
+
+| Purpose | URL |
+| --- | --- |
+| Source repository | https://github.com/Lisayinyy/VoicePrompt |
+| Installation guide | https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/agent-setup.md |
+| Data and permission statement | https://github.com/Lisayinyy/VoicePrompt/blob/main/minimax/data-and-permissions.md |
+| MiniMax package README | https://github.com/Lisayinyy/VoicePrompt/blob/main/minimax/README.md |
+| Asset rights | https://github.com/Lisayinyy/VoicePrompt/blob/main/minimax/ASSET-RIGHTS.md |
+| Release notes | https://github.com/Lisayinyy/VoicePrompt/blob/main/CHANGELOG.md |
+| Submission template | https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/minimax-marketplace-submission-template.md |
+| HTTPS plan | https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/https-and-mcp-release-plan.md |
+| Commercial launch audit | https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/commercial-launch-plan-2026-09-12.md |
+
+Website URL:
+
+TODO: replace with the final public website URL after deployment.
+
+Candidate ZIP:
+
+TODO: use the platform upload field for `dist/minimax/voice-prompt-minimax-0.7.1.zip`, or attach a stable release asset if MiniMax prefers URL-based source material.
+
+## Review Description
+
+Chinese:
+
+Voice Prompt 是一个桌面语音输入与 Prompt 润色工具。用户在 MiniMax Code 或其他输入框中聚焦目标输入框后，使用桌面应用快捷键录音。本地模型将语音转为文字，开启 AI 润色后会把文字整理成更清晰的 Prompt，并填回输入框，由用户确认后发送。MiniMax 插件提供本地 MCP 与 Skill，用于检查安装状态、引导首次安装、整理给定文本，并帮助用户连接桌面工作流。
+
+English:
+
+Voice Prompt is a desktop voice input and prompt refinement tool. A user focuses an input field, records with the desktop shortcut, transcribes speech locally, optionally refines the transcript into a clearer prompt, and reviews the inserted text before sending. The MiniMax plugin provides a local MCP and Skill layer for readiness checks, first-time setup guidance, text refinement, and connection to the desktop workflow.
+
+## Permission Statement
+
+Required user-granted permissions:
+
+| Permission | Why It Is Needed |
+| --- | --- |
+| Microphone | Capture speech after the user starts recording |
+| Accessibility | Insert the final text into the focused input field |
+| Network | Download model files and optionally call configured AI polish services |
+| Local storage | Store the app, local model files, configuration, and non-secret runtime state |
+
+The plugin import itself does not grant system permissions. macOS permission dialogs and security approval must be completed by the user.
+
+## Data Statement
+
+The desktop app records only after the user starts recording. Local ASR runs on the user's Mac when configured. AI polish sends transcript text, not raw audio, to the configured model provider. The user reviews inserted text before sending. The first candidate package does not include a publisher-funded shared polish account and does not extract MiniMax Code subscription credentials.
+
+## Pricing Statement
+
+Current beta package:
+
+| Item | Statement |
+| --- | --- |
+| Desktop beta | Free internal beta |
+| Local ASR | No per-transcription cloud fee when running locally |
+| AI polish | Depends on the user's configured AI service |
+| Publisher shared quota | Not included in the current marketplace candidate |
+
+Before offering paid or publisher-funded hosted polish, confirm API terms, quota limits, billing, privacy policy, and user-facing refund/support terms.
+
+## Candidate Evidence
+
+Latest local candidate package:
+
+| Evidence | Value |
+| --- | --- |
+| Version | 0.7.1 |
+| ZIP path | `dist/minimax/voice-prompt-minimax-0.7.1.zip` |
+| SHA-256 | `acb14dfb3465ee3c0c17868d45e0f234ec37d439b7ee9a6896ace9e78a23d072` |
+| ZIP size | 101,178 bytes |
+| Local preflight | Passed |
+| Marketplace review | Not submitted |
+
+Local preflight does not replace MiniMax review or a clean-machine user journey test.
+
+## Clean-Machine Evidence To Add
+
+Before final submission, add a short record here or in a linked test report:
+
+| Check | Result |
+| --- | --- |
+| Fresh Mac install | TODO |
+| Microphone permission | TODO |
+| Accessibility permission | TODO |
+| Chinese voice input | TODO |
+| English voice input | TODO |
+| AI polish preserves constraints | TODO |
+| Text inserted into MiniMax Code input | TODO |
+| No automatic send | TODO |
+| Failure handling | TODO |
+

@@ -11,3 +11,5 @@ Build app UI in `src/`. Keep `.openai/hosting.json`, `worker/index.js`, `scripts
 ## Selected direction
 
 User selected the first ivory/lilac ribbon concept and likes its overall composition. Subsequent annotations should stay scoped; the headline can be refined without redesigning the page.
+
+The public website should present Voice Prompt as a general desktop voice-to-prompt product, not as a MiniMax-only tool. Do not add a "Developer" nav item or a MiniMax Code-specific guide CTA to the main navigation. Keep the language switch visible and simple, with Chinese and English available for users who need either language.
