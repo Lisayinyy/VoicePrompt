@@ -35,11 +35,12 @@ Use these links when the latest changes have been pushed to GitHub:
 | HTTPS plan | https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/https-and-mcp-release-plan.md |
 | Commercial launch audit | https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/commercial-launch-plan-2026-09-12.md |
 | Clean-machine test report | https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/minimax-clean-machine-test-report.md |
+| Automated clean preflight report | https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/minimax-clean-preflight-report.json |
 | Frontend/backend integration plan | https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/frontend-backend-integration-plan.md |
 | Backend public API status | https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/backend-public-api-status.md |
 | Chinese form copy | https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/minimax-form-copy-zh.md |
 
-Link check on 2026-09-12: the repository, submission template, public material index, clean-machine test report, installation guide, data and permission statement, asset rights statement, changelog, frontend/backend integration plan, backend public API status, Chinese form copy, and public website returned HTTP 200 after the latest push.
+Link check on 2026-09-12: the repository, submission template, public material index, clean-machine test report, automated clean preflight report, installation guide, data and permission statement, asset rights statement, changelog, frontend/backend integration plan, backend public API status, Chinese form copy, and public website returned HTTP 200 after the latest push.
 
 Website URL:
 
@@ -106,7 +107,7 @@ Latest local candidate package:
 | Local preflight | Passed |
 | Marketplace review | Not submitted |
 
-Local preflight does not replace MiniMax review or a clean-machine user journey test.
+Local package validation and automated isolated clean preflight do not replace MiniMax review or a physical clean-machine user journey test.
 
 ## Clean-Machine Evidence To Add
 

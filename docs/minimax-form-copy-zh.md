@@ -77,7 +77,7 @@ Voice Prompt 需要以下权限配合桌面应用使用：
 
 ## 当前未完成项
 
-- clean-machine 测试尚未完成
+- 自动隔离 clean preflight 已通过；真实 clean-machine 新机测试尚未完成
 - MiniMax Code 表单尚未正式提交
 - `api.voiceprompt.work` 公网 HTTPS API 尚未可用，当前不能作为 hosted polish 证据
 - 桌面应用仍是 beta 分发路径，正式公开分发前还需要签名、公证和新设备安装验证
@@ -88,5 +88,5 @@ Voice Prompt 需要以下权限配合桌面应用使用：
 2. 确认作者字段使用 Lisa Yin 还是 Voice Prompt contributors
 3. 上传 `dist/minimax/voice-prompt-minimax-0.7.1.zip`
 4. 附上官网、安装说明、数据说明、公开材料索引
-5. 完成 clean-machine 测试报告
+5. 完成真实 clean-machine 测试报告；自动隔离预检报告已生成
 6. 保存 MiniMax 返回的 submission_id、提交邮箱、区域、客户端和任何 Release/MR 链接

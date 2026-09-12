@@ -43,6 +43,7 @@ Use these as copy-ready draft values. Confirm the account, email, and contact fi
 | Installation guide URL | https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/agent-setup.md |
 | Public material index | https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/minimax-marketplace-public-materials.md |
 | Clean-machine test report | https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/minimax-clean-machine-test-report.md |
+| Automated clean preflight report | https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/minimax-clean-preflight-report.json |
 | Frontend/backend integration plan | https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/frontend-backend-integration-plan.md |
 | Backend public API status | https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/backend-public-api-status.md |
 | Chinese form copy | https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/minimax-form-copy-zh.md |
@@ -112,7 +113,7 @@ Latest local build command:
 /usr/bin/env PATH=/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin npm run pack:minimax
 ```
 
-Local validation only proves the package shape and internal references. It does not prove MiniMax marketplace approval, public listing, clean-machine installation, or hosted cloud polish readiness.
+Local validation and automated isolated clean preflight prove the package shape, internal references, and first-use MCP behavior under an empty HOME. They do not prove MiniMax marketplace approval, public listing, physical clean-machine installation, microphone/Accessibility permissions, input-field insertion, or hosted cloud polish readiness.
 
 ## 5. Product Boundary For Review
 

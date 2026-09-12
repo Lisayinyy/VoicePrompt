@@ -1,0 +1,92 @@
+{
+  "date": "2026-09-12T04:42:00.295Z",
+  "status": "passed",
+  "scope": "Automated isolated package preflight only. This is not a physical clean-machine install, microphone permission test, ASR quality test, or MiniMax marketplace review.",
+  "archive": "dist/minimax/voice-prompt-minimax-0.7.1.zip",
+  "archiveSha256": "acb14dfb3465ee3c0c17868d45e0f234ec37d439b7ee9a6896ace9e78a23d072",
+  "tempHomeUsed": true,
+  "developerPrivateConfigUsed": false,
+  "checks": [
+    {
+      "check": "zip_local_preflight",
+      "ok": true,
+      "details": {
+        "format": "MiniMax V1 local MCP + Skill",
+        "name": "voice-prompt",
+        "version": "0.7.1",
+        "files": 32,
+        "entries": 32,
+        "unpackedBytes": 97622,
+        "zipBytes": 101178,
+        "sha256": "acb14dfb3465ee3c0c17868d45e0f234ec37d439b7ee9a6896ace9e78a23d072",
+        "localPreflight": "passed",
+        "marketplaceReview": "not submitted"
+      }
+    },
+    {
+      "check": "manifest_loaded",
+      "ok": true,
+      "details": {
+        "name": "voice-prompt",
+        "version": "0.7.1"
+      }
+    },
+    {
+      "check": "mcp_initialize",
+      "ok": true,
+      "details": {
+        "name": "voice-prompt",
+        "version": "0.7.1"
+      }
+    },
+    {
+      "check": "mcp_tools_list",
+      "ok": true,
+      "details": {
+        "tools": [
+          "voice_setup_status",
+          "voice_status",
+          "voice_models",
+          "voice_prepare_prompt",
+          "voice_transcribe_file"
+        ]
+      }
+    },
+    {
+      "check": "first_use_setup_status",
+      "ok": true,
+      "details": {
+        "platform": "darwin",
+        "architecture": "arm64",
+        "supportedHardware": true,
+        "qwenMinimumMacOS": "15",
+        "desktopInstalled": false,
+        "desktopVersion": null,
+        "pythonInstalled": false,
+        "weightsPresent": false,
+        "selectedModel": "sensevoice-small",
+        "aiProviderConfigured": false,
+        "aiProvider": "unconfigured",
+        "setupGuide": "https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/agent-setup.md",
+        "verification": "File presence only. Does not verify model hashes, inference, AI credentials, permissions, or input insertion."
+      }
+    },
+    {
+      "check": "missing_companion_does_not_fake_polish",
+      "ok": true,
+      "details": {
+        "isError": true,
+        "message": "Run node server.mjs init, then node server.mjs serve"
+      }
+    },
+    {
+      "check": "no_runtime_diagnostic",
+      "ok": true,
+      "details": {
+        "platform": "darwin",
+        "status": 1,
+        "stderr": "Voice Prompt needs first-use setup. Read skills/voice-prompt/references/setup.md using the host Agent file tools. No desktop runtime or Node 22+ was found; the Skill guide works without MCP."
+      }
+    }
+  ]
+}
