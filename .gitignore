@@ -18,4 +18,4 @@ runtime-path
 backups/
 *.pem
 *.key
-
+.local/

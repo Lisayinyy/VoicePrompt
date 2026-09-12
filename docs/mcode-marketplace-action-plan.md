@@ -2,7 +2,7 @@
 
 日期：2026-09-12  
 状态：提交前执行中；用于把 MiniMax Code / Mcode 插件市场上架流程逐项落地。  
-当前证据：`npm run preflight:minimax-submit` 已在 `9987a69` 通过；尚未正式提交表单，也没有官方 submission_id。
+当前证据：最近一次记录的 `npm run preflight:minimax-submit` 已通过；尚未正式提交表单，也没有官方 submission_id。
 
 ## 1. 本阶段目标
 
@@ -57,6 +57,30 @@
 | 是否现在正式提交 | 上传 ZIP 和点击提交会把材料发送给 MiniMax / Feishu | 提交前需要你最后确认 |
 | 是否把邮箱写进 GitHub 文档 | 邮箱会变成公开信息 | 默认不公开，除非你明确同意 |
 
+
+## 4A. 私有邮箱填表稿
+
+真实提交邮箱不要默认写进 GitHub 文档。拿到邮箱后，先生成本地私有草稿：
+
+```sh
+npm run prepare:minimax-private-submission -- --submitter-email <提交邮箱>
+```
+
+如果支持邮箱不同：
+
+```sh
+npm run prepare:minimax-private-submission -- --submitter-email <提交邮箱> --support-email <支持邮箱>
+```
+
+生成位置：
+
+```text
+.local/minimax-submission/form-payload.private.json
+.local/minimax-submission/fill-sheet.private.md
+```
+
+`.local/` 已加入 `.gitignore`，用于保存真实邮箱和正式填表草稿。公开仓库继续保留 TODO 占位，除非明确决定把邮箱公开。
+
 ## 5. 提交前最后检查命令
 
 ```sh
@@ -67,7 +91,7 @@ npm run preflight:minimax-submit
 
 ```text
 status: passed
-gitHead: 9987a69
+gitHead: 见 docs/minimax-submit-preflight-latest.md 的最近一次记录
 public links: 20 / 20 passed, 1 skipped
 clean preflight: passed
 upload zip: dist/submission/voice-prompt-minimax-0.7.1/voice-prompt-minimax-0.7.1.zip

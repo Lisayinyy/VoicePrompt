@@ -15,7 +15,8 @@
     "pack:minimax": "python3 scripts/pack-minimax.py",
     "record:minimax-submission": "node scripts/make-minimax-submission-record.mjs",
     "preflight:minimax-submit": "node scripts/preflight-minimax-submit.mjs",
-    "set:minimax-contact": "node scripts/set-minimax-submission-contact.mjs"
+    "set:minimax-contact": "node scripts/set-minimax-submission-contact.mjs",
+    "prepare:minimax-private-submission": "node scripts/prepare-minimax-private-submission.mjs"
   },
   "description": "Voice Prompt: hotkey dictation with faithful AI prompt polishing",
   "license": "MIT",

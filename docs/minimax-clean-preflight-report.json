@@ -1,5 +1,5 @@
 {
-  "date": "2026-09-12T05:20:17.682Z",
+  "date": "2026-09-12T05:22:33.887Z",
   "status": "passed",
   "scope": "Automated isolated package preflight only. This is not a physical clean-machine install, microphone permission test, ASR quality test, or MiniMax marketplace review.",
   "archive": "dist/minimax/voice-prompt-minimax-0.7.1.zip",
