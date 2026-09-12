@@ -1,0 +1,59 @@
+{
+  "status": "pre-submit; not submitted",
+  "operationType": "新增插件",
+  "pluginName": "Voice Prompt",
+  "machineName": "voice-prompt",
+  "version": "0.7.1",
+  "category": "Productivity / 效率工具",
+  "targetRegion": "CN",
+  "targetClient": "MiniMax Code 桌面端",
+  "author": "Lisa Yin",
+  "submitterEmail": "TODO: actual submitter email",
+  "supportEmail": "TODO: support email, can initially match submitter email",
+  "sourceRepository": "https://github.com/Lisayinyy/VoicePrompt",
+  "website": "https://lisayinyy.github.io/VoicePrompt/",
+  "uploadArtifact": {
+    "localPath": "dist/submission/voice-prompt-minimax-0.7.1/voice-prompt-minimax-0.7.1.zip",
+    "fileName": "voice-prompt-minimax-0.7.1.zip",
+    "sha256": "acb14dfb3465ee3c0c17868d45e0f234ec37d439b7ee9a6896ace9e78a23d072",
+    "version": "0.7.1",
+    "zipBytes": 101178,
+    "unpackedBytes": 97622,
+    "files": 32,
+    "entries": 32
+  },
+  "links": {
+    "installationGuide": "https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/agent-setup.md",
+    "dataAndPermissions": "https://github.com/Lisayinyy/VoicePrompt/blob/main/minimax/data-and-permissions.md",
+    "publicMaterials": "https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/minimax-marketplace-public-materials.md",
+    "submissionPacket": "https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/minimax-submission-packet-2026-09-12.md",
+    "finalFormFill": "https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/minimax-form-final-fill.md",
+    "submissionDayRunbook": "https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/minimax-submission-day-runbook.md",
+    "automatedCleanPreflight": "https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/minimax-clean-preflight-report.json",
+    "publicLinkCheck": "https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/minimax-public-link-check.json"
+  },
+  "shortIntro": "将口述整理成清晰的 AI 提问草稿，保留原意、数字和限制；配合桌面应用使用快捷键语音输入、实时预览和发送前润色。",
+  "descriptionZh": "Voice Prompt 是一个面向桌面 Agent 工作流的语音输入与 Prompt 润色工具。用户聚焦 MiniMax Code 或其他输入框后，可以通过桌面应用快捷键开始录音，本地模型将语音转为文字，并在用户确认前将表达整理成更清晰的 Prompt。MiniMax Code 插件提供本地 MCP 与 Skill，用于检查安装状态、引导首次安装、整理给定文本，并帮助用户连接桌面工作流。",
+  "descriptionEn": "Voice Prompt is a desktop voice input and prompt refinement tool for agent workflows. Users focus an input field, record with the companion macOS shortcut, transcribe speech locally, optionally refine the transcript into a clearer prompt, and review the inserted text before sending. The MiniMax Code plugin provides local MCP tools and Skill guidance for setup checks, first-use onboarding, supplied-text refinement, and connection to the desktop workflow.",
+  "examples": [
+    "检查 Voice Prompt 是否已准备好语音输入",
+    "整理这段口述：嗯，请检查登录页，不要修改数据库，保留版本 2.0",
+    "帮我完成 Voice Prompt 首次安装，并开启录音后自动润色"
+  ],
+  "permissions": {
+    "microphone": "用户按快捷键开始录音后采集语音",
+    "accessibility": "将整理后的文字填入当前聚焦输入框",
+    "network": "下载本地模型文件，并在用户启用 AI 润色时调用配置的模型服务",
+    "localStorage": "保存应用、模型文件、配置和非敏感运行状态"
+  },
+  "dataStatement": "录音只在用户主动开始录音后发生。本地 ASR 在用户 Mac 上运行。开启 AI 润色时，发送的是转写后的文本和可选术语，不会因为文字润色自动上传原始录音。用户会在发送前看到填入的最终文本，并自行确认是否发送。当前 0.7.1 上架候选包不包含发布者统一付费的云端润色额度，也不会读取或提取 MiniMax Code 用户订阅凭据。",
+  "boundary": "@Voice Prompt 用于调用插件工具或 Skill 引导，例如检查状态、指导安装、整理给定文字。它不是麦克风开关。真正的全局快捷键录音、实时预览和输入框注入由配套 macOS 桌面应用完成。",
+  "notes": "0.7.1 为本地 MCP + Skill + macOS 桌面伴侣应用的上架候选版。自动隔离 clean preflight、公开链接检查、ZIP 本地校验和测试套件均已通过。真实第二台 Mac 的麦克风、辅助功能授权和输入框填入测试将作为后续 clean-machine 体验报告补充；当前不宣称 marketplace 已审核通过、桌面应用已公证、或已提供发布者共享云端润色额度。",
+  "doNotClaim": [
+    "已上架 / 已审核通过",
+    "已有 submission_id，除非表单已经返回",
+    "导入插件后自动安装桌面 App、模型或 macOS 权限",
+    "0.7.1 已包含发布者共享云端润色额度",
+    "当前 REST API 已通过 MiniMax 联调成为远程 MCP Connector"
+  ]
+}
