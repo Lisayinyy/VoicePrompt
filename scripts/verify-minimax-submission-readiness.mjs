@@ -3,8 +3,10 @@ import { access, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-const root = fileURLToPath(new URL('../', import.meta.url));
-const rel = (...parts) => path.join(...parts);
+const defaultRoot = fileURLToPath(new URL('../', import.meta.url));
+const root = process.env.VOICE_PROMPT_SUBMISSION_AUDIT_ROOT
+  ? path.resolve(process.env.VOICE_PROMPT_SUBMISSION_AUDIT_ROOT)
+  : defaultRoot;
 const mustExist = [
   'docs/mcode-marketplace-action-plan.md',
   'docs/minimax-live-form-field-map.md',
@@ -43,7 +45,7 @@ const forbiddenPatterns = [
   [/48\/48|48 项|48 tests|tests 48/g, 'stale 48-test count'],
   [/已上架\s*\/\s*已审核通过/g, 'unqualified published-or-approved claim'],
   [/status"\s*:\s*"submitted"/g, 'submitted status before official submission'],
-  [/submission_id"\s*:\s*"(?!TODO|<ID>)[^"]+"/g, 'real submission_id before form submission'],
+  [/submission_id\s*[":]\s*"(?!TODO|<ID>)[^"]+"/g, 'real submission_id before form submission'],
 ];
 const emailPattern = /[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/gi;
 const allowedEmailText = new Set([
