@@ -37,11 +37,13 @@ Use these links when the latest changes have been pushed to GitHub:
 | Clean-machine test report | https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/minimax-clean-machine-test-report.md |
 | Frontend/backend integration plan | https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/frontend-backend-integration-plan.md |
 
-Link check on 2026-09-12: the repository, submission template, public material index, clean-machine test report, installation guide, data and permission statement, asset rights statement, changelog, and frontend/backend integration plan returned HTTP 200 from GitHub. The final website URL is still pending public deployment.
+Link check on 2026-09-12: the repository, submission template, public material index, clean-machine test report, installation guide, data and permission statement, asset rights statement, changelog, frontend/backend integration plan, and public website returned HTTP 200.
 
 Website URL:
 
 Verified public website: https://lisayinyy.github.io/VoicePrompt/
+
+GitHub Pages publish workflow: latest run for commit `00c602c` completed successfully on 2026-09-12. The page, JavaScript, and CSS assets returned HTTP 200.
 
 Sites status on 2026-09-12: Sites project was created and local build/archive completed, but production deployment through Sites is not live because the Sites source repository rejected Git push with HTTP 400. Use the verified GitHub Pages URL for marketplace materials unless Sites is later repaired.
 

@@ -25,7 +25,7 @@ This means Voice Prompt is not only an MCP package. The marketplace plugin is th
 
 | Component | Current State | Marketplace Meaning | Next Action |
 | --- | --- | --- | --- |
-| Public website | Local React/Vite site exists; public Sites deployment is not verified live | Needed as product home, download, privacy, and support reference | Publish through GitHub Pages as the immediate HTTPS fallback; keep Sites as optional later hosting |
+| Public website | React/Vite site is deployed through GitHub Pages; Sites deployment is optional and still blocked | Needed as product home, download, privacy, and support reference | Keep GitHub Pages current for marketplace; repair Sites only if specifically required |
 | MiniMax plugin ZIP | `dist/minimax/voice-prompt-minimax-0.7.1.zip` validates locally | Candidate upload package, not marketplace-approved | Keep as current candidate until clean-machine test or code changes require a version bump |
 | Local MCP | Stdio tools expose setup/status/models/prompt prep/file transcription | Lets MiniMax Code call `@Voice Prompt`; cannot record microphone by itself | Keep claims precise: `@` checks or refines supplied text; shortcut records through desktop app |
 | Desktop app | Required for hotkey, recording, preview, and input injection | Required companion for full voice input | Verify install and permissions on a clean Mac |
@@ -99,9 +99,9 @@ Do not expose local desktop service ports, Node plaintext port `8787`, Caddy adm
 
 | Gate | Required Evidence | Current Status |
 | --- | --- | --- |
-| Package shape | Local package validation JSON and SHA-256 | Ready for candidate 0.7.1 |
-| Public docs | GitHub public links checked | Ready, except final website live URL |
-| Product website | HTTPS page opens publicly | Pending; local site exists, Sites push was blocked earlier |
+| Package shape | Local package validation JSON and SHA-256 | Ready for candidate 0.7.1; revalidated 2026-09-12 |
+| Public docs | GitHub public links checked | Ready; public website included in link check |
+| Product website | HTTPS page opens publicly | Ready via GitHub Pages: https://lisayinyy.github.io/VoicePrompt/; latest publish workflow succeeded; Sites remains optional and blocked by source push HTTP 400 |
 | Hosted API | HTTPS `/healthz`, authenticated `/readyz`, real polish | Pending public TLS and token flow |
 | Desktop install | Clean-machine macOS install and permission flow | Pending |
 | Marketplace form | Submitted form and submission ID | Pending |
