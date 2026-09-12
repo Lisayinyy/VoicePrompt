@@ -43,4 +43,12 @@ scripts/check-remote-backend.sh
 
 The script checks service state, listening ports, loopback `/healthz`, pending Caddy config validation, and the Caddy systemd unit. It does not copy files, start services, open firewall ports, print secrets, or expose the API.
 
+When public exposure is allowed, activate HTTPS with the guarded script:
+
+```sh
+VOICE_PROMPT_ENABLE_PUBLIC_HTTPS=1 scripts/activate-remote-https.sh
+```
+
+The script refuses to run unless the environment variable is set. It validates the pending Caddyfile, verifies the systemd unit, checks loopback health, backs up any active Caddyfile, installs the pending file, starts `voice-prompt-caddy`, and runs the public HTTPS verifier.
+
 MiniMax 端点和型号可在环境文件中配置；初始候选为官方 OpenAI 兼容端点与 MiniMax-M3，并关闭思考以减少润色延迟。实际可用性和额度需用被授权的账户实测。[官方接口说明](https://platform.minimaxi.com/docs/api-reference/text-openai-api)

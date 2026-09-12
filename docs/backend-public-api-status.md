@@ -58,12 +58,11 @@ Interpretation: the backend process itself is healthy on the server, and the pen
 
 1. Confirm Tencent Cloud ICP/备案/resource requirements for a Guangzhou mainland server before exposing a public API on this domain.
 2. Confirm Tencent Cloud security group and Ubuntu firewall allow TCP 80 and 443 without weakening SSH access.
-3. Install the validated pending file as `/etc/voice-prompt-caddy/Caddyfile`, preserving a rollback copy if an active file appears.
-4. Start `voice-prompt-caddy` and verify Caddy can obtain a public certificate.
-5. Confirm the backend still listens only on `127.0.0.1:8787` and that Caddy is the only public entry point.
-6. Re-run `node scripts/verify-https.mjs 'https://api.voiceprompt.work'`.
-7. Create a limited beta customer token and run the authenticated verification once.
-8. Record latency, status, model name, fallback status, and quota behavior without logging private prompt text or secrets.
+3. Run the guarded activation script only after the public exposure requirements are satisfied: `VOICE_PROMPT_ENABLE_PUBLIC_HTTPS=1 scripts/activate-remote-https.sh`.
+4. Confirm the backend still listens only on `127.0.0.1:8787` and that Caddy is the only public entry point.
+5. Re-run `node scripts/verify-https.mjs 'https://api.voiceprompt.work'` if the activation script does not complete it.
+6. Create a limited beta customer token and run the authenticated verification once.
+7. Record latency, status, model name, fallback status, and quota behavior without logging private prompt text or secrets.
 
 ## Submission Boundary
 
