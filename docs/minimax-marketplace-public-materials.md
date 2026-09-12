@@ -36,6 +36,8 @@ Use these links when the latest changes have been pushed to GitHub:
 | Commercial launch audit | https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/commercial-launch-plan-2026-09-12.md |
 | Clean-machine test report | https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/minimax-clean-machine-test-report.md |
 
+Link check on 2026-09-12: the repository, submission template, public material index, clean-machine test report, installation guide, data and permission statement, asset rights statement, and changelog returned HTTP 200 from GitHub. The final website URL is still pending public deployment.
+
 Website URL:
 
 TODO: replace with the final public website URL after deployment.
