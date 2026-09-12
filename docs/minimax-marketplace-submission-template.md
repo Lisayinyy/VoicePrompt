@@ -43,6 +43,7 @@ Use these as copy-ready draft values. Confirm the account, email, and contact fi
 | Installation guide URL | https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/agent-setup.md |
 | Public material index | https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/minimax-marketplace-public-materials.md |
 | Clean-machine test report | https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/minimax-clean-machine-test-report.md |
+| Frontend/backend integration plan | https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/frontend-backend-integration-plan.md |
 | Website URL | Pending live deployment; expected Sites URL is https://voice-prompt.lisayyyin.chatgpt.site |
 
 ## 3. Example Queries
@@ -58,6 +59,18 @@ If MiniMax asks for English examples:
 1. Check whether Voice Prompt is ready for voice input
 2. Refine this spoken request: um, review the login page, do not change the database, keep version 2.0
 3. Help me set up Voice Prompt and enable polish after recording
+
+## 3A. Frontend / Backend / Desktop Integration Status
+
+The plugin submission depends on three external pieces that are not proven by ZIP validation alone: public website, hosted polish API, and clean desktop install. Track them in [Frontend, Backend, and MiniMax Marketplace Integration Plan](frontend-backend-integration-plan.md).
+
+Current submission boundary:
+
+- The 0.7.1 ZIP is a local MCP + Skill candidate.
+- Full voice capture and input insertion require the macOS desktop app.
+- Hosted AI polish requires the HTTPS backend, customer token flow, and real provider validation.
+- The public website is required as a stable product, download, privacy, and support reference before marketplace submission.
+- Remote MCP/App Connector support is not claimed until a Streamable HTTP MCP endpoint is implemented and accepted by MiniMax.
 
 ## 4. Package Checklist
 
