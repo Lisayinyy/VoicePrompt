@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 import { access, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
+import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 
 const defaultRoot = fileURLToPath(new URL('../', import.meta.url));
@@ -16,6 +17,7 @@ const mustExist = [
   'docs/minimax-submission-human-fields.md',
   'docs/minimax-submission-record-template.md',
   'docs/minimax-review-response-template.md',
+  'docs/minimax-version-boundary.md',
   'docs/minimax-submit-preflight-latest.md',
   'dist/submission/voice-prompt-minimax-0.7.1/voice-prompt-minimax-0.7.1.zip',
   'dist/submission/voice-prompt-minimax-0.7.1/docs/mcode-marketplace-action-plan.md',
@@ -33,6 +35,7 @@ const docsToScan = [
   'docs/minimax-submission.md',
   'docs/minimax-submit-preflight-latest.md',
   'docs/minimax-review-response-template.md',
+  'docs/minimax-version-boundary.md',
 ];
 const requiredSnippets = [
   ['docs/mcode-marketplace-action-plan.md', '尚未正式提交表单，也没有官方 submission_id'],
@@ -43,6 +46,7 @@ const requiredSnippets = [
   ['docs/minimax-form-payload.json', 'TODO: actual submitter email'],
   ['docs/minimax-submit-preflight-latest.md', '20 / 20 passed; 1 skipped self-report link'],
   ['docs/minimax-review-response-template.md', '当前 0.7.1 上架候选包不包含发布者统一付费的共享云端润色额度'],
+  ['docs/minimax-version-boundary.md', '本次 MiniMax Code 插件市场投稿使用独立的 MiniMax 专用包，版本为 0.7.1'],
 ];
 const forbiddenPatterns = [
   [/48\/48|48 项|48 tests|tests 48/g, 'stale 48-test count'],
@@ -78,6 +82,18 @@ const payload = JSON.parse(await readFile(path.join(root, 'docs/minimax-form-pay
 if (payload.status !== 'pre-submit; not submitted') issues.push({ file: 'docs/minimax-form-payload.json', issue: 'public payload status is not pre-submit', value: payload.status });
 if (payload.submitterEmail !== 'TODO: actual submitter email') issues.push({ file: 'docs/minimax-form-payload.json', issue: 'public payload has non-redacted submitter email' });
 if (payload.uploadArtifact?.sha256 !== 'acb14dfb3465ee3c0c17868d45e0f234ec37d439b7ee9a6896ace9e78a23d072') issues.push({ file: 'docs/minimax-form-payload.json', issue: 'unexpected upload sha256', value: payload.uploadArtifact?.sha256 });
+const zipManifest = spawnSync('unzip', ['-p', path.join(root, 'dist/minimax/voice-prompt-minimax-0.7.1.zip'), '.minimax-plugin/plugin.json'], { encoding: 'utf8' });
+if (zipManifest.status !== 0) {
+  issues.push({ file: 'dist/minimax/voice-prompt-minimax-0.7.1.zip', issue: 'cannot read packaged MiniMax manifest' });
+} else {
+  try {
+    const manifest = JSON.parse(zipManifest.stdout);
+    if (manifest.name !== 'voice-prompt') issues.push({ file: 'dist/minimax/voice-prompt-minimax-0.7.1.zip', issue: 'unexpected packaged plugin name', value: manifest.name });
+    if (manifest.version !== '0.7.1') issues.push({ file: 'dist/minimax/voice-prompt-minimax-0.7.1.zip', issue: 'unexpected packaged plugin version', value: manifest.version });
+  } catch (error) {
+    issues.push({ file: 'dist/minimax/voice-prompt-minimax-0.7.1.zip', issue: 'packaged MiniMax manifest is not valid JSON', error: String(error.message || error) });
+  }
+}
 const report = {
   status: issues.length ? 'failed' : 'passed',
   generatedAt: new Date().toISOString(),

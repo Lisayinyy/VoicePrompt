@@ -5,6 +5,7 @@ import { mkdtempSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { spawnSync } from 'node:child_process';
+import { writeFileSync, mkdirSync } from 'node:fs';
 
 const repoRoot = path.resolve(new URL('..', import.meta.url).pathname);
 const script = path.join(repoRoot, 'scripts/verify-minimax-submission-readiness.mjs');
@@ -19,6 +20,7 @@ const requiredFiles = [
   'docs/minimax-submission-human-fields.md',
   'docs/minimax-submission-record-template.md',
   'docs/minimax-review-response-template.md',
+  'docs/minimax-version-boundary.md',
   'docs/minimax-submit-preflight-latest.md',
   'docs/minimax-submission-execution-template.md',
   'docs/minimax-submission-packet-2026-09-12.md',
@@ -41,12 +43,19 @@ async function createAuditFixture(overrides = {}) {
   await writeFile(path.join(dir, 'docs/minimax-form-final-fill.md'), overrides['docs/minimax-form-final-fill.md'] ?? '提交邮箱 | TODO\n');
   await writeFile(path.join(dir, 'docs/minimax-submit-preflight-latest.md'), overrides['docs/minimax-submit-preflight-latest.md'] ?? '20 / 20 passed; 1 skipped self-report link\n');
   await writeFile(path.join(dir, 'docs/minimax-review-response-template.md'), overrides['docs/minimax-review-response-template.md'] ?? '当前 0.7.1 上架候选包不包含发布者统一付费的共享云端润色额度\n');
+  await writeFile(path.join(dir, 'docs/minimax-version-boundary.md'), overrides['docs/minimax-version-boundary.md'] ?? '本次 MiniMax Code 插件市场投稿使用独立的 MiniMax 专用包，版本为 0.7.1\n');
   await writeFile(path.join(dir, 'docs/minimax-form-payload.json'), overrides['docs/minimax-form-payload.json'] ?? JSON.stringify({
     status: 'pre-submit; not submitted',
     submitterEmail: 'TODO: actual submitter email',
     supportEmail: 'TODO: support email, can initially match submitter email',
     uploadArtifact: { sha256: 'acb14dfb3465ee3c0c17868d45e0f234ec37d439b7ee9a6896ace9e78a23d072' },
   }, null, 2));
+  const zipStage = path.join(dir, '.zip-stage/.minimax-plugin');
+  mkdirSync(zipStage, { recursive: true });
+  writeFileSync(path.join(zipStage, 'plugin.json'), JSON.stringify({ name: 'voice-prompt', version: '0.7.1' }));
+  await mkdir(path.join(dir, 'dist/minimax'), { recursive: true });
+  const zip = spawnSync('/usr/bin/zip', ['-qr', path.join(dir, 'dist/minimax/voice-prompt-minimax-0.7.1.zip'), '.minimax-plugin/plugin.json'], { cwd: path.join(dir, '.zip-stage'), encoding: 'utf8' });
+  assert.equal(zip.status, 0, zip.stderr || zip.stdout);
   return dir;
 }
 
