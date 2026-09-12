@@ -16,7 +16,7 @@ Recommended first submission route:
 | Target client | MiniMax Code desktop |
 | Package source | ZIP package from `npm run pack:minimax` |
 | Plugin form | Local MCP + Skill candidate |
-| Public cloud polish | Not bundled in first candidate until HTTPS, quota, and platform classification are confirmed |
+| Public cloud polish | Not claimed in first candidate; backend loopback is healthy but public HTTPS is not live |
 
 Reasoning: the current working product is a Mac desktop voice input app plus local MCP/Skill integration. It can guide installation, check local readiness, and polish provided text. The future hosted service can be added after public HTTPS and customer-token flow are stable.
 
@@ -45,6 +45,7 @@ Use these as copy-ready draft values. Confirm the account, email, and contact fi
 | Clean-machine test report | https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/minimax-clean-machine-test-report.md |
 | Frontend/backend integration plan | https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/frontend-backend-integration-plan.md |
 | Backend public API status | https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/backend-public-api-status.md |
+| Chinese form copy | https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/minimax-form-copy-zh.md |
 | Website URL | Verified public website: https://lisayinyy.github.io/VoicePrompt/ . Sites target remains optional because Sites source push returned HTTP 400. |
 
 ## 3. Example Queries
@@ -195,6 +196,6 @@ Immediate next actions:
 
 1. Confirm whether the form should use personal developer name or Voice Prompt contributors.
 2. Decide whether the first submission is local MCP + Skill only, or whether to wait for hosted MCP.
-3. Complete the public website deployment and replace the pending website URL with a verified live URL.
-4. Run one clean-machine installation test and capture evidence.
-5. Submit the form only after the selected package and support docs match the actual user journey.
+3. Run one clean-machine installation test and capture evidence.
+4. Confirm the submission account, support email, and author display name.
+5. Submit the form only after the selected package and support docs match the actual user journey, then save the returned submission record.

@@ -37,8 +37,9 @@ Use these links when the latest changes have been pushed to GitHub:
 | Clean-machine test report | https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/minimax-clean-machine-test-report.md |
 | Frontend/backend integration plan | https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/frontend-backend-integration-plan.md |
 | Backend public API status | https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/backend-public-api-status.md |
+| Chinese form copy | https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/minimax-form-copy-zh.md |
 
-Link check on 2026-09-12: the repository, submission template, public material index, clean-machine test report, installation guide, data and permission statement, asset rights statement, changelog, frontend/backend integration plan, backend public API status, and public website returned HTTP 200 after the latest push.
+Link check on 2026-09-12: the repository, submission template, public material index, clean-machine test report, installation guide, data and permission statement, asset rights statement, changelog, frontend/backend integration plan, backend public API status, Chinese form copy, and public website returned HTTP 200 after the latest push.
 
 Website URL:
 
@@ -50,7 +51,7 @@ Sites status on 2026-09-12: Sites project was created and local build/archive co
 
 Candidate ZIP:
 
-TODO: use the platform upload field for `dist/minimax/voice-prompt-minimax-0.7.1.zip`, or attach a stable release asset if MiniMax prefers URL-based source material.
+Use the platform upload field for local file `dist/minimax/voice-prompt-minimax-0.7.1.zip`. The candidate package has been locally validated and should not be replaced with older connector archives.
 
 ## Review Description
 
