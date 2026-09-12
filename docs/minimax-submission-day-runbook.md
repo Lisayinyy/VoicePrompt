@@ -82,7 +82,7 @@ npm test
 - ZIP localPreflight passed
 - automated clean preflight passed
 - public links 14/14 passed，self-report link skipped
-- tests 48/48 passed
+- tests 51/51 passed
 
 ## 5. 不要写进表单的说法
 
