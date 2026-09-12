@@ -42,6 +42,7 @@ Use these as copy-ready draft values. Confirm the account, email, and contact fi
 | Privacy / data policy URL | https://github.com/Lisayinyy/VoicePrompt/blob/main/minimax/data-and-permissions.md |
 | Installation guide URL | https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/agent-setup.md |
 | Public material index | https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/minimax-marketplace-public-materials.md |
+| Clean-machine test report | https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/minimax-clean-machine-test-report.md |
 
 ## 3. Example Queries
 
@@ -85,6 +86,7 @@ Required package evidence:
 | Installation statement | `minimax/installation.md` |
 | Asset rights statement | `minimax/ASSET-RIGHTS.md` |
 | Public material index | `docs/minimax-marketplace-public-materials.md` |
+| Clean-machine test report | `docs/minimax-clean-machine-test-report.md` |
 
 Do not submit older connector archives such as `voice-prompt-connector-0.7.0.zip`. Do not submit the raw `minimax/` template directory unless it has been packaged with all runtime dependencies.
 

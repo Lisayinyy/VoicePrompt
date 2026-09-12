@@ -34,6 +34,7 @@ Use these links when the latest changes have been pushed to GitHub:
 | Submission template | https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/minimax-marketplace-submission-template.md |
 | HTTPS plan | https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/https-and-mcp-release-plan.md |
 | Commercial launch audit | https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/commercial-launch-plan-2026-09-12.md |
+| Clean-machine test report | https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/minimax-clean-machine-test-report.md |
 
 Website URL:
 
@@ -100,7 +101,9 @@ Local preflight does not replace MiniMax review or a clean-machine user journey 
 
 ## Clean-Machine Evidence To Add
 
-Before final submission, add a short record here or in a linked test report:
+Before final submission, complete the linked test report:
+
+https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/minimax-clean-machine-test-report.md
 
 | Check | Result |
 | --- | --- |
@@ -113,4 +116,3 @@ Before final submission, add a short record here or in a linked test report:
 | Text inserted into MiniMax Code input | TODO |
 | No automatic send | TODO |
 | Failure handling | TODO |
-
