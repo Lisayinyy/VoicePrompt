@@ -87,6 +87,7 @@ Still to fill manually in the form:
 | Submission template | https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/minimax-marketplace-submission-template.md |
 | Submission execution template | https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/minimax-submission-execution-template.md |
 | Human confirmation fields | https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/minimax-submission-human-fields.md |
+| Submission-day runbook | https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/minimax-submission-day-runbook.md |
 | Chinese form copy | https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/minimax-form-copy-zh.md |
 | Installation guide | https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/agent-setup.md |
 | Data and permissions | https://github.com/Lisayinyy/VoicePrompt/blob/main/minimax/data-and-permissions.md |
@@ -134,7 +135,7 @@ Expected current results:
 
 - package validation: `localPreflight` is `passed`;
 - clean preflight: `status` is `passed`;
-- public link check: 14 public links passed;
+- public link check: 15 public links passed;
 - test suite: 48 tests passed.
 
 ## 6. Final Human Checks
