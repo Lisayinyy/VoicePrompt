@@ -133,7 +133,7 @@ Expected current results:
 
 - package validation: `localPreflight` is `passed`;
 - clean preflight: `status` is `passed`;
-- public link check: 12 public links passed;
+- public link check: 13 public links passed;
 - test suite: 48 tests passed.
 
 ## 6. Final Human Checks
