@@ -48,6 +48,7 @@ Use these links when the latest changes have been pushed to GitHub:
 | Chinese form copy | https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/minimax-form-copy-zh.md |
 | Final form fill sheet | https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/minimax-form-final-fill.md |
 | Live form field map | https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/minimax-live-form-field-map.md |
+| Live form quick fill | https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/minimax-live-form-quick-fill.md |
 | Structured form payload | https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/minimax-form-payload.json |
 
 Link check on 2026-09-12: the repository, submission template, submission execution template, human confirmation fields, submission-day runbook, public material index, clean-machine test report, automated clean preflight report, submission packet, installation guide, data and permission statement, asset rights statement, changelog, frontend/backend integration plan, backend public API status, Chinese form copy, public link check report, and public website returned HTTP 200 after the latest push.
