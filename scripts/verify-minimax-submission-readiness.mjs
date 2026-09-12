@@ -85,6 +85,16 @@ const payload = JSON.parse(await readFile(path.join(root, 'docs/minimax-form-pay
 if (payload.status !== 'pre-submit; not submitted') issues.push({ file: 'docs/minimax-form-payload.json', issue: 'public payload status is not pre-submit', value: payload.status });
 if (payload.submitterEmail !== 'TODO: actual submitter email') issues.push({ file: 'docs/minimax-form-payload.json', issue: 'public payload has non-redacted submitter email' });
 if (payload.uploadArtifact?.sha256 !== 'acb14dfb3465ee3c0c17868d45e0f234ec37d439b7ee9a6896ace9e78a23d072') issues.push({ file: 'docs/minimax-form-payload.json', issue: 'unexpected upload sha256', value: payload.uploadArtifact?.sha256 });
+const submissionIndexPath = path.join(root, 'dist/submission/voice-prompt-minimax-0.7.1/SUBMISSION-INDEX.json');
+try {
+  const index = JSON.parse(await readFile(submissionIndexPath, 'utf8'));
+  const expectedIndexKeys = ['submitConsole', 'mcodeActionPlan', 'finalFormFill', 'liveFormQuickFill', 'formPayload', 'runbook', 'humanFields', 'latestPreflightEvidence', 'recordTemplate', 'reviewResponseTemplate', 'versionBoundary', 'submitNow'];
+  for (const key of expectedIndexKeys) {
+    if (!index[key]) issues.push({ file: 'dist/submission/voice-prompt-minimax-0.7.1/SUBMISSION-INDEX.json', issue: 'missing submission index key', key });
+  }
+} catch (error) {
+  issues.push({ file: 'dist/submission/voice-prompt-minimax-0.7.1/SUBMISSION-INDEX.json', issue: 'cannot read submission index', error: String(error.message || error) });
+}
 const zipManifest = spawnSync('unzip', ['-p', path.join(root, 'dist/minimax/voice-prompt-minimax-0.7.1.zip'), '.minimax-plugin/plugin.json'], { encoding: 'utf8' });
 if (zipManifest.status !== 0) {
   issues.push({ file: 'dist/minimax/voice-prompt-minimax-0.7.1.zip', issue: 'cannot read packaged MiniMax manifest' });

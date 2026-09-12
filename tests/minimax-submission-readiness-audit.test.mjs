@@ -31,6 +31,7 @@ const requiredFiles = [
   'dist/submission/voice-prompt-minimax-0.7.1/voice-prompt-minimax-0.7.1.zip',
   'dist/submission/voice-prompt-minimax-0.7.1/docs/mcode-marketplace-action-plan.md',
   'dist/submission/voice-prompt-minimax-0.7.1/SUBMIT-NOW.md',
+  'dist/submission/voice-prompt-minimax-0.7.1/SUBMISSION-INDEX.json',
 ];
 
 async function createAuditFixture(overrides = {}) {
@@ -52,6 +53,20 @@ async function createAuditFixture(overrides = {}) {
     supportEmail: 'TODO: support email, can initially match submitter email',
     uploadArtifact: { sha256: 'acb14dfb3465ee3c0c17868d45e0f234ec37d439b7ee9a6896ace9e78a23d072' },
   }, null, 2));
+  await writeFile(path.join(dir, 'dist/submission/voice-prompt-minimax-0.7.1/SUBMISSION-INDEX.json'), JSON.stringify({
+    submitConsole: 'docs/mcode-submit-console.md',
+    mcodeActionPlan: 'docs/mcode-marketplace-action-plan.md',
+    finalFormFill: 'docs/minimax-form-final-fill.md',
+    liveFormQuickFill: 'docs/minimax-live-form-quick-fill.md',
+    formPayload: 'docs/minimax-form-payload.json',
+    runbook: 'docs/minimax-submission-day-runbook.md',
+    humanFields: 'docs/minimax-submission-human-fields.md',
+    latestPreflightEvidence: 'docs/minimax-submit-preflight-latest.md',
+    recordTemplate: 'docs/minimax-submission-record-template.md',
+    reviewResponseTemplate: 'docs/minimax-review-response-template.md',
+    versionBoundary: 'docs/minimax-version-boundary.md',
+    submitNow: 'SUBMIT-NOW.md',
+  }));
   const zipStage = path.join(dir, '.zip-stage/.minimax-plugin');
   mkdirSync(zipStage, { recursive: true });
   writeFileSync(path.join(zipStage, 'plugin.json'), JSON.stringify({ name: 'voice-prompt', version: '0.7.1' }));
