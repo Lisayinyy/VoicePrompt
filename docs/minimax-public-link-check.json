@@ -1,5 +1,5 @@
 {
-  "date": "2026-09-12T05:38:28.276Z",
+  "date": "2026-09-12T05:40:16.247Z",
   "source": "docs/minimax-submission-packet-2026-09-12.md",
   "skipped": [
     "https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/minimax-public-link-check.json"
@@ -14,140 +14,140 @@
       "ok": true,
       "status": 200,
       "finalUrl": "https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/minimax-form-copy-zh.md",
-      "elapsedMs": 1598
+      "elapsedMs": 1763
     },
     {
       "url": "https://github.com/Lisayinyy/VoicePrompt",
       "ok": true,
       "status": 200,
       "finalUrl": "https://github.com/Lisayinyy/VoicePrompt",
-      "elapsedMs": 1688
+      "elapsedMs": 1460
     },
     {
       "url": "https://lisayinyy.github.io/VoicePrompt/",
       "ok": true,
       "status": 200,
       "finalUrl": "https://lisayinyy.github.io/VoicePrompt/",
-      "elapsedMs": 987
+      "elapsedMs": 1032
     },
     {
       "url": "https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/minimax-marketplace-public-materials.md",
       "ok": true,
       "status": 200,
       "finalUrl": "https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/minimax-marketplace-public-materials.md",
-      "elapsedMs": 558
+      "elapsedMs": 484
     },
     {
       "url": "https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/minimax-marketplace-submission-template.md",
       "ok": true,
       "status": 200,
       "finalUrl": "https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/minimax-marketplace-submission-template.md",
-      "elapsedMs": 529
+      "elapsedMs": 495
     },
     {
       "url": "https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/minimax-submission-execution-template.md",
       "ok": true,
       "status": 200,
       "finalUrl": "https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/minimax-submission-execution-template.md",
-      "elapsedMs": 518
+      "elapsedMs": 520
     },
     {
       "url": "https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/minimax-submission-human-fields.md",
       "ok": true,
       "status": 200,
       "finalUrl": "https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/minimax-submission-human-fields.md",
-      "elapsedMs": 530
+      "elapsedMs": 509
     },
     {
       "url": "https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/minimax-submission-day-runbook.md",
       "ok": true,
       "status": 200,
       "finalUrl": "https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/minimax-submission-day-runbook.md",
-      "elapsedMs": 607
+      "elapsedMs": 467
     },
     {
       "url": "https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/minimax-form-final-fill.md",
       "ok": true,
       "status": 200,
       "finalUrl": "https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/minimax-form-final-fill.md",
-      "elapsedMs": 486
+      "elapsedMs": 517
     },
     {
       "url": "https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/minimax-live-form-field-map.md",
       "ok": true,
       "status": 200,
       "finalUrl": "https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/minimax-live-form-field-map.md",
-      "elapsedMs": 491
+      "elapsedMs": 492
     },
     {
       "url": "https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/minimax-live-form-quick-fill.md",
       "ok": true,
       "status": 200,
       "finalUrl": "https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/minimax-live-form-quick-fill.md",
-      "elapsedMs": 504
+      "elapsedMs": 481
     },
     {
       "url": "https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/minimax-form-payload.json",
       "ok": true,
       "status": 200,
       "finalUrl": "https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/minimax-form-payload.json",
-      "elapsedMs": 460
+      "elapsedMs": 509
     },
     {
       "url": "https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/agent-setup.md",
       "ok": true,
       "status": 200,
       "finalUrl": "https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/agent-setup.md",
-      "elapsedMs": 479
+      "elapsedMs": 511
     },
     {
       "url": "https://github.com/Lisayinyy/VoicePrompt/blob/main/minimax/data-and-permissions.md",
       "ok": true,
       "status": 200,
       "finalUrl": "https://github.com/Lisayinyy/VoicePrompt/blob/main/minimax/data-and-permissions.md",
-      "elapsedMs": 562
+      "elapsedMs": 567
     },
     {
       "url": "https://github.com/Lisayinyy/VoicePrompt/blob/main/minimax/ASSET-RIGHTS.md",
       "ok": true,
       "status": 200,
       "finalUrl": "https://github.com/Lisayinyy/VoicePrompt/blob/main/minimax/ASSET-RIGHTS.md",
-      "elapsedMs": 487
+      "elapsedMs": 468
     },
     {
       "url": "https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/minimax-clean-machine-test-report.md",
       "ok": true,
       "status": 200,
       "finalUrl": "https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/minimax-clean-machine-test-report.md",
-      "elapsedMs": 488
+      "elapsedMs": 478
     },
     {
       "url": "https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/minimax-clean-preflight-report.json",
       "ok": true,
       "status": 200,
       "finalUrl": "https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/minimax-clean-preflight-report.json",
-      "elapsedMs": 491
+      "elapsedMs": 488
     },
     {
       "url": "https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/backend-public-api-status.md",
       "ok": true,
       "status": 200,
       "finalUrl": "https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/backend-public-api-status.md",
-      "elapsedMs": 472
+      "elapsedMs": 509
     },
     {
       "url": "https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/minimax-submit-preflight-latest.md",
       "ok": true,
       "status": 200,
       "finalUrl": "https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/minimax-submit-preflight-latest.md",
-      "elapsedMs": 510
+      "elapsedMs": 513
     },
     {
       "url": "https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/minimax-submission-record-template.md",
       "ok": true,
       "status": 200,
       "finalUrl": "https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/minimax-submission-record-template.md",
-      "elapsedMs": 529
+      "elapsedMs": 489
     }
   ]
 }

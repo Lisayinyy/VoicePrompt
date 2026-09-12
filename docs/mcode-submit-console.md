@@ -78,6 +78,7 @@ MiniMax package version: 0.7.1
 
 | 用途 | 文件 |
 | --- | --- |
+| 机器可读填表计划 | `docs/mcode-form-fill-plan.json` |
 | 最终字段填写稿 | `docs/minimax-form-final-fill.md` |
 | 现场快速填表 | `docs/minimax-live-form-quick-fill.md` |
 | 提交材料主控清单 | `docs/mcode-marketplace-action-plan.md` |

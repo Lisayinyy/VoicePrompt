@@ -1,0 +1,99 @@
+{
+  "status": "pre-submit; not submitted",
+  "purpose": "Machine-readable fill plan for the MiniMax Code / Mcode plugin submission form.",
+  "form": {
+    "title": "MiniMax Plugin 提交表单 / Plugin Submission Form",
+    "source": "Feishu form inspected on 2026-09-12",
+    "submitBoundary": "Uploading the ZIP and clicking submit sends the plugin package, contact email, and form data to MiniMax / Feishu. Final human confirmation is required before submission."
+  },
+  "preflight": {
+    "command": "npm run preflight:minimax-submit",
+    "requiredStatus": "passed",
+    "requiredChecks": [
+      "Package validation",
+      "Automated clean preflight",
+      "Build submission bundle",
+      "Submission readiness audit",
+      "Public link check",
+      "Test suite"
+    ]
+  },
+  "privateDraft": {
+    "requiredBeforeBrowserFill": true,
+    "command": "npm run prepare:minimax-private-submission -- --submitter-email <提交邮箱>",
+    "fillSheet": ".local/minimax-submission/fill-sheet.private.md",
+    "payload": ".local/minimax-submission/form-payload.private.json",
+    "doNotCommit": true
+  },
+  "fields": [
+    {
+      "order": 1,
+      "label": "Plugin 名 / Plugin name",
+      "value": "voice-prompt",
+      "required": true,
+      "source": "minimax/.minimax-plugin/plugin.json name"
+    },
+    {
+      "order": 2,
+      "label": "操作类型 / Operation type",
+      "value": "新插件 / New Plugin",
+      "required": true,
+      "source": "current submission route"
+    },
+    {
+      "order": 3,
+      "label": "来源类型 / Source type",
+      "value": "ZIP",
+      "required": true,
+      "source": "current submission route"
+    },
+    {
+      "order": 4,
+      "label": "目标区域 / Target region",
+      "value": "CN",
+      "required": true,
+      "source": "current submission route"
+    },
+    {
+      "order": 5,
+      "label": "启用端 / Delivery target",
+      "value": "桌面端 / Desktop",
+      "required": true,
+      "source": "current submission route"
+    },
+    {
+      "order": 6,
+      "label": "组织/团队 / Organization or team",
+      "value": "Lisa Yin",
+      "required": true,
+      "source": "docs/minimax-form-final-fill.md"
+    },
+    {
+      "order": 7,
+      "label": "联系邮箱（提交者） / Contact email",
+      "value": "READ_FROM_PRIVATE_DRAFT",
+      "required": true,
+      "source": ".local/minimax-submission/fill-sheet.private.md",
+      "publicRepositoryValue": "TODO only"
+    }
+  ],
+  "upload": {
+    "type": "ZIP",
+    "path": "dist/submission/voice-prompt-minimax-0.7.1/voice-prompt-minimax-0.7.1.zip",
+    "fileName": "voice-prompt-minimax-0.7.1.zip",
+    "sha256": "acb14dfb3465ee3c0c17868d45e0f234ec37d439b7ee9a6896ace9e78a23d072",
+    "version": "0.7.1"
+  },
+  "postSubmit": {
+    "requiredReceipt": "official submission_id or equivalent form record",
+    "recordCommand": "npm run record:minimax-submission -- --submission-id <官方返回的ID> --submitter-email <提交邮箱> --support-email <支持邮箱> --author \"Lisa Yin\" --operation \"new plugin\"",
+    "boundary": "The post-submit record proves form submission only; it does not prove marketplace approval, publication, or fresh-user installability."
+  },
+  "doNotClaim": [
+    "marketplace approval is complete",
+    "plugin is published or visible before verification",
+    "plugin import silently installs desktop app, model, or macOS permissions",
+    "0.7.1 includes publisher-funded shared cloud polish",
+    "current REST API is an approved MiniMax hosted remote MCP Connector"
+  ]
+}

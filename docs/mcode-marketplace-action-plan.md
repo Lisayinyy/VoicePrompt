@@ -22,6 +22,7 @@
 | --- | --- | --- |
 | 插件候选包 | 已生成 | `dist/submission/voice-prompt-minimax-0.7.1/voice-prompt-minimax-0.7.1.zip` |
 | 提交控制台 | 已整理 | `docs/mcode-submit-console.md` |
+| 机器可读填表计划 | 已整理 | `docs/mcode-form-fill-plan.json` |
 | ZIP 校验 | 已通过 | SHA-256 `acb14dfb3465ee3c0c17868d45e0f234ec37d439b7ee9a6896ace9e78a23d072` |
 | 自动隔离预检 | 已通过 | `docs/minimax-clean-preflight-report.json` |
 | 公开链接检查 | 已通过 | 20 / 20 passed，1 个自报告链接跳过 |
