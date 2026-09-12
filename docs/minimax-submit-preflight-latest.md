@@ -1,13 +1,13 @@
 # Voice Prompt · MiniMax Submit Preflight Latest Evidence
 
-Generated at: 2026-09-12T05:25:13.141182+00:00
+Generated at: 2026-09-12T05:27:03.879916+00:00
 
 ## Result
 
 | Field | Value |
 | --- | --- |
 | Status | passed |
-| Git head | `526dda2` |
+| Git head | `5451c36` |
 | Upload ZIP | `dist/submission/voice-prompt-minimax-0.7.1/voice-prompt-minimax-0.7.1.zip` |
 | SHA-256 | `acb14dfb3465ee3c0c17868d45e0f234ec37d439b7ee9a6896ace9e78a23d072` |
 | Submission bundle | `dist/submission/voice-prompt-minimax-0.7.1` |
@@ -41,8 +41,9 @@ npm run record:minimax-submission -- --submission-id <ID> --submitter-email <EMA
 
 | Step | Status | Elapsed ms | Command |
 | --- | ---: | ---: | --- |
-| Package validation | 0 | 238 | `python3 scripts/pack-minimax.py --validate dist/minimax/voice-prompt-minimax-0.7.1.zip` |
-| Automated clean preflight | 0 | 401 | `/opt/homebrew/Cellar/node/25.8.0/bin/node scripts/verify-minimax-clean-preflight.mjs` |
-| Build submission bundle | 0 | 761 | `/opt/homebrew/Cellar/node/25.8.0/bin/node scripts/make-minimax-submission-bundle.mjs` |
-| Public link check | 0 | 12420 | `/opt/homebrew/Cellar/node/25.8.0/bin/node scripts/verify-minimax-public-links.mjs` |
-| Test suite | 0 | 2089 | `npm test` |
+| Package validation | 0 | 89 | `python3 scripts/pack-minimax.py --validate dist/minimax/voice-prompt-minimax-0.7.1.zip` |
+| Automated clean preflight | 0 | 367 | `/opt/homebrew/Cellar/node/25.8.0/bin/node scripts/verify-minimax-clean-preflight.mjs` |
+| Build submission bundle | 0 | 536 | `/opt/homebrew/Cellar/node/25.8.0/bin/node scripts/make-minimax-submission-bundle.mjs` |
+| Submission readiness audit | 0 | 93 | `/opt/homebrew/Cellar/node/25.8.0/bin/node scripts/verify-minimax-submission-readiness.mjs` |
+| Public link check | 0 | 13816 | `/opt/homebrew/Cellar/node/25.8.0/bin/node scripts/verify-minimax-public-links.mjs` |
+| Test suite | 0 | 2297 | `npm test` |

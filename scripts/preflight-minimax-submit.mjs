@@ -10,6 +10,7 @@ const steps = [
   ['Package validation', 'python3', ['scripts/pack-minimax.py', '--validate', 'dist/minimax/voice-prompt-minimax-0.7.1.zip']],
   ['Automated clean preflight', process.execPath, ['scripts/verify-minimax-clean-preflight.mjs']],
   ['Build submission bundle', process.execPath, ['scripts/make-minimax-submission-bundle.mjs']],
+  ['Submission readiness audit', process.execPath, ['scripts/verify-minimax-submission-readiness.mjs']],
   ['Public link check', process.execPath, ['scripts/verify-minimax-public-links.mjs']],
   ['Test suite', 'npm', ['test']],
 ];

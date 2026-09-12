@@ -86,7 +86,7 @@ npm test
 
 ## 5. 不要写进表单的说法
 
-- 已上架 / 已审核通过
+- 宣称已上架或已审核通过
 - 已有 submission_id
 - 导入插件后会自动安装桌面 App、模型或系统权限
 - 0.7.1 已包含发布者共享云端润色额度
@@ -120,3 +120,17 @@ npm run record:minimax-submission -- \
 - 审核反馈
 
 不要在 MiniMax Code 市场真实可见前宣称“已发布”。
+
+## 提交材料审计
+
+提交前会自动运行：
+
+```sh
+npm run verify:minimax-submission-readiness
+```
+
+审计报告写入：
+
+```text
+docs/minimax-submission-readiness-report.json
+```

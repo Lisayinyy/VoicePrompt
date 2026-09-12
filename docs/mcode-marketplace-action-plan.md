@@ -29,6 +29,7 @@
 | 快速填表页 | 已整理 | `docs/minimax-live-form-quick-fill.md` |
 | 最终填写稿 | 已整理 | `docs/minimax-form-final-fill.md` |
 | 提交后记录模板 | 已整理 | `docs/minimax-submission-record-template.md` |
+| 提交材料审计 | 已通过 | `docs/minimax-submission-readiness-report.json` |
 
 ## 3. Mcode 表单填写顺序
 
@@ -54,7 +55,7 @@
 | 提交邮箱 | 表单必填，也用于审核通知 | 待你确认 |
 | 支持邮箱 | 用户或平台反馈入口 | 可以先与提交邮箱一致 |
 | 作者显示名 | 表单或市场页可能展示 | 暂定 `Lisa Yin` |
-| 是否现在正式提交 | 上传 ZIP 和点击提交会把材料发送给 MiniMax / Feishu | 提交前需要你最后确认 |
+| 是否现在正式提交 | 上传 ZIP 和点击提交会把插件包、联系邮箱和表单内容发送给 MiniMax / 飞书 | 提交前需要你最后确认 |
 | 是否把邮箱写进 GitHub 文档 | 邮箱会变成公开信息 | 默认不公开，除非你明确同意 |
 
 

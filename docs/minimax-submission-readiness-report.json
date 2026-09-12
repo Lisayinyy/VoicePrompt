@@ -1,0 +1,31 @@
+{
+  "status": "passed",
+  "generatedAt": "2026-09-12T05:26:30.182Z",
+  "scope": "Submission-material consistency audit only. This does not submit the plugin or prove marketplace approval.",
+  "checkedFiles": [
+    "docs/mcode-marketplace-action-plan.md",
+    "docs/minimax-live-form-quick-fill.md",
+    "docs/minimax-form-final-fill.md",
+    "docs/minimax-form-payload.json",
+    "docs/minimax-submission-execution-template.md",
+    "docs/minimax-submission-packet-2026-09-12.md",
+    "docs/minimax-submission-day-runbook.md",
+    "docs/minimax-submission-readiness.md",
+    "docs/minimax-submission.md",
+    "docs/minimax-submit-preflight-latest.md"
+  ],
+  "requiredArtifacts": [
+    "docs/mcode-marketplace-action-plan.md",
+    "docs/minimax-live-form-field-map.md",
+    "docs/minimax-live-form-quick-fill.md",
+    "docs/minimax-form-final-fill.md",
+    "docs/minimax-form-payload.json",
+    "docs/minimax-submission-human-fields.md",
+    "docs/minimax-submission-record-template.md",
+    "docs/minimax-submit-preflight-latest.md",
+    "dist/submission/voice-prompt-minimax-0.7.1/voice-prompt-minimax-0.7.1.zip",
+    "dist/submission/voice-prompt-minimax-0.7.1/docs/mcode-marketplace-action-plan.md",
+    "dist/submission/voice-prompt-minimax-0.7.1/SUBMIT-NOW.md"
+  ],
+  "issues": []
+}
