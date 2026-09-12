@@ -37,6 +37,7 @@ const summary = {
   submissionBundle: 'dist/submission/voice-prompt-minimax-0.7.1',
   publicLinks: { status: publicLinks.status, passed: publicLinks.passed, total: publicLinks.total, skipped: publicLinks.skipped?.length || 0 },
   cleanPreflight: { status: clean.status, scope: clean.scope },
+  finalFormFill: manifest.finalFormFill,
   stillNeedsHumanFields: manifest.humanFields,
   runbook: manifest.submissionDayRunbook,
   recordCommand: 'npm run record:minimax-submission -- --submission-id <ID> --submitter-email <EMAIL> --support-email <EMAIL> --author "Lisa Yin" --operation "new plugin"',
