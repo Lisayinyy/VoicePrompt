@@ -156,7 +156,7 @@ struct VoiceRootView: View {
                 rule
                 permissionRow("cursorarrow.click", "自动填入", "说完直接回到输入框，由你确认发送", model.pasteGranted, actions.accessibility)
             }.frame(maxWidth: 460)
-            Text(model.permissionHint.isEmpty ? "不 @ 只转写；@Voice Prompt 并发送后，AI 才润色。" : model.permissionHint)
+            Text(model.permissionHint.isEmpty ? "录音无需每次 @；自动润色可在 AI 润色页设置。" : model.permissionHint)
                 .font(.system(size: 11)).foregroundColor(VPColor.muted)
             Button("开始使用", action: actions.beginUsing).buttonStyle(PinkButton(prominent: true))
             Text("本地识别 · Esc 取消 · 这份指南只在首次打开时出现")
@@ -541,6 +541,9 @@ struct VoiceRecordingView: View {
                     HStack(spacing: 6) {
                         if model.phase == .polishing {
                             Text("正在润色").font(.system(size: 10, weight: .regular))
+                        }
+                        if model.phase == .saved {
+                            Text(status).font(.system(size: 10, weight: .regular))
                         }
                         if model.phase == .saved || model.phase == .error {
                             if model.phase == .saved {

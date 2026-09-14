@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { mkdtemp, mkdir, writeFile, readFile, rm, readdir } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
-import { setupStatus } from '../plugin/lib/setup-status.mjs';
+import { setupStatus, inputDiagnostics } from '../plugin/lib/setup-status.mjs';
 
 test('first-use inspection works without desktop/config and never creates files', async t => {
   const home = await mkdtemp(path.join(tmpdir(), 'voice-empty-')); t.after(() => rm(home, { recursive: true }));
@@ -31,4 +31,25 @@ test('both import formats include the same first-use instructions without the de
   const a = await readFile(new URL('skills/voice-prompt/references/setup.md', root), 'utf8');
   const b = await readFile(new URL('plugin/skills/voice-prompt/references/setup.md', root), 'utf8');
   assert.equal(a, b);
+});
+
+test('input diagnostics reject stale reports and expose no arbitrary fields', async t => {
+  const home = await mkdtemp(path.join(tmpdir(), 'voice-input-report-')); t.after(() => rm(home, { recursive: true }));
+  const dir = path.join(home, '.config/voice-prompt'); await mkdir(dir, { recursive: true });
+  const file = path.join(dir, 'input-diagnostics.json');
+  const now = Date.now();
+  const report = { schema: 'voice-prompt-input/1', bundleIdentifier: 'ai.voiceprompt.desktop', pid: process.pid,
+    updatedAt: now / 1000, appVersion: '0.7.1', appBuild: '24', microphoneGranted: true,
+    accessibilityGranted: false, autoInsert: true, insertionState: 'accessibility_required', secret: 'must-not-appear' };
+  await writeFile(file, JSON.stringify(report));
+  const result = await inputDiagnostics(home, now);
+  assert.equal(result.accessibilityGranted, false); assert.equal(result.status, 'recent-desktop-report');
+  assert.ok(!JSON.stringify(result).includes(report.secret));
+  assert.equal((await inputDiagnostics(home, now + 16000)).status, 'stale');
+  await writeFile(file, JSON.stringify({ ...report, updatedAt: (now + 10000) / 1000 }));
+  assert.equal((await inputDiagnostics(home, now)).status, 'stale');
+  await writeFile(file, JSON.stringify({ ...report, accessibilityGranted: 'true' }));
+  assert.equal((await inputDiagnostics(home, now)).status, 'invalid');
+  await writeFile(file, 'null');
+  assert.equal((await inputDiagnostics(home, now)).status, 'invalid');
 });

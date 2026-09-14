@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "name": "voice-prompt",
   "displayName": "Voice Prompt",
-  "version": "0.7.4",
+  "version": "0.7.5",
   "description": "直接说话，把想法变成清晰的文字。首次 @ 查看指南，发送「安装」让 Agent 帮你准备桌面应用和模型；日常用 Option＋空格录音，可开启 AI 自动润色，填入后由你确认发送（Apple Silicon Mac / macOS 15+）",
   "author": "Voice Prompt contributors",
   "icon": "icon.png",

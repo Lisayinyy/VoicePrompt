@@ -22,11 +22,12 @@
 
 ## 安装校验值
 
-固定桌面依赖为 v0.7.0-beta.3；它与本次 0.7.4 插件包装版本分别编号。首次安装前比对官方发布页的 SHA256SUMS 与以下记录；若不一致应停止并调查，不替换成任意“最新”文件。
+固定桌面依赖为 v0.7.1-beta.1；它与本次 0.7.5 插件包装版本分别编号。首次安装前比对官方发布页的 SHA256SUMS 与以下记录；若不一致应停止并调查，不替换成任意“最新”文件。
 
 | 文件 | SHA-256 |
 | --- | --- |
-| voice-prompt-setup-0.7.0.zip | `9a975bb70d40f90d884163b8f63507ff26502f320fd14bfcb5db390b0190ab81` |
-| voice-prompt-desktop-0.7.0-macos-arm64.zip | `ee066a2f8a9f71e6fed2c2f505c7be6a5404ba96f769ddfe22ef569bc1f3b89a` |
+| voice-prompt-desktop-0.7.1-macos-arm64.zip | `2126f47db1996d9e078fa99ac501371d73d19b2045fccc43ad6741346393bc97` |
+
+安装工具包 `voice-prompt-setup-0.7.1.zip` 的校验值见同一发布页的 `SHA256SUMS`。
 
 这些校验值用于完整性核对，不等于 Apple 公证，也不保证企业策略允许安装

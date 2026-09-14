@@ -1,13 +1,15 @@
-import { mkdir, rm, cp } from 'node:fs/promises';
+import { mkdir, rm, cp, readFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 import { spawnSync } from 'node:child_process';
 const root = fileURLToPath(new URL('../', import.meta.url));
 const dist = path.join(root, 'dist');
 await mkdir(dist, { recursive: true });
+const version = JSON.parse(await readFile(path.join(root, 'plugin/package.json'), 'utf8')).version;
+const archive = path.join(dist, `voice-prompt-connector-${version}.zip`);
 const destination = path.join(dist, 'voice-prompt');
 await rm(destination, { recursive: true, force: true });
 await cp(path.join(root, 'plugin'), destination, { recursive: true, dereference: false });
-const result = spawnSync('/usr/bin/ditto', ['-c', '-k', '--keepParent', destination, path.join(dist, 'voice-prompt-connector-0.7.0.zip')], { stdio: 'inherit' });
+const result = spawnSync('/usr/bin/ditto', ['-c', '-k', '--keepParent', destination, archive], { stdio: 'inherit' });
 if (result.status !== 0) throw new Error('Packaging failed');
-console.log(path.join(dist, 'voice-prompt-connector-0.7.0.zip'));
+console.log(archive);

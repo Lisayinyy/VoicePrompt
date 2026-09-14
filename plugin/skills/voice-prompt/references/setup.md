@@ -38,3 +38,15 @@ Report these separately: desktop installed; model ready/inference tested; AI pol
 For Chinese users, keep the final setup result to: “桌面应用：…；语音模型：…；AI 润色：…；下一步：点击输入框，按 Option+空格开始，再按一次结束，检查后发送。” Report only observed success; distinguish “待本人授权/待录音测试” from completion. If no AI provider is configured, do not block working local dictation or imply the MiniMax subscription is automatically available. Offer the existing-text @ path as an optional alternative.
 
 If the host has no local shell/file tools (for example a cloud task), explain that this session cannot install onto the user's Mac. Direct them to a local MiniMax Code desktop task with terminal tools and the same “@Voice Prompt 安装” request. Do not download a Mac app onto a remote Linux host and call it installed on the user's computer.
+
+## MiniMax Code: speech recognized but not inserted
+
+Read `voice_setup_status.inputDiagnostics` first. Only `status: recent-desktop-report` describes the currently running desktop process; an absent/stale report is not evidence that permission is granted or denied. Desktop 0.7.1 build 24 or later reports this. The marketplace version and the desktop build are different: older packages may still download desktop build 22.
+
+- `accessibilityGranted: false`: direct the user to macOS Privacy & Security → Accessibility → the currently installed Voice Prompt app. Permission for MiniMax Code, another voice app, or a previous app copy does not prove this process is authorized. After granting, return to Voice Prompt to recheck; if still false, quit and reopen Voice Prompt. Do not reset system permissions or bypass authorization.
+- `autoInsert: false`: explain that automatic insertion is disabled and enable it only when the user requests auto-fill.
+- `insertionState: blocked`: use `failureReason` to distinguish changed app/window/editor, disabled insertion and other failures. Keep the draft, ask them to focus the intended MiniMax composer and use the insert arrow. Never overwrite an edited composer.
+- `unconfirmed` means the paste event was attempted but no readback confirmed it. Ask whether text actually appeared before retrying, to avoid duplicates.
+- `confirmed` means the desktop read back the expected text. No Enter is sent.
+
+For an unconfigured AI service, test raw dictation first: missing polishing credentials do not prevent raw input delivery. Do not ask for API keys to fix an insertion problem. This diagnostic contains no transcript or credentials. A different Mac's successful microphone/insertion test cannot be inferred from the publisher's machine.

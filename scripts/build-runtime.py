@@ -16,7 +16,7 @@ app = build / 'Voice Prompt.app'
 if app.exists(): shutil.rmtree(app)
 contents = app / 'Contents'; resources = contents / 'Resources'
 for d in [contents / 'MacOS', resources / 'bin', resources / 'models', resources / 'licenses']: d.mkdir(parents=True, exist_ok=True)
-subprocess.run(['swiftc', '-swift-version', '5', '-parse-as-library', '-target', 'arm64-apple-macosx13.0', '-O', str(root/'native/VoicePrompt.swift'), str(root/'native/VoicePromptUI.swift'), str(root/'native/VoiceHotkey.swift'), str(root/'native/VoiceDirectEdit.swift'), str(root/'native/VoicePasteboard.swift'), str(root/'native/VoiceInputGuard.swift'), str(root/'native/VoiceLivePreview.swift'), str(root/'native/VoiceAppAppearance.swift'), '-o', str(contents/'MacOS/VoicePrompt'), '-framework', 'AppKit', '-framework', 'AVFoundation', '-framework', 'Carbon'], check=True)
+subprocess.run(['swiftc', '-swift-version', '5', '-parse-as-library', '-target', 'arm64-apple-macosx13.0', '-O', str(root/'native/VoicePrompt.swift'), str(root/'native/VoicePromptUI.swift'), str(root/'native/VoiceHotkey.swift'), str(root/'native/VoiceInputReadiness.swift'), str(root/'native/VoiceDirectEdit.swift'), str(root/'native/VoicePasteboard.swift'), str(root/'native/VoiceInputGuard.swift'), str(root/'native/VoiceLivePreview.swift'), str(root/'native/VoiceAppAppearance.swift'), '-o', str(contents/'MacOS/VoicePrompt'), '-framework', 'AppKit', '-framework', 'AVFoundation', '-framework', 'Carbon'], check=True)
 shutil.copy2(node/'bin/node', resources/'bin/node')
 shutil.copy2(build/'compiled/bin/transcribe-cli', resources/'bin/voice-asr')
 shutil.copy2(model, resources/'models/sensevoice-small.gguf')
@@ -27,13 +27,15 @@ src = build/'transcribe.cpp-e2f82cb6702315a1194f3bf1a6fee67cd2678447'
 shutil.copy2(src/'LICENSE', resources/'licenses/transcribe.cpp-LICENSE.txt')
 shutil.copy2(src/'ggml/LICENSE', resources/'licenses/ggml-LICENSE.txt')
 with (contents/'Info.plist').open('wb') as f:
- plistlib.dump({'CFBundleExecutable':'VoicePrompt','CFBundleIdentifier':'ai.voiceprompt.desktop','CFBundleName':'Voice Prompt','CFBundleDisplayName':'Voice Prompt','CFBundlePackageType':'APPL','CFBundleShortVersionString':'0.7.0','CFBundleVersion':'22','LSMinimumSystemVersion':'13.0','LSUIElement':True,'NSMicrophoneUsageDescription':'Voice Prompt records speech only when you start dictation, then transcribes it locally.','NSHighResolutionCapable':True}, f)
-manifest = {'product':'Voice Prompt','version':'0.7.0','platform':'macOS 13+ Apple Silicon','node':provenance,'engineBackend':'CPU with Apple Accelerate; Metal disabled to avoid cold shader compilation','engineCommit':'e2f82cb6702315a1194f3bf1a6fee67cd2678447','model':{'name':'SenseVoiceSmall-Q8_0','revision':'4a08b8e900b38a977e32eb08d5d0697d6e72ba04','sha256':expected},'aiServiceBundled':False,'developerIdSigned':False,'notarized':False}
+ plistlib.dump({'CFBundleExecutable':'VoicePrompt','CFBundleIdentifier':'ai.voiceprompt.desktop','CFBundleName':'Voice Prompt','CFBundleDisplayName':'Voice Prompt','CFBundlePackageType':'APPL','CFBundleShortVersionString':'0.7.1','CFBundleVersion':'24','LSMinimumSystemVersion':'13.0','LSUIElement':True,'NSMicrophoneUsageDescription':'Voice Prompt records speech only when you start dictation, then transcribes it locally.','NSHighResolutionCapable':True}, f)
+manifest = {'product':'Voice Prompt','version':'0.7.1','build':'24','inputDiagnostics':True,'platform':'macOS 13+ Apple Silicon','node':provenance,'engineBackend':'CPU with Apple Accelerate; Metal disabled to avoid cold shader compilation','engineCommit':'e2f82cb6702315a1194f3bf1a6fee67cd2678447','model':{'name':'SenseVoiceSmall-Q8_0','revision':'4a08b8e900b38a977e32eb08d5d0697d6e72ba04','sha256':expected},'aiServiceBundled':False,'developerIdSigned':False,'notarized':False}
 (resources/'components.json').write_text(json.dumps(manifest,indent=2)+'\n')
-subprocess.run(['xattr','-cr',str(app)],check=True)
+# Preserve security/quarantine attributes; only strip Finder signing detritus.
+for metadata in ('com.apple.FinderInfo', 'com.apple.ResourceFork'):
+ subprocess.run(['/usr/bin/xattr','-dr',metadata,str(app)],stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
 subprocess.run(['codesign','--force','--deep','--sign','-',str(app)],check=True)
 subprocess.run(['codesign','--verify','--deep','--strict',str(app)],check=True)
-destination = root/'dist/voice-prompt-desktop-0.7.0-macos-arm64.zip'
+destination = root/'dist/voice-prompt-desktop-0.7.1-macos-arm64.zip'
 destination.parent.mkdir(parents=True, exist_ok=True)
 subprocess.run(['/usr/bin/ditto','-c','-k','--norsrc','--keepParent',str(app),str(destination)],check=True)
 print(app)

@@ -40,6 +40,9 @@ final class VoicePrompt: NSObject, NSApplicationDelegate {
     var rawDraft = ""
     var pendingInsertion = false
     var pasteTransaction: VoicePasteboardTransaction?
+    var lastInputDiagnosticWrite = Date.distantPast
+    var lastInsertionState = "not_attempted"
+    var lastInsertionReason = ""
     var historyRecoveryAttempts = 0
     var historyRecovering = false
     var starting = false
@@ -194,6 +197,42 @@ final class VoicePrompt: NSObject, NSApplicationDelegate {
     func refreshPermissions() {
         ui.micGranted = AVCaptureDevice.authorizationStatus(for: .audio) == .authorized
         ui.pasteGranted = AXIsProcessTrusted()
+        publishInputDiagnostics()
+    }
+    func publishInputDiagnostics(force: Bool = false) {
+        guard force || Date().timeIntervalSince(lastInputDiagnosticWrite) >= 5 else { return }
+        let info = Bundle.main.infoDictionary ?? [:]
+        let report: [String: Any] = [
+            "schema": "voice-prompt-input/1", "updatedAt": Date().timeIntervalSince1970,
+            "pid": ProcessInfo.processInfo.processIdentifier,
+            "bundleIdentifier": Bundle.main.bundleIdentifier ?? "",
+            "appVersion": info["CFBundleShortVersionString"] as? String ?? "",
+            "appBuild": info["CFBundleVersion"] as? String ?? "",
+            "microphoneGranted": AVCaptureDevice.authorizationStatus(for: .audio) == .authorized,
+            "accessibilityGranted": AXIsProcessTrusted(), "autoInsert": ui.autoInsert,
+            "phase": String(describing: ui.phase), "insertionState": lastInsertionState,
+            "failureReason": lastInsertionReason
+        ]
+        // No transcripts, editor contents, window titles, tokens or AI configuration.
+        let dir = home.appendingPathComponent(".config/voice-prompt")
+        do {
+            try FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true, attributes: [.posixPermissions: 0o700])
+            let url = dir.appendingPathComponent("input-diagnostics.json")
+            try JSONSerialization.data(withJSONObject: report, options: [.sortedKeys]).write(to: url, options: .atomic)
+            try FileManager.default.setAttributes([.posixPermissions: 0o600], ofItemAtPath: url.path)
+            lastInputDiagnosticWrite = Date()
+        } catch { /* Diagnostics must never interrupt dictation. */ }
+    }
+    func requireInputPermissions(editorOwned: Bool = false) -> Bool {
+        refreshPermissions()
+        guard let blocker = VoiceInputReadiness.blocker(microphone: ui.micGranted, accessibility: ui.pasteGranted, autoInsert: ui.autoInsert, editorOwned: editorOwned) else { return true }
+        ui.onboarding = true
+        ui.permissionHint = blocker == "microphone_required"
+            ? "请先允许 Voice Prompt 使用麦克风，再回到输入框开始录音。"
+            : "还未取得自动填入权限。请在辅助功能中允许当前安装的 Voice Prompt；已打开仍无效时，退出后重新打开应用再检查。"
+        lastInsertionState = blocker; lastInsertionReason = ui.permissionHint; publishInputDiagnostics(force: true)
+        showMain()
+        return false
     }
     func requestMicrophone() {
         let status = AVCaptureDevice.authorizationStatus(for: .audio)
@@ -208,7 +247,7 @@ final class VoicePrompt: NSObject, NSApplicationDelegate {
         ui.permissionHint = "在系统设置中允许 Voice Prompt，然后回到这里。"
     }
     func beginUsing() {
-        refreshPermissions()
+        guard requireInputPermissions() else { return }
         UserDefaults.standard.set(true, forKey: "welcomeCompleted"); ui.onboarding = false; ui.page = "general"
         ui.permissionHint = ""
     }
@@ -297,6 +336,12 @@ final class VoicePrompt: NSObject, NSApplicationDelegate {
         if recorder != nil { finish(); return }
         if captureID != nil && !fromEditor { return }
         if processing != nil || starting || pasteTransaction != nil { return }
+        // Resolve OS prompts before recording: otherwise the first prompt steals the captured input focus.
+        guard requireInputPermissions(editorOwned: fromEditor) else {
+            if fromEditor { updateCapture("error", error: ui.permissionHint) }
+            return
+        }
+        lastInsertionState = "not_attempted"; lastInsertionReason = ""
         target = NSWorkspace.shared.frontmostApplication
         targetWindow = target.flatMap { focusedWindow($0) }
         targetField = target.flatMap { focusedField($0) }
@@ -569,6 +614,7 @@ final class VoicePrompt: NSObject, NSApplicationDelegate {
     }
     func keepDraft(_ reason: String) {
         pendingInsertion = true
+        lastInsertionState = "blocked"; lastInsertionReason = reason; publishInputDiagnostics(force: true)
         ui.insertionHint = reason; ui.message = reason
         display(.saved)
     }
@@ -593,7 +639,7 @@ final class VoicePrompt: NSObject, NSApplicationDelegate {
         ui.insertionConfirmed = false
         guard ui.autoInsert else { keepDraft("自动填入已关闭，文字保留在历史中。"); return }
         guard AXIsProcessTrusted() else {
-            keepDraft("请在系统辅助功能中允许 Voice Prompt 自动填入；不需要手动复制。"); return
+            keepDraft("请在系统辅助功能中允许当前安装的 Voice Prompt 自动填入；已允许仍无效时，请重新打开应用再检查。"); lastInsertionState = "accessibility_required"; publishInputDiagnostics(force: true); return
         }
         guard let target, !target.isTerminated, target.bundleIdentifier != Bundle.main.bundleIdentifier else {
             keepDraft("请先点中目标输入框，再点声波旁的填入箭头。"); return
@@ -655,6 +701,12 @@ final class VoicePrompt: NSObject, NSApplicationDelegate {
                     guard self.generation == current else { return }
                     let confirmed = expected != nil && activeField.flatMap { self.fieldValue($0) } == expected
                     self.ui.insertionConfirmed = confirmed
+                    self.lastInsertionState = confirmed ? "confirmed" : "unconfirmed"
+                    self.lastInsertionReason = ""
+                    self.publishInputDiagnostics(force: true)
+                    if !confirmed, let before, let activeField, self.fieldValue(activeField) == before {
+                        self.keepDraft("输入框未变化。请确认辅助功能已允许当前 Voice Prompt，再点中输入框重试。"); return
+                    }
                     self.pendingInsertion = !confirmed
                     self.ui.insertionHint = confirmed ? "" : "已发送自动填入操作；此输入框无法确认结果，请检查。原文仍在历史中。"
                     self.display(.done, dismissAfter: 3)

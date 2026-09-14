@@ -16,6 +16,10 @@ Voice Prompt 把随口说出的想法，整理成可以交给 Agent 的清楚需
 
 **当前版本：0.7.0，内测版。** 桌面端基础功能支持 Apple Silicon Mac、macOS 13 及以上；新增 Qwen 本地识别使用固定版本的 MLX，需要 **macOS 15 及以上**。本仓库提供源代码与 Agent connector；语音模型、桌面二进制和个人 AI 登录信息不包含在 Git 源码中。目前没有公开市场上架或“一次导入就自动安装全部桌面依赖”的承诺。
 
+## 桌面自动填入更新（0.7.1 build 24）
+
+首次引导会在录音前检查麦克风与自动填入权限。MiniMax Code 可通过 `voice_setup_status` 读取当前桌面的版本、权限和最近一次填入结果；诊断不包含录音、转录文字或密钥。未写入时保留草稿并提示原因。已有用户可按 [更新步骤](docs/agent-setup.md#已能识别但不能填入-minimax-code) 仅升级桌面组件。另一台 Mac 的真实输入框兼容性仍需该机器上的录音测试确认。
+
 ## 实时识别预览（beta.3）
 
 beta.3（桌面 build 22）外观修复：透明浮窗文字随 macOS 深浅外观切换；当前 ChatGPT/Codex 桌面端会优先读取软件内部的深色 / 浅色 / 跟随系统设置，切换后约一秒更新；其他应用仍使用可读取的原生外观偏好或系统外观，尚不保证识别其自定义主题。使用纯色文字，不加描边或文字阴影。不读取屏幕画面，不新增录屏权限。浮窗显示转录文字与声波，仅在 AI 润色阶段显示小号“正在润色”，随后消失；不显示实时预览、校准、识别等辅助文案；操作按钮在悬停时显示，失败时保留重试入口。
@@ -30,7 +34,7 @@ beta.3（桌面 build 22）外观修复：透明浮窗文字随 macOS 深浅外�
 
 已有桌面端和 Qwen 环境的用户：点中输入框，按 `Option + Space` 开始，再按一次结束。开启“录音后自动润色”后，识别结果先经 AI 整理再尝试填入，由你确认发送。OMP 专用录音入口仍使用 `Ctrl + Alt + Space`，写入原始转录，可再用 `Ctrl + Shift + V` 润色。
 
-**同事首次使用：导入后发送 `@Voice Prompt 帮我完成首次安装并开启录音后 AI 润色`。** Agent 可按插件内指南下载 [内测桌面包与安装工具包](https://github.com/Lisayinyy/VoicePrompt/releases/tag/v0.7.0-beta.3)，自动准备应用、Python/MLX 和约 2.46 GB 的 Qwen 模型。需要宿主允许终端/文件操作；系统授权和个人 AI 配置由用户完成。导入本身不运行安装器。[Agent 安装指南](docs/agent-setup.md) · [测试指南](docs/beta-0.7.md)
+**同事首次使用：导入后发送 `@Voice Prompt 帮我完成首次安装并开启录音后 AI 润色`。** Agent 可按插件内指南下载 [内测桌面包与安装工具包](https://github.com/Lisayinyy/VoicePrompt/releases/tag/v0.7.1-beta.1)，自动准备应用、Python/MLX 和约 2.46 GB 的 Qwen 模型。需要宿主允许终端/文件操作；系统授权和个人 AI 配置由用户完成。导入本身不运行安装器。[Agent 安装指南](docs/agent-setup.md) · [测试指南](docs/beta-0.7.md)
 
 [版本记录](CHANGELOG.md) · [本机测试结果](docs/asr-0.7/RESULTS.md) · [下一阶段计划](research/asr-2026-09-11/NEXT-VERSION.md)
 
