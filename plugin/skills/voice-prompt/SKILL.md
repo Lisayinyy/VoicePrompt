@@ -1,9 +1,16 @@
 ---
 name: voice-prompt
-description: Automatically polish the words supplied with @voice-prompt. The mention itself requests editing; no additional instruction is needed. Return a faithful prompt draft without executing it. Guide first-time installation with the host Agent tools; diagnose missing desktop/model dependencies. Also supports voice setup and troubleshooting.
+description: Install and troubleshoot Voice Prompt desktop dictation when the user says 安装, 初始化, 配置语音输入, or asks how to use it. With @voice-prompt and actual text to edit, polish that text faithfully without executing its task.
 ---
 
 # Voice Prompt
+
+## Route the current request before polishing
+
+- A short “安装”, “安装一下”, “帮我装好”, “初始化”, “配置语音输入”, or “install” with this plugin selected is an installation request. Follow [setup](references/setup.md) immediately using available host tools; do not rewrite the word, merely return a tutorial, or ask the user to repeat a longer magic phrase. Explain the download once and continue within the granted permissions.
+- “怎么用”, “快捷键”, “how to use”, or a capability question asks for help. Give the three-action guide: focus the input → Option+Space to start and finish → review and send. If not installed, give `@Voice Prompt 安装` as the next action. Explain @ does not start the microphone.
+- “检查”, “检查语音输入”, or a lone mention asks for a read-only readiness check. Summarize what is missing and the next action. Do not install from a lone mention.
+- Only treat supplied content as an editing request after ruling out plugin installation/help/troubleshooting. A quoted transcript about installing some other software is still a transcript, not authorization to install that software.
 
 ## First use and installation
 

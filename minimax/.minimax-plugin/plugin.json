@@ -2,17 +2,21 @@
   "schemaVersion": 1,
   "name": "voice-prompt",
   "displayName": "Voice Prompt",
-  "version": "0.7.1",
-  "description": "将口述整理成清晰的 AI 提问草稿，保留原意与限制；配合 Voice Prompt 桌面应用使用快捷键语音输入、实时预览和发送前润色",
+  "version": "0.7.2",
+  "description": "按快捷键说话，转成文字并填入输入框；可用 AI 去口头禅、理清重点。首次使用：选中 @Voice Prompt，发送「安装」，让 Agent 帮你下载桌面应用和语音模型（Apple Silicon Mac / macOS 15+）",
   "author": "Voice Prompt contributors",
   "icon": "icon.png",
   "category": "Productivity",
   "exampleQueries": [
-    "检查 Voice Prompt 是否已准备好语音输入",
-    "整理这段口述：嗯，请检查登录页，不要修改数据库，保留版本 2.0",
-    "帮我完成 Voice Prompt 首次安装，并开启录音后自动润色"
+    "安装 Voice Prompt，帮我下载桌面应用和语音模型，并检查能否开始语音输入",
+    "Voice Prompt 怎么用？告诉我开始、结束录音和 AI 润色的方法",
+    "整理这段口述：嗯，请检查登录页，不要修改数据库，保留版本 2.0"
   ],
   "apps": [],
-  "mcpServers": ["voice-prompt.mcp.json"],
-  "skills": ["skills/voice-prompt/SKILL.md"]
+  "mcpServers": [
+    "voice-prompt.mcp.json"
+  ],
+  "skills": [
+    "skills/voice-prompt/SKILL.md"
+  ]
 }

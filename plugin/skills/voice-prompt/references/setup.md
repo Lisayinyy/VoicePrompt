@@ -1,6 +1,6 @@
 # Agent-assisted first use
 
-Use this workflow for “帮我安装/初始化/配置 Voice Prompt”, “第一次用”, or an explicit setup request. Setup is not text polishing. A lone @ mention permits a read-only readiness check; it does not authorize a multi-gigabyte installation. If missing, offer installation once. If the user has requested installation, proceed within the host's granted capabilities without repeatedly asking about each dependency.
+Use this workflow for “安装” with Voice Prompt selected, “帮我安装/初始化/配置 Voice Prompt”, or an explicit setup request. “第一次用” without an installation request calls for a readiness check and the short installation entrypoint. Setup is not text polishing. A lone @ mention permits a read-only readiness check; it does not authorize a multi-gigabyte installation. If missing, offer installation once. If the user has requested installation, proceed within the host's granted capabilities without repeatedly asking about each dependency.
 
 Read the maintained setup instructions before acting:
 https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/agent-setup.md
@@ -32,3 +32,9 @@ For the requested “speak → polish → fill” workflow, enable “录音后�
 Check service version, selected Qwen model and language; verify an actual local ASR sample or ask the user for a short recording. Check a nonsensitive polishing example with fallback=false. Then have the user click a real target input and try Option+Space twice. Confirm whether text was actually inserted without sending. MCP status cannot prove microphone, permission or input-box compatibility.
 
 Report these separately: desktop installed; model ready/inference tested; AI polishing tested; microphone confirmed; target input insertion confirmed. Mark anything not exercised as pending user test. Never describe “like the developer's machine” as verified before that end-to-end test.
+
+## Short handback in the user's language
+
+For Chinese users, keep the final setup result to: “桌面应用：…；语音模型：…；AI 润色：…；下一步：点击输入框，按 Option+空格开始，再按一次结束，检查后发送。” Report only observed success; distinguish “待本人授权/待录音测试” from completion. If no AI provider is configured, do not block working local dictation or imply the MiniMax subscription is automatically available. Offer the existing-text @ path as an optional alternative.
+
+If the host has no local shell/file tools (for example a cloud task), explain that this session cannot install onto the user's Mac. Direct them to a local MiniMax Code desktop task with terminal tools and the same “@Voice Prompt 安装” request. Do not download a Mac app onto a remote Linux host and call it installed on the user's computer.
