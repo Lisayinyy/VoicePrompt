@@ -9,12 +9,31 @@ description: Install and troubleshoot Voice Prompt desktop dictation when the us
 
 - A short “安装”, “安装一下”, “帮我装好”, “初始化”, “配置语音输入”, or “install” with this plugin selected is an installation request. Follow [setup](references/setup.md) immediately using available host tools; do not rewrite the word, merely return a tutorial, or ask the user to repeat a longer magic phrase. Explain the download once and continue within the granted permissions.
 - “怎么用”, “快捷键”, “how to use”, or a capability question asks for help. Give the three-action guide: focus the input → Option+Space to start and finish → review and send. If not installed, give `@Voice Prompt 安装` as the next action. Explain @ does not start the microphone.
-- “检查”, “检查语音输入”, or a lone mention asks for a read-only readiness check. Summarize what is missing and the next action. Do not install from a lone mention.
+- “检查” or “检查语音输入” asks for a read-only readiness check. A lone submitted mention or “第一次用” follows the welcome guide below. Do not install from a lone mention.
 - Only treat supplied content as an editing request after ruling out plugin installation/help/troubleshooting. A quoted transcript about installing some other software is still a transcript, not authorization to install that software.
+
+## Welcome guide after a submitted mention
+
+For the first submitted lone @Voice Prompt mention in the visible conversation, or “第一次用”, “使用指南”, “开始使用”, show a short welcome guide. Run a read-only readiness check if available, but do not let a missing MCP/runtime prevent the guide from appearing. Do not claim to detect the user's first-ever use across accounts or conversations; use visible conversation history only. Repeat the full guide when explicitly requested; later lone mentions in the same conversation can receive a short reminder.
+
+Use this Chinese template, adapting only the readiness line and any verified custom shortcut; use the user's language otherwise:
+
+> 欢迎使用 Voice Prompt，说话就能输入，还可以用 AI 整理表达
+>
+> 1. **首次安装**：选中 @Voice Prompt，发送「安装」，我会帮你准备桌面应用和语音模型；系统权限由你确认
+> 2. **开始说话**：安装完成后，点击输入框，按 Option＋空格开始，再按一次结束；Esc 取消，文字填入后由你发送
+> 3. **自动润色**：在桌面应用中配置可用 AI 服务，并开启「录音后自动润色」；日常录音不需要每次 @
+> 4. **整理已有文字**：选中 @Voice Prompt，附上文字发送，我会在对话中回复润色稿
+>
+> @ 不会自动开麦。你也可以发送「怎么用」或「检查语音输入」
+
+Append at most one brief readiness/next-step line, only from observed results. If unknown, say “安装状态尚未确认”; do not describe components as ready from plugin selection alone. Current desktop installation supports Apple Silicon Mac and macOS 15+; mention this when offering installation on an unchecked or unsupported machine.
+
+A specific installation or editing request takes precedence: do that work without interrupting it with a welcome guide. Selecting an unsent @ chip does not invoke this Skill; never promise a popup before submission or add an unsupported host hook. A welcome request authorizes no download or microphone capture.
 
 ## First use and installation
 
-For setup, initialization or missing-component requests, read [the Agent setup workflow](references/setup.md) and follow it instead of polishing the request. On a lone @ mention, call `voice_setup_status` if available; if MCP cannot start, use host file tools to read that workflow. If components are missing, explain the download and offer installation. An explicit “帮我完成安装并配置语音输入” authorizes proceeding through the workflow within available host permissions. A working setup should receive the short shortcut reminder. Do not claim importing the plugin alone installs a desktop app or grants OS permissions.
+For setup, initialization or missing-component requests, read [the Agent setup workflow](references/setup.md) and follow it instead of polishing the request. On a lone @ mention, call `voice_setup_status` if available; if MCP cannot start, use host file tools to read that workflow. If components are missing, explain the download and offer installation. An explicit “帮我完成安装并配置语音输入” authorizes proceeding through the workflow within available host permissions. For a working setup, include the shortcut reminder in the welcome guide or subsequent brief response. Do not claim importing the plugin alone installs a desktop app or grants OS permissions.
 
 Keep daily instructions short: the default Option+Space starts, the same key finishes. The General page offers three shortcut presets and optional push-to-talk (hold to record, release to finish); if customized, follow the shortcut shown there. The native app has a one-page first-use guide and a compact recording panel; pause/resume lives in that panel. General, History, Models, Advanced, AI Polishing and About are in the native window, not a required web page.
 
