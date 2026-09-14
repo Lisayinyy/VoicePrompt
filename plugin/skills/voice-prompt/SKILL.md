@@ -16,18 +16,27 @@ description: Install and troubleshoot Voice Prompt desktop dictation when the us
 
 For the first submitted lone @Voice Prompt mention in the visible conversation, or “第一次用”, “使用指南”, “开始使用”, show a short welcome guide. Run a read-only readiness check if available, but do not let a missing MCP/runtime prevent the guide from appearing. Do not claim to detect the user's first-ever use across accounts or conversations; use visible conversation history only. Repeat the full guide when explicitly requested; later lone mentions in the same conversation can receive a short reminder.
 
-Use this Chinese template, adapting only the readiness line and any verified custom shortcut; use the user's language otherwise:
+For Chinese users, render the following welcome guide as normal Markdown (not a code block or blockquote). Preserve its wording and emphasis; change the shortcut only when a customized shortcut has been verified. Use the user's language otherwise.
 
-> 欢迎使用 Voice Prompt，说话就能输入，还可以用 AI 整理表达
->
-> 1. **首次安装**：选中 @Voice Prompt，发送「安装」，我会帮你准备桌面应用和语音模型；系统权限由你确认
-> 2. **开始说话**：安装完成后，点击输入框，按 Option＋空格开始，再按一次结束；Esc 取消，文字填入后由你发送
-> 3. **自动润色**：在桌面应用中配置可用 AI 服务，并开启「录音后自动润色」；日常录音不需要每次 @
-> 4. **整理已有文字**：选中 @Voice Prompt，附上文字发送，我会在对话中回复润色稿
->
-> @ 不会自动开麦。你也可以发送「怎么用」或「检查语音输入」
+欢迎使用 **Voice Prompt**，直接说话，把想法变成清晰的文字
 
-Append at most one brief readiness/next-step line, only from observed results. If unknown, say “安装状态尚未确认”; do not describe components as ready from plugin selection alone. Current desktop installation supports Apple Silicon Mac and macOS 15+; mention this when offering installation on an unchecked or unsupported machine.
+**① 首次使用**\
+发送「安装」，我会帮你准备桌面应用和语音模型，系统权限由你确认
+
+**② 开始说话**\
+点击输入框 → 按 **Option＋空格**开始 → 再按一次结束\
+文字填入后，你检查并发送。按 **Esc** 可以取消
+
+**③ 让表达更清楚**\
+在桌面应用中配置 AI 服务，开启「录音后自动润色」，就能去掉口头禅、整理重点
+
+平时录音不用每次 @。想整理已有文字，可以 **@Voice Prompt ＋ 文字**发送给我
+
+还没安装的话，现在发送 **「安装」** 就可以开始
+
+Keep this guide concise. Do not append an unknown-readiness disclaimer or a technical checklist. If a check positively identifies unsupported hardware or missing host installation tools, briefly state that limitation instead of offering an impossible installation. The default guide does not claim the app/model is installed. Current desktop installation supports Apple Silicon Mac and macOS 15+; explain compatibility and the download size when entering the installation workflow.
+
+A reply “安装” immediately after this guide is an explicit Voice Prompt setup request even without a repeated @ marker. Continue the setup workflow; do not ask for a longer phrase or polish the word “安装”. This context handling applies to setup only; it does not enable sticky polishing for subsequent unmentioned messages.
 
 A specific installation or editing request takes precedence: do that work without interrupting it with a welcome guide. Selecting an unsent @ chip does not invoke this Skill; never promise a popup before submission or add an unsupported host hook. A welcome request authorizes no download or microphone capture.
 

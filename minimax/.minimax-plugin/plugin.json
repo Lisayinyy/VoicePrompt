@@ -2,15 +2,15 @@
   "schemaVersion": 1,
   "name": "voice-prompt",
   "displayName": "Voice Prompt",
-  "version": "0.7.3",
-  "description": "按快捷键说话，转成文字并填入输入框；可用 AI 去口头禅、理清重点。首次使用：选中 @Voice Prompt，发送「安装」，让 Agent 帮你下载桌面应用和语音模型（Apple Silicon Mac / macOS 15+）",
+  "version": "0.7.4",
+  "description": "直接说话，把想法变成清晰的文字。首次 @ 查看指南，发送「安装」让 Agent 帮你准备桌面应用和模型；日常用 Option＋空格录音，可开启 AI 自动润色，填入后由你确认发送（Apple Silicon Mac / macOS 15+）",
   "author": "Voice Prompt contributors",
   "icon": "icon.png",
   "category": "Productivity",
   "exampleQueries": [
-    "安装 Voice Prompt，帮我下载桌面应用和语音模型，并检查能否开始语音输入",
-    "Voice Prompt 怎么用？告诉我开始、结束录音和 AI 润色的方法",
-    "整理这段口述：嗯，请检查登录页，不要修改数据库，保留版本 2.0"
+    "第一次使用 Voice Prompt，请显示使用指南",
+    "安装 Voice Prompt，帮我准备桌面应用和语音模型",
+    "Voice Prompt 怎么用？告诉我录音快捷键和自动润色的设置方法"
   ],
   "apps": [],
   "mcpServers": [
