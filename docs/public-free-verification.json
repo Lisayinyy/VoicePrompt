@@ -1,0 +1,49 @@
+{
+  "origin": "https://api.voiceprompt.work",
+  "certificateDaysRemaining": 88,
+  "tls": "TLSv1.3",
+  "checks": [
+    {
+      "name": "health",
+      "status": 200,
+      "elapsedMs": 63
+    },
+    {
+      "name": "private_readiness_hidden",
+      "status": 404,
+      "elapsedMs": 40
+    },
+    {
+      "name": "unknown_route_hidden",
+      "status": 404,
+      "elapsedMs": 37
+    },
+    {
+      "name": "polish_requires_auth",
+      "status": 401,
+      "elapsedMs": 38
+    },
+    {
+      "name": "invalid_token_rejected",
+      "status": 401,
+      "elapsedMs": 129
+    },
+    {
+      "name": "authenticated_polishing",
+      "status": 200,
+      "elapsedMs": 1357
+    }
+  ],
+  "modelVerified": true,
+  "scope": "Real public TLS, automatic enrollment and Chinese/English model calls. Does not verify desktop installation, microphone, or input insertion.",
+  "checkedAt": "2026-09-15T17:15:54.331Z",
+  "status": "passed",
+  "freeEnrollment": true,
+  "invitationRequired": false,
+  "vendorKeyOnClient": false,
+  "dailyLimit": 30,
+  "englishPolishing": {
+    "status": "passed",
+    "elapsedMs": 1118
+  }
+}

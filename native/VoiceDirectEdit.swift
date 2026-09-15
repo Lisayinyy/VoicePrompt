@@ -2,6 +2,16 @@ import Foundation
 
 // A UTF-16 accessibility selection must resolve cleanly before writing an editor value.
 enum VoiceDirectEdit {
+    static func unicodeChunks(_ text: String, maxUnits: Int = 20) -> [[UInt16]] {
+        var chunks: [[UInt16]] = [], chunk: [UInt16] = []
+        for scalar in text.unicodeScalars {
+            let units = Array(String(scalar).utf16)
+            if chunk.count + units.count > maxUnits && !chunk.isEmpty { chunks.append(chunk); chunk = [] }
+            chunk.append(contentsOf: units)
+        }
+        if !chunk.isEmpty { chunks.append(chunk) }
+        return chunks
+    }
     // Only a leading, explicit invocation in the current editor enables polishing.
     // Do not infer invocation from a quoted mention, email address or conversation history.
     static func mentionsVoicePrompt(_ editor: String?) -> Bool {

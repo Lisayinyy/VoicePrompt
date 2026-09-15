@@ -66,7 +66,7 @@ export async function verifyEndpoint(origin, { token, request = checkedRequest }
   if (token) {
     const result = await check('authenticated_polishing', '/voice/prepare', { method: 'POST', token, body: { prompt: '嗯，请检查登录页面，不要修改数据库，保留版本 2.0。', mode: 'agent', terms: [] } }, 200);
     const draft = parseObject(result.body);
-    if (draft.schema !== 'prompt-ai-voice/1' || draft.fallback !== false || !draft.optimized?.includes('2.0') || !draft.optimized?.includes('数据库')) throw new Error('Polishing returned fallback or lost test constraints');
+    if (draft.schema !== 'prompt-ai-voice/1' || draft.fallback !== false || !draft.optimized?.includes('2.0') || !draft.optimized?.includes('数据库')) throw new Error(`Polishing returned fallback or lost test constraints (fallback=${draft.fallback === true}, versionPreserved=${draft.optimized?.includes('2.0') === true}, databasePreserved=${draft.optimized?.includes('数据库') === true})`);
     modelVerified = true;
   }
   return { origin, certificateDaysRemaining: days, tls: health.certificate.protocol, checks, modelVerified, scope: 'HTTPS API checks only; not MCP, desktop insertion, mainland/HK network quality, certificate renewal or marketplace approval' };

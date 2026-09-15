@@ -40,6 +40,7 @@ final class VoicePrompt: NSObject, NSApplicationDelegate {
     var rawDraft = ""
     var pendingInsertion = false
     var pasteTransaction: VoicePasteboardTransaction?
+    var insertionTask: Task<Void, Never>?
     var lastInputDiagnosticWrite = Date.distantPast
     var lastInsertionState = "not_attempted"
     var lastInsertionReason = ""
@@ -70,6 +71,9 @@ final class VoicePrompt: NSObject, NSApplicationDelegate {
         refreshModel: { [weak self] in self?.refreshModel() },
         setSpeechModel: { [weak self] in self?.setSpeechPreference("speechModelId", $0) },
         setSpeechLanguage: { [weak self] in self?.setSpeechPreference("speechLanguage", $0) },
+        activateBeta: { [weak self] in self?.activateFree() },
+        showBeta: { [weak self] in self?.ui.onboarding = false; self?.ui.page = "polish" },
+        testInsertion: { [weak self] in self?.testInsertion() },
         previewOverlay: { [weak self] in
             guard let self, self.recorder == nil, self.processing == nil, self.pasteTransaction == nil, !self.starting else { return }
             self.display(.preview, dismissAfter: 5)
@@ -98,7 +102,9 @@ final class VoicePrompt: NSObject, NSApplicationDelegate {
         do {
             try setupService()
             ui.mode = config["defaultMode"] as? String ?? "agent"
-            ui.aiConfigured = (config["provider"] as? String ?? "unconfigured") != "unconfigured"
+            ui.aiConfigured = (config["provider"] as? String ?? "unconfigured") != "unconfigured" && config["betaActivated"] as? Bool != true
+            ui.betaActivated = false
+            ui.betaLocal = config["betaServiceUrl"] as? String == "http://127.0.0.1:18788"
             try registerKeys()
             checkService()
             refreshModel()
@@ -265,11 +271,50 @@ final class VoicePrompt: NSObject, NSApplicationDelegate {
                     var req = URLRequest(url: URL(string: "http://127.0.0.1:\(config["port"] as? Int ?? 17866)/api/status")!)
                     req.timeoutInterval = 1; req.setValue("Bearer \(config["token"] as? String ?? "")", forHTTPHeaderField: "Authorization")
                     let (_, response) = try await URLSession.shared.data(for: req)
-                    if (response as? HTTPURLResponse)?.statusCode == 200 { ui.serviceReady = true; return }
+                    if (response as? HTTPURLResponse)?.statusCode == 200 {
+                        ui.serviceReady = true
+                        if (config["provider"] as? String ?? "unconfigured") == "unconfigured" || config["betaActivated"] as? Bool == true {
+                            activateFree(automatic: true)
+                        }
+                        return
+                    }
                 } catch {}
                 try? await Task.sleep(nanoseconds: 250_000_000)
             }
             ui.message = "语音服务暂未连接，请重新打开 Voice Prompt。"
+        }
+    }
+    func activateFree(automatic: Bool = false) {
+        guard !ui.active, !starting, !ui.betaBusy else { return }
+        ui.betaBusy = true; ui.betaMessage = "正在连接免费 AI 润色"; ui.betaIssue = nil; ui.betaActivated = false
+        Task { @MainActor in
+            defer { ui.betaBusy = false }
+            var verifying = false
+            do {
+                let account = VoiceBeta.account(base: "https://api.voiceprompt.work", code: "public-free-v1")
+                guard let credential = try await VoiceBeta.credentialAsync(account: account, create: true, allowInteraction: !automatic) else {
+                    throw VoiceBeta.ConnectionIssue.authorization
+                }
+                try await VoiceBeta.enroll(credential: credential)
+                ui.betaMessage = "正在验证 AI 润色"
+                verifying = true
+                let verification = try await call("/api/free/configure", ["credential": credential, "keychainAccount": account])
+                guard verification["activated"] as? Bool == true, verification["verified"] as? Bool == true else {
+                    throw VoiceBeta.ConnectionIssue.verificationFailed
+                }
+                let wasFree = config["hostedFree"] as? Bool == true
+                if let data = try? Data(contentsOf: home.appendingPathComponent(".config/voice-prompt/config.json")), let saved = try? JSONSerialization.jsonObject(with: data) as? [String: Any] { config = saved }
+                ui.betaActivated = true; ui.betaLocal = false; ui.aiConfigured = true
+                if !wasFree { ui.polishOnRecord = true; ui.autoInsert = true }
+                refreshPermissions()
+                ui.betaMessage = "免费 AI 润色已就绪"
+            } catch {
+                let issue = VoiceBeta.ConnectionIssue.classify(error, verifying: verifying)
+                ui.betaIssue = issue; ui.betaMessage = issue.localizedDescription; ui.betaActivated = false
+                if config["hostedFree"] as? Bool == true || (config["provider"] as? String ?? "unconfigured") == "unconfigured" {
+                    ui.aiConfigured = false
+                }
+            }
         }
     }
     func setupService() throws {
@@ -293,6 +338,10 @@ final class VoicePrompt: NSObject, NSApplicationDelegate {
         let child = Process(); child.executableURL = resources.appendingPathComponent("bin/node")
         child.arguments = [resources.appendingPathComponent("plugin/server.mjs").path, "serve"]
         var env = ProcessInfo.processInfo.environment; env["VOICE_PROMPT_CONFIG"] = url.path; child.environment = env
+        // Start local speech immediately. Keychain/hosted setup runs asynchronously
+        // after the child is ready; a blocked legacy credential cannot freeze the UI.
+        if config["betaActivated"] as? Bool == true { env.removeValue(forKey: "VOICE_PROMPT_BETA_TOKEN") }
+        child.environment = env
         let log = dir.appendingPathComponent("service.log")
         if !FileManager.default.fileExists(atPath: log.path) { FileManager.default.createFile(atPath: log.path, contents: nil, attributes: [.posixPermissions: 0o600]) }
         let handle = try FileHandle(forWritingTo: log); try handle.seekToEnd(); child.standardError = handle; child.standardOutput = handle
@@ -335,7 +384,7 @@ final class VoicePrompt: NSObject, NSApplicationDelegate {
     func toggle(_ requested: String, fromEditor: Bool = false) {
         if recorder != nil { finish(); return }
         if captureID != nil && !fromEditor { return }
-        if processing != nil || starting || pasteTransaction != nil { return }
+        if processing != nil || starting || pasteTransaction != nil || insertionTask != nil || ui.betaBusy { return }
         // Resolve OS prompts before recording: otherwise the first prompt steals the captured input focus.
         guard requireInputPermissions(editorOwned: fromEditor) else {
             if fromEditor { updateCapture("error", error: ui.permissionHint) }
@@ -504,6 +553,7 @@ final class VoicePrompt: NSObject, NSApplicationDelegate {
         if let key = escape { UnregisterEventHotKey(key); escape = nil }
     }
     @objc func cancel() {
+        insertionTask?.cancel()
         pasteTransaction?.restore(); pasteTransaction = nil
         updateCapture("cancelled")
         gesture = VoiceHotkey()
@@ -566,6 +616,12 @@ final class VoicePrompt: NSObject, NSApplicationDelegate {
     }
     func focusedField(_ app: NSRunningApplication) -> AXUIElement? {
         guard AXIsProcessTrusted() else { return nil }
+        let appElement = AXUIElementCreateApplication(app.processIdentifier)
+        // Electron may expose only the window until assistive-technology support is requested.
+        // This uses the existing Accessibility permission; it does not grant or bypass it.
+        if ["com.minimax.agent.cn", "com.minimax.agent", "com.openai.codex", "com.openai.chat", "com.google.Chrome", "com.microsoft.edgemac"].contains(app.bundleIdentifier ?? "") {
+            AXUIElementSetAttributeValue(appElement, "AXManualAccessibility" as CFString, kCFBooleanTrue)
+        }
         // Prefer the system focus, which avoids stale per-app focus proxies.
         if let focused = elementAttribute(AXUIElementCreateSystemWide(), kAXFocusedUIElementAttribute) {
             var pid: pid_t = 0
@@ -619,7 +675,7 @@ final class VoicePrompt: NSObject, NSApplicationDelegate {
         display(.saved)
     }
     func retryInsertion(atCurrentFocus: Bool) {
-        guard pendingInsertion, !starting, recorder == nil, processing == nil, captureID == nil, pasteTransaction == nil else { return }
+        guard pendingInsertion, !starting, recorder == nil, processing == nil, captureID == nil, pasteTransaction == nil, insertionTask == nil else { return }
         guard let latest = ui.entries.last, Date().timeIntervalSince(latest.created) < 3600, latest.text == draft else {
             pendingInsertion = false; ui.message = "没有待填入的录音，或文字已过期。"; return
         }
@@ -634,84 +690,98 @@ final class VoicePrompt: NSObject, NSApplicationDelegate {
         generation = UUID()
         insert(draft, fallback: ui.lastFallback)
     }
+    func testInsertion() {
+        guard ui.betaActivated, !ui.active, !starting, insertionTask == nil else { return }
+        refreshPermissions()
+        guard ui.pasteGranted else { ui.betaMessage = "请先允许自动填入权限"; requestAccessibility(); return }
+        generation = UUID(); let current = generation
+        ui.betaMessage = "请在 5 秒内点中 MiniMax Code 输入框；只试填，不发送"
+        window.orderOut(nil); starting = true
+        processing = Task { @MainActor in
+            do {
+                try await Task.sleep(nanoseconds: 5_000_000_000)
+                guard current == generation else { return }
+                target = NSWorkspace.shared.frontmostApplication
+                targetWindow = target.flatMap { focusedWindow($0) }; targetField = target.flatMap { focusedField($0) }
+                targetSnapshot = targetField.map { snapshot($0) }; targetValue = targetField.flatMap { fieldValue($0) }; targetSelection = targetField.flatMap { fieldSelection($0) }
+                rawDraft = "嗯那个请帮我整理登录页面的问题，不要改数据库，先说明原因。"
+                display(.polishing)
+                let result = try await call("/api/prepare", ["text": rawDraft, "mode": "agent", "session": "desktop", "id": current.uuidString])
+                guard current == generation else { return }
+                draft = result["text"] as? String ?? rawDraft; ui.lastFallback = result["fallback"] as? Bool == true
+                ui.entries.append(VoiceEntry(text: draft, raw: rawDraft, fallback: ui.lastFallback))
+                processing = nil; starting = false; insert(draft, fallback: ui.lastFallback)
+            } catch { processing = nil; starting = false; ui.message = error.localizedDescription; display(.error, dismissAfter: 5) }
+        }
+    }
     func insert(_ text: String, fallback: Bool) {
-        guard pasteTransaction == nil else { return }
+        guard insertionTask == nil, !text.isEmpty else { return }
         ui.insertionConfirmed = false
         guard ui.autoInsert else { keepDraft("自动填入已关闭，文字保留在历史中。"); return }
         guard AXIsProcessTrusted() else {
-            keepDraft("请在系统辅助功能中允许当前安装的 Voice Prompt 自动填入；已允许仍无效时，请重新打开应用再检查。"); lastInsertionState = "accessibility_required"; publishInputDiagnostics(force: true); return
+            keepDraft("请在系统辅助功能中允许当前 Voice Prompt 自动填入"); lastInsertionState = "accessibility_required"; publishInputDiagnostics(force: true); return
         }
         guard let target, !target.isTerminated, target.bundleIdentifier != Bundle.main.bundleIdentifier else {
-            keepDraft("请先点中目标输入框，再点声波旁的填入箭头。"); return
+            keepDraft("请先点中目标输入框，再点声波旁的填入箭头"); return
         }
-        let field = targetField, before = targetValue, selection = targetSelection
-        let expected: String? = before.flatMap { value in
-            selection.flatMap { VoiceDirectEdit.replacing(value, selection: NSRange(location: $0.location, length: $0.length), with: text) }
-        }
-        var activeField = field
-        func targetFailure() -> String? {
+        let before = targetValue, selection = targetSelection
+        let expected = before.flatMap { value in selection.flatMap { VoiceDirectEdit.replacing(value, selection: NSRange(location: $0.location, length: $0.length), with: text) } }
+        let current = generation
+        func focusFailure(checkContent: Bool) -> String? {
             guard NSWorkspace.shared.frontmostApplication?.processIdentifier == target.processIdentifier else { return "当前应用已切换" }
-            if let originalWindow = self.targetWindow {
-                guard let currentWindow = self.focusedWindow(target), CFEqual(originalWindow, currentWindow) else { return "当前窗口已切换" }
+            if let original = self.targetWindow {
+                guard let window = self.focusedWindow(target), CFEqual(original, window) else { return "当前窗口已切换" }
             }
-            if let beforeDocument = self.targetSnapshot?.document, let currentField = self.focusedField(target),
-               let nowDocument = self.snapshot(currentField).document, beforeDocument != nowDocument { return "页面已切换" }
-            if let field, let before = self.targetSnapshot {
-                guard let focused = self.focusedField(target) else { return "暂时读不到输入框" }
-                let failure = VoiceInputGuard.failure(before: before, now: self.snapshot(focused), sameElement: CFEqual(field, focused))
-                if failure == nil { activeField = focused }
-                return failure
+            let focused = self.focusedField(target)
+            if let focused, self.stringAttribute(focused, kAXSubroleAttribute) == "AXSecureTextField" { return "不能填入密码框" }
+            if let field = self.targetField, let old = self.targetSnapshot {
+                guard let focused else { return "暂时读不到输入框" }
+                var next = self.snapshot(focused)
+                // Delivery itself changes content and the caret. Keep the original identity
+                // checks while allowing a renderer to recreate the same editable control.
+                if !checkContent { next.value = old.value; next.selection = old.selection }
+                return VoiceInputGuard.failure(before: old, now: next, sameElement: CFEqual(field, focused))
             }
-            return nil // Opaque apps: paste to the unchanged front window, without claiming a verified result.
+            return nil
         }
         let front = NSWorkspace.shared.frontmostApplication
-        guard front?.processIdentifier == target.processIdentifier || front?.bundleIdentifier == Bundle.main.bundleIdentifier else {
-            keepDraft("你切换了应用，文字已保留；点中目标输入框后可重试。"); return
-        }
+        guard front?.processIdentifier == target.processIdentifier || front?.bundleIdentifier == Bundle.main.bundleIdentifier else { keepDraft("你切换了应用，请点中目标输入框后重试"); return }
         panel.orderOut(nil)
         if front?.bundleIdentifier == Bundle.main.bundleIdentifier { target.activate(options: [.activateIgnoringOtherApps]) }
-        let current = generation
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.16) { [weak self] in
-            guard let self, self.generation == current else { return }
-            if let reason = targetFailure() { self.keepDraft(reason + "，文字已保留。"); return }
-            let transaction = VoicePasteboardTransaction()
-            guard transaction.publish(text) else { self.keepDraft("剪贴板正在变化，未覆盖原内容，请重试填入。"); return }
-            self.pasteTransaction = transaction
-            self.display(.inserting)
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.12) { [weak self] in
-                guard let self else { transaction.restore(); return }
-                let focusFailure = targetFailure()
-                guard self.generation == current, transaction.stillOwnsClipboard, focusFailure == nil else {
-                    transaction.restore(); self.pasteTransaction = nil
-                    if self.generation == current { self.keepDraft((focusFailure ?? "剪贴板已改变") + "，文字已保留。") }
-                    return
-                }
-                guard let source = CGEventSource(stateID: .privateState),
-                      let down = CGEvent(keyboardEventSource: source, virtualKey: 9, keyDown: true),
-                      let up = CGEvent(keyboardEventSource: source, virtualKey: 9, keyDown: false) else {
-                    transaction.restore(); self.pasteTransaction = nil; self.keepDraft("未能创建自动填入事件，请重试。"); return
-                }
-                // Product input delivery: Cmd+V only. Never emit Return/Enter.
-                down.flags = .maskCommand; up.flags = .maskCommand
-                down.post(tap: .cghidEventTap); up.post(tap: .cghidEventTap)
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) { [weak self] in
-                    transaction.restore()
-                    guard let self else { return }
-                    self.pasteTransaction = nil
-                    guard self.generation == current else { return }
-                    let confirmed = expected != nil && activeField.flatMap { self.fieldValue($0) } == expected
-                    self.ui.insertionConfirmed = confirmed
-                    self.lastInsertionState = confirmed ? "confirmed" : "unconfirmed"
-                    self.lastInsertionReason = ""
-                    self.publishInputDiagnostics(force: true)
-                    if !confirmed, let before, let activeField, self.fieldValue(activeField) == before {
-                        self.keepDraft("输入框未变化。请确认辅助功能已允许当前 Voice Prompt，再点中输入框重试。"); return
+        insertionTask = Task { @MainActor in
+            defer { insertionTask = nil }
+            do {
+                try await Task.sleep(nanoseconds: 160_000_000)
+                guard current == generation else { return }
+                if let reason = focusFailure(checkContent: true) { keepDraft(reason); return }
+                guard let source = CGEventSource(stateID: .privateState) else { keepDraft("无法创建文字输入事件"); return }
+                display(.inserting)
+                // Unicode keyboard input: never touch the clipboard, and never send Return/Enter.
+                for chunk in VoiceDirectEdit.unicodeChunks(text) {
+                    try Task.checkCancellation()
+                    guard current == generation else { return }
+                    if let reason = focusFailure(checkContent: false) { keepDraft(reason + "，已停止填入，请检查已有文字"); return }
+                    guard let down = CGEvent(keyboardEventSource: source, virtualKey: 0, keyDown: true), let up = CGEvent(keyboardEventSource: source, virtualKey: 0, keyDown: false) else { keepDraft("自动填入中断，请检查输入框"); return }
+                    chunk.withUnsafeBufferPointer { buffer in
+                        down.keyboardSetUnicodeString(stringLength: buffer.count, unicodeString: buffer.baseAddress!)
+                        up.keyboardSetUnicodeString(stringLength: buffer.count, unicodeString: buffer.baseAddress!)
                     }
-                    self.pendingInsertion = !confirmed
-                    self.ui.insertionHint = confirmed ? "" : "已发送自动填入操作；此输入框无法确认结果，请检查。原文仍在历史中。"
-                    self.display(.done, dismissAfter: 3)
+                    down.flags = []; up.flags = []
+                    down.post(tap: .cghidEventTap); up.post(tap: .cghidEventTap)
+                    try await Task.sleep(nanoseconds: 20_000_000)
                 }
-            }
+                try await Task.sleep(nanoseconds: 450_000_000)
+                guard current == generation else { return }
+                let field = focusedField(target), actual = field.flatMap { fieldValue($0) }
+                let confirmed = expected != nil && actual == expected
+                ui.insertionConfirmed = confirmed; lastInsertionState = confirmed ? "confirmed" : "unconfirmed"; lastInsertionReason = ""
+                publishInputDiagnostics(force: true)
+                if !confirmed, let before, actual == before { keepDraft("输入框未变化，请检查当前应用的辅助功能权限"); return }
+                pendingInsertion = !confirmed
+                ui.insertionHint = confirmed ? "" : "已尝试填入，请检查输入框；原文仍在历史中"
+                ui.message = fallback ? "本次未润色，已使用原文" : ""
+                display(.done, dismissAfter: 3)
+            } catch { if current == generation { keepDraft("填入已停止，请检查输入框") } }
         }
     }
     func clearHistory() {
@@ -721,6 +791,7 @@ final class VoicePrompt: NSObject, NSApplicationDelegate {
     @objc func quit() { NSApp.terminate(nil) }
     func applicationWillTerminate(_ notification: Notification) {
         livePreview?.cancel()
+        insertionTask?.cancel()
         if let livePreviewFile { try? FileManager.default.removeItem(at: livePreviewFile) }
         generation = UUID(); recorder?.stop(); processing?.cancel(); limit?.invalidate(); meter?.invalidate(); refresh?.invalidate(); captureTimer?.invalidate(); dismiss?.cancel()
         if let file { try? FileManager.default.removeItem(at: file) }

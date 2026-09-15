@@ -1,0 +1,37 @@
+{
+  "checkedAt": "2026-09-15T02:48:49.319501+00:00",
+  "appVersion": "0.8.0",
+  "appBuild": "30",
+  "desktopInstalledAndSignatureVerified": true,
+  "minimaxLocalPluginFiles": "updated-0.8.0",
+  "ompLocalPluginFiles": "updated-0.8.0",
+  "activeHostMcpReload": "not-verified",
+  "nativeCompile": "passed",
+  "connectionErrorClassificationTests": "passed",
+  "targetedNodeTests": {
+    "uniqueTests": 14,
+    "status": "passed",
+    "scope": "Setup, free enrollment, HTTPS verifier, isolated fresh/upgrade install and MiniMax package"
+  },
+  "realPublicHttps": "failed-ECONNRESET",
+  "publicHttp": "Tencent-domain-block-redirect",
+  "icpFiling": "draft-not-submitted",
+  "guangzhouRenewalQuote": {
+    "months": 2,
+    "CNY": 70,
+    "purchased": false
+  },
+  "newPhysicalMacAIAndInsertion": "not-verified",
+  "marketplaceSubmitted": false,
+  "artifacts": {
+    "voice-prompt-desktop-0.8.0-macos-arm64.zip": "4d19ea0fb4ea3bc1b894e883587194c5974673436db14e6d79c7596bffe03e2b",
+    "voice-prompt-setup-0.8.0.zip": "e20561faf0f23e3d8f963e326cfaef55a4606abffbdd540bd58526e58c8addde",
+    "voice-prompt-minimax-0.8.0.zip": "ab02e8f6b09920b9b2af84426fc3c5cfb36868a790149c48c6e43d8552026932"
+  },
+  "currentMacPermissions": {
+    "appBuild": "30",
+    "microphoneGranted": false,
+    "accessibilityGranted": false,
+    "insertionState": "not_attempted"
+  }
+}

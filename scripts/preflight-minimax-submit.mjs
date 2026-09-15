@@ -5,6 +5,12 @@ import { fileURLToPath } from 'node:url';
 import { spawnSync } from 'node:child_process';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
+// The free release has a stronger gate than the historical 0.7.1 package-only audit.
+const current = JSON.parse(await readFile(new URL('../minimax/.minimax-plugin/plugin.json', import.meta.url), 'utf8'));
+if (current.version !== '0.7.1') {
+  const child = spawnSync(process.execPath, ['scripts/preflight-free-release.mjs'], { cwd: root, stdio: 'inherit' });
+  process.exit(child.status ?? 1);
+}
 const env = { ...process.env, PATH: `/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:${process.env.PATH || ''}` };
 const steps = [
   ['Package validation', 'python3', ['scripts/pack-minimax.py', '--validate', 'dist/minimax/voice-prompt-minimax-0.7.1.zip']],

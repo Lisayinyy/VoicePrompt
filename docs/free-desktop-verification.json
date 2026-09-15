@@ -1,0 +1,13 @@
+{
+  "checkedAt": "2026-09-14T10:31:22.872701+00:00",
+  "appVersion": "0.8.0",
+  "appBuild": "28",
+  "hostedFree": true,
+  "publicOrigin": "https://api.voiceprompt.work",
+  "serviceVersion": "0.8.0",
+  "uiFreeReadyObserved": true,
+  "microphoneGranted": false,
+  "accessibilityGranted": false,
+  "insertionState": "not_attempted",
+  "scope": "Publisher Mac upgrade only; separate Mac and actual insertion pending"
+}

@@ -17,6 +17,17 @@ final class VoiceUI: ObservableObject {
     @Published var micGranted = false
     @Published var pasteGranted = false
     @Published var aiConfigured = false
+    @Published var inviteCode = ""
+    @Published var betaBusy = false
+    @Published var betaActivated = false
+    @Published var betaLocal = false
+    @Published var betaMessage = ""
+    @Published var betaIssue: VoiceBeta.ConnectionIssue?
+    var freeStatusTitle: String {
+        if betaBusy { return "正在连接" }
+        if let betaIssue { return betaIssue.title }
+        return betaActivated ? "已就绪" : "等待连接"
+    }
     @Published var serviceReady = false
     @Published var mode = "agent"
     @Published var insertionHint = ""
@@ -81,6 +92,9 @@ struct VoiceActions {
     var refreshModel: () -> Void = {}
     var setSpeechModel: (String) -> Void = { _ in }
     var setSpeechLanguage: (String) -> Void = { _ in }
+    var activateBeta: () -> Void = {}
+    var showBeta: () -> Void = {}
+    var testInsertion: () -> Void = {}
     var previewOverlay: () -> Void = {}
 }
 enum VPColor {
@@ -159,6 +173,7 @@ struct VoiceRootView: View {
             Text(model.permissionHint.isEmpty ? "录音无需每次 @；自动润色可在 AI 润色页设置。" : model.permissionHint)
                 .font(.system(size: 11)).foregroundColor(VPColor.muted)
             Button("开始使用", action: actions.beginUsing).buttonStyle(PinkButton(prominent: true))
+            Button("查看免费 AI 润色", action: actions.showBeta).buttonStyle(.plain).font(.system(size: 12)).foregroundColor(VPColor.rose)
             Text("本地识别 · Esc 取消 · 这份指南只在首次打开时出现")
                 .font(.system(size: 10)).foregroundColor(VPColor.muted)
         }.padding(24).frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -371,6 +386,22 @@ struct VoiceRootView: View {
     var polishing: some View {
         Group {
             heading("AI 润色", "把口述整理成清楚的提示词，保留你的意思。")
+            section("免费 AI 润色") {
+                VStack(alignment: .leading, spacing: 12) {
+                    HStack {
+                        Label(model.freeStatusTitle, systemImage: model.betaBusy ? "sparkles" : (model.betaIssue != nil ? "info.circle" : (model.betaActivated ? "checkmark.circle.fill" : "sparkles")))
+                            .font(.system(size: 13, weight: .medium)).foregroundColor(model.betaIssue != nil ? VPColor.muted : VPColor.rose)
+                        Spacer()
+                        Button(model.betaBusy ? "正在连接" : (model.betaActivated && model.betaIssue == nil ? "检查连接" : "重试"), action: actions.activateBeta)
+                            .buttonStyle(SettingsButton()).disabled(model.betaBusy || model.active)
+                    }
+                    if !model.betaMessage.isEmpty { Text(model.betaMessage).font(.system(size: 12)).foregroundColor(model.betaIssue != nil ? VPColor.muted : VPColor.rose).textSelection(.enabled) }
+                    Text("语音在本机识别；润色时仅将文字发送至云端，由 MiniMax 处理。每台设备每天可用 30 次，共享额度繁忙时保留原文。可随时关闭自动润色。")
+                        .font(.system(size: 11)).foregroundColor(VPColor.muted)
+                    if model.betaActivated { Button("试填一句到输入框", action: actions.testInsertion).buttonStyle(SettingsButton()).disabled(model.active) }
+                    if model.betaActivated && !model.pasteGranted { Button("允许自动填入", action: actions.accessibility).buttonStyle(SettingsButton()) }
+                }.padding(16).frame(maxWidth: .infinity, alignment: .leading)
+            }
             section("润色行为") {
                 row("录音后自动润色", help: "开启后只用普通录音快捷键：结束录音后自动润色并填入草稿，不发送。关闭时，开头的文字 @voice-prompt 仍可单次开启润色。") {
                     Toggle("录音后自动润色", isOn: $model.polishOnRecord).labelsHidden().toggleStyle(.switch).controlSize(.small).disabled(model.active)
@@ -381,8 +412,6 @@ struct VoiceRootView: View {
                         Text("轻润色").tag("clean"); Text("深度整理").tag("agent")
                     }.labelsHidden().frame(width: 140)
                 }
-                rule
-                row("AI 服务") { Label(model.aiConfigured ? "已配置" : "未配置", systemImage: model.aiConfigured ? "checkmark.circle" : "exclamationmark.circle").foregroundColor(VPColor.muted) }
             }
             Text(model.mode == "agent" ? "深度整理：理顺目标、背景与限制，合并重复表达；不会擅自增加要求或执行任务。" : "轻润色：去掉口头重复，补上标点与语法，保留表达顺序。")
                 .font(.system(size: 12)).foregroundColor(VPColor.muted).lineSpacing(4)

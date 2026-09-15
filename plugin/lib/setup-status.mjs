@@ -34,6 +34,7 @@ export async function setupStatus({ home = homedir(), config, system = platform(
   const desktopInstalled = await exists(path.join(resources, 'bin/node')) && await exists(path.join(home, 'Applications/Voice Prompt.app/Contents/MacOS/VoicePrompt'));
   const pythonInstalled = Boolean(c.asrPython) && await exists(c.asrPython);
   const weightsPresent = Boolean(c.qwenModelPath) && await exists(path.join(c.qwenModelPath, 'model.safetensors'));
+  const automaticFree = !c.provider || c.provider === 'unconfigured' || c.hostedFree === true;
   return {
     platform: system, architecture: machine, supportedHardware: system === 'darwin' && machine === 'arm64',
     qwenMinimumMacOS: '15', desktopInstalled, desktopVersion, pythonInstalled, weightsPresent,
@@ -41,6 +42,11 @@ export async function setupStatus({ home = homedir(), config, system = platform(
     selectedModel: c.speechModelId || 'sensevoice-small',
     aiProviderConfigured: Boolean(c.provider && c.provider !== 'unconfigured'),
     aiProvider: c.provider || 'unconfigured',
+    aiSetupMode: automaticFree ? 'automatic_free' : 'existing_custom_provider',
+    aiConnectionVerified: false,
+    aiNextStep: automaticFree
+      ? 'Open Voice Prompt → AI 润色 for automatic setup and an actual model check. No user API Key or Provider setup is required. Service unavailability must not be reported as a user configuration error.'
+      : 'Preserve the existing provider and verify an actual polishing call before reporting it as ready.',
     setupGuide: 'https://github.com/Lisayinyy/VoicePrompt/blob/main/docs/agent-setup.md',
     verification: 'Components use file presence; inputDiagnostics is a recent self-report from the desktop app when available. Does not verify model hashes, inference, AI credentials or physical microphone capture; confirmed insertion requires desktop readback.',
   };

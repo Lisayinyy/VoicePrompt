@@ -12,6 +12,8 @@ setDefaultResultOrder('ipv4first');
 import assert from 'node:assert/strict';
 import { createBackend, tokenHash } from '../backend/server.mjs';
 import { verifyEndpoint, checkedRequest } from './verify-https.mjs';
+import { makeInvitationBatch } from '../backend/invites.mjs';
+import { randomBytes } from 'node:crypto';
 
 const caddy = process.argv[2];
 if (!caddy || !path.isAbsolute(caddy)) throw new Error('Pass an absolute path to a verified Caddy binary');
@@ -21,7 +23,9 @@ try {
   const token = 'synthetic-local-test-client-token';
   const clients = path.join(directory, 'clients.json');
   await writeFile(clients, JSON.stringify([{ id: 'test', tokenHash: tokenHash(token), dailyLimit: 20 }]), { mode: 0o600 });
-  backend = createBackend({ VOICE_CLIENTS_FILE: clients, VOICE_STATE_DIR: path.join(directory, 'state'), VOICE_MODEL_ENABLED: 'true', MINIMAX_API_KEY: 'synthetic-test-model-key', MINIMAX_MODEL: 'MiniMax-M3' }, { fetchModel: async () => { modelCalls++; return new Response(JSON.stringify({ choices: [{ message: { content: '请检查登录页面，不要修改数据库，保留版本 2.0。' } }] }), { headers: { 'content-type': 'application/json' } }); } });
+  const batch = makeInvitationBatch(1), inviteFile = path.join(directory, 'invitations.json');
+  await writeFile(inviteFile, JSON.stringify(batch.records), { mode: 0o600 });
+  backend = createBackend({ VOICE_CLIENTS_FILE: clients, VOICE_PUBLIC_ENROLLMENT: 'true', VOICE_TRUST_LOOPBACK_PROXY: 'true', VOICE_STATE_DIR: path.join(directory, 'state'), VOICE_MODEL_ENABLED: 'true', MINIMAX_API_KEY: 'synthetic-test-model-key', MINIMAX_MODEL: 'MiniMax-M3' }, { fetchModel: async () => { modelCalls++; return new Response(JSON.stringify({ choices: [{ message: { content: '请检查登录页面，不要修改数据库，保留版本 2.0。' } }] }), { headers: { 'content-type': 'application/json' } }); } });
   backend.listen(0, '127.0.0.1'); await once(backend, 'listening');
   const upstream = backend.address().port;
   const reserve = net.createServer(); reserve.listen(0, '127.0.0.1'); await once(reserve, 'listening');
@@ -74,7 +78,17 @@ try {
   assert.equal(modelCalls, 1, 'Oversized body must not call model');
   assert.equal((await request(origin + '/voice/prepare')).status, 404);
   assert.equal((await request(origin + '/healthz', { headers: { host: 'wrong-host.invalid' } })).status, 421);
-  console.log(JSON.stringify({ localProxyTest: 'passed', checked: ['real TLS with scoped test CA', 'untrusted certificate refused', 'health routing', 'private paths hidden', 'anonymous and invalid token rejected', 'one authenticated synthetic model call', 'oversized body rejected', 'wrong method rejected', 'Host/SNI mismatch rejected'], publicCertificate: 'not requested', publicDeployment: 'not tested' }, null, 2));
+  const credential = randomBytes(32).toString('base64url');
+  assert.equal((await request(origin + '/client/enroll')).status, 404);
+  assert.equal((await request(origin + '/client/enroll', { method: 'POST', body: { credential }, headers: { origin: 'https://untrusted.invalid' } })).status, 403);
+  assert.equal((await request(origin + '/client/enroll', { method: 'POST', body: { credential } })).status, 200);
+  const invited = await verifyEndpoint(origin, { token: credential, request });
+  assert.equal(invited.modelVerified, true);
+  assert.equal(modelCalls, 2);
+  // A spoofed client IP cannot bypass activation throttling through the proxy.
+  for (let i = 0; i < 9; i++) assert.equal((await request(origin + '/client/enroll', { method: 'POST', body: {}, headers: { 'x-voice-prompt-client-ip': `192.0.2.${i + 1}` } })).status, 400);
+  assert.equal((await request(origin + '/client/enroll', { method: 'POST', body: {}, headers: { 'x-voice-prompt-client-ip': '192.0.2.100' } })).status, 429);
+  console.log(JSON.stringify({ localProxyTest: 'passed', checked: ['real TLS with scoped test CA', 'untrusted certificate refused', 'health routing', 'private paths hidden', 'anonymous and invalid token rejected', 'legacy and free client model calls', 'automatic free enrollment through proxy', 'spoofed client IP cannot bypass throttling', 'browser activation rejected', 'oversized body rejected', 'wrong method rejected', 'Host/SNI mismatch rejected'], publicCertificate: 'not requested', publicDeployment: 'not tested' }, null, 2));
 } finally {
   if (child && child.exitCode === null) { child.kill('SIGTERM'); await childExit; }
   if (backend) { backend.closeAllConnections(); await new Promise(resolve => backend.close(resolve)); }

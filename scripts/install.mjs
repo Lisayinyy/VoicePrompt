@@ -5,13 +5,13 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { spawnSync } from 'node:child_process';
 import { randomBytes } from 'node:crypto';
-if (process.platform !== 'darwin' || process.arch !== 'arm64') throw new Error('Voice Prompt 0.7.1 runtime supports Apple Silicon macOS only');
+if (process.platform !== 'darwin' || process.arch !== 'arm64') throw new Error('Voice Prompt runtime supports Apple Silicon macOS only');
 const root = fileURLToPath(new URL('../', import.meta.url));
 const testRoot = process.argv.find(a => a.startsWith('--test-root='))?.slice(12);
 if (testRoot && (!path.isAbsolute(testRoot) || !path.resolve(testRoot).startsWith(path.resolve(tmpdir()) + path.sep))) throw new Error('Test root must be an absolute temporary directory');
 const home = testRoot || homedir();
 const temporary = await mkdtemp(path.join(tmpdir(), 'voice-prompt-install-'));
-const unpack = spawnSync('/usr/bin/ditto', ['-x', '-k', path.join(root, 'dist/voice-prompt-desktop-0.7.1-macos-arm64.zip'), temporary], { encoding: 'utf8' });
+const unpack = spawnSync('/usr/bin/ditto', ['-x', '-k', path.join(root, 'dist/voice-prompt-desktop-0.8.0-macos-arm64.zip'), temporary], { encoding: 'utf8' });
 if (unpack.status !== 0) throw new Error(unpack.stderr);
 const source = path.join(temporary, 'Voice Prompt.app'), destination = path.join(home, 'Applications/Voice Prompt.app');
 await access(path.join(source, 'Contents/Resources/models/sensevoice-small.gguf'));
@@ -61,6 +61,9 @@ if (process.argv.includes('--omp')) {
  lock.plugins['voice-prompt'] = { enabledFeatures: null, enabled: true, ...previous, version: JSON.parse(await readFile(path.join(root, 'plugin/package.json'), 'utf8')).version };
  await writeFile(lockPath, JSON.stringify(lock, null, 2) + '\n');
 }
-console.log(`Installed ${destination}\nBackups: ${backup}\nOpen Voice Prompt.app and grant microphone/accessibility permissions. AI provider: ${config.provider}.`);
+const aiNext = config.provider === 'unconfigured' || config.hostedFree === true
+  ? 'Open Voice Prompt for automatic free AI setup and verification; no API Key or Provider entry is needed.'
+  : 'Your existing AI settings were preserved. Verify a real polishing request in Voice Prompt.';
+console.log(`Installed ${destination}\nBackups: ${backup}\nOpen Voice Prompt.app and grant microphone/accessibility permissions. ${aiNext}`);
 
 await rm(temporary, { recursive: true, force: true });

@@ -5,6 +5,7 @@ import { randomUUID, timingSafeEqual } from 'node:crypto';
 import { prepare, validateInput } from './prepare.mjs';
 import { listModels, transcribe, selectedSpeechModel, closeSpeech, warmSpeech } from './speech.mjs';
 import { validateConfig, savePreferences } from './config.mjs';
+import { activateBeta } from './beta-client.mjs';
 
 export const TRANSCRIPT_MARKER = 'VOICE_PROMPT_TRANSCRIPT\n';
 const assets = new Map([['/', ['index.html', 'text/html']], ['/app.js', ['app.js', 'text/javascript']], ['/style.css', ['style.css', 'text/css']]]);
@@ -22,6 +23,7 @@ export function createService(config, dependencies = {}) {
   if (typeof config.token !== 'string' || config.token.length < 32) throw new Error('Run init to create a local access token');
   const jobs = new Map(), drafts = [], sessions = new Map(), expirations = new Map();
   let audioBusy = false;
+  let activationBusy = false;
   const directCapture = createDirectCapture();
   const transcriber = dependencies.transcribe || transcribe;
   const models = dependencies.listModels || listModels;
@@ -58,9 +60,15 @@ export function createService(config, dependencies = {}) {
     } finally { jobs.delete(id); if (sessions.get(session) === id) sessions.delete(session); }
   }
   async function dispatch(route, input, signal) {
+    if (route === '/api/beta/configure' || route === '/api/free/configure') {
+      if (activationBusy || audioBusy || jobs.size) throw new Error('请等待当前操作结束后再激活');
+      activationBusy = true;
+      try { return await activateBeta(config, input, { ...(dependencies.beta || {}), free: route === '/api/free/configure' }); }
+      finally { activationBusy = false; }
+    }
     if (route === '/api/asr/warm') return warmSpeech(config);
     if (route.startsWith("/api/capture/")) return directCapture(route.slice("/api/capture/".length), input);
-    if (route === '/api/status') return { version: '0.7.0', product: 'Voice Prompt', speechModel: selectedSpeechModel(config), speechLanguage: config.speechLanguage || 'auto', speechEngine: selectedSpeechModel(config) === 'qwen3-asr-1.7b' ? 'mlx-local' : 'transcribe.cpp', defaultMode: config.defaultMode || 'clean', service: 'ready', provider: config.provider, model: config.model || (config.provider === 'omp' ? 'OMP configured model' : null), aiConfigured: config.provider !== 'unconfigured', pending: jobs.size, audioBusy, microphone: 'managed_by_Voice_Prompt', history: 'memory_only_1_hour_max_20', modes: ['raw', 'clean', 'agent'] };
+    if (route === '/api/status') return { version: '0.8.0', product: 'Voice Prompt', speechModel: selectedSpeechModel(config), speechLanguage: config.speechLanguage || 'auto', speechEngine: selectedSpeechModel(config) === 'qwen3-asr-1.7b' ? 'mlx-local' : 'transcribe.cpp', defaultMode: config.defaultMode || 'clean', service: 'ready', provider: config.provider, model: config.model || (config.provider === 'omp' ? 'OMP configured model' : null), aiConfigured: config.provider !== 'unconfigured', pending: jobs.size, audioBusy, microphone: 'managed_by_Voice_Prompt', history: 'memory_only_1_hour_max_20', modes: ['raw', 'clean', 'agent'] };
     if (route === '/api/preferences') {
       if (audioBusy && (input.speechModelId || input.speechLanguage)) throw new Error('Wait until transcription finishes');
       if (input.speechModelId && !(await models(config, signal)).some(m => m.id === input.speechModelId && m.downloaded)) throw new Error('Selected speech model is not installed');

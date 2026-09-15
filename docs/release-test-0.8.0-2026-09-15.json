@@ -1,0 +1,46 @@
+{
+  "checkedAt": "2026-09-15T07:56:12.864402+00:00",
+  "automatedTests": {
+    "passed": 67,
+    "failed": 0
+  },
+  "isolatedFreshAndUpgradeInstall": "passed",
+  "publicFreeEnrollmentAndChineseEnglishPolish": "passed",
+  "installedMiniMaxMcpActualPolish": {
+    "passed": true,
+    "fallback": false,
+    "elapsedMs": 3769,
+    "versionAndDatabaseConstraintPreserved": true
+  },
+  "desktopUIFreeReady": "observed",
+  "installedExecutableMatchesPackagedExecutable": true,
+  "actualMiniMaxInputInsertion": "passed-user-confirmed-current-mac",
+  "userPermissionRefreshRequested": true,
+  "separatePhysicalMac": "not-tested",
+  "publicDownloads": "not-yet-published-verified",
+  "marketplaceSubmitted": false,
+  "githubDraftRelease": {
+    "id": 388959310,
+    "tag": "v0.8.0",
+    "published": false,
+    "desktopUpload": "uploaded-sha256-matches",
+    "assetId": 565605056,
+    "allFourAssetsUploaded": true
+  },
+  "permissionRefresh": {
+    "oldEntryRemoved": true,
+    "currentEntryAdd": "completed",
+    "observedAt": "2026-09-15T15:57:58.346595+00:00",
+    "accessibilityGranted": true
+  },
+  "inputTestFollowup": {
+    "checkedAt": "2026-09-15T17:13:44.812704+00:00",
+    "appBuild": "30",
+    "appInsertionState": "confirmed",
+    "independentMiniMaxReadback": "empty-composer-send-disabled",
+    "userAssistedFocusTest": "passed-user-confirmed-polished-text-in-minimax-composer-without-sending",
+    "marketSubmissionBlocked": false,
+    "limitation": "Not an independent fresh installation on a separate physical Mac",
+    "userRequestedSubmissionAfterPassing": true
+  }
+}

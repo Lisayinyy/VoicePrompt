@@ -14,6 +14,11 @@ import Foundation
         assert(!VoiceDirectEdit.mentionsVoicePrompt("@voice-prompt-extra"))
         assert(!VoiceDirectEdit.mentionsVoicePrompt("name@voice-prompt.com"))
         assert(!VoiceDirectEdit.mentionsVoicePrompt(nil))
-        print("13 direct-edit and explicit-invocation checks passed")
+        let text = "中文🦊 hello\\n" + String(repeating: "𠮷🇭🇰", count: 15)
+        let chunks = VoiceDirectEdit.unicodeChunks(text)
+        assert(chunks.allSatisfy { $0.count <= 20 })
+        assert(chunks.map { String(decoding: $0, as: UTF16.self) }.joined() == text)
+        assert(VoiceDirectEdit.unicodeChunks("").isEmpty)
+        print("16 direct-edit, unicode delivery and explicit-invocation checks passed")
     }
 }

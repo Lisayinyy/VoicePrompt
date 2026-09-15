@@ -14,7 +14,8 @@
 
 Voice Prompt 把随口说出的想法，整理成可以交给 Agent 的清楚需求。你可以按快捷键说话，也可以在 MiniMax Code 中选中 `@Voice Prompt`，把已经输入的文字交给它整理。它清理口头禅、合并重复、理顺目标与限制，处理后的内容由你确认。
 
-**当前版本：0.7.0，内测版。** 桌面端基础功能支持 Apple Silicon Mac、macOS 13 及以上；新增 Qwen 本地识别使用固定版本的 MLX，需要 **macOS 15 及以上**。本仓库提供源代码与 Agent connector；语音模型、桌面二进制和个人 AI 登录信息不包含在 Git 源码中。目前没有公开市场上架或“一次导入就自动安装全部桌面依赖”的承诺。
+**当前源码：0.8.0 免费版候选。** 面向 Apple Silicon Mac、macOS 15+。打开桌面应用自动开通免费 MiniMax 润色，不需要邀请码或填写 API Key；每台设备每天 30 次，并受共享服务总量限制。模型 Key 仅在服务器，客户端独立凭证存于钥匙串。市场更新与下载安装包的发布状态以发布记录为准。
+
 
 ## 桌面自动填入更新（0.7.1 build 24）
 
@@ -34,7 +35,7 @@ beta.3（桌面 build 22）外观修复：透明浮窗文字随 macOS 深浅外�
 
 已有桌面端和 Qwen 环境的用户：点中输入框，按 `Option + Space` 开始，再按一次结束。开启“录音后自动润色”后，识别结果先经 AI 整理再尝试填入，由你确认发送。OMP 专用录音入口仍使用 `Ctrl + Alt + Space`，写入原始转录，可再用 `Ctrl + Shift + V` 润色。
 
-**同事首次使用：导入后发送 `@Voice Prompt 帮我完成首次安装并开启录音后 AI 润色`。** Agent 可按插件内指南下载 [内测桌面包与安装工具包](https://github.com/Lisayinyy/VoicePrompt/releases/tag/v0.7.1-beta.1)，自动准备应用、Python/MLX 和约 2.46 GB 的 Qwen 模型。需要宿主允许终端/文件操作；系统授权和个人 AI 配置由用户完成。导入本身不运行安装器。[Agent 安装指南](docs/agent-setup.md) · [测试指南](docs/beta-0.7.md)
+**同事首次使用：导入后发送 `@Voice Prompt 帮我完成首次安装并开启录音后 AI 润色`。** Agent 可按插件内指南下载 [内测桌面包与安装工具包](https://github.com/Lisayinyy/VoicePrompt/releases/tag/v0.8.0)，自动准备应用、Python/MLX 和约 2.46 GB 的 Qwen 模型。需要宿主允许终端/文件操作；系统授权由用户确认，默认免费 AI 服务自动配置。导入本身不运行安装器。[Agent 安装指南](docs/agent-setup.md) · [测试指南](docs/beta-0.7.md)
 
 [版本记录](CHANGELOG.md) · [本机测试结果](docs/asr-0.7/RESULTS.md) · [下一阶段计划](research/asr-2026-09-11/NEXT-VERSION.md)
 
@@ -163,9 +164,9 @@ OMP 会话录音通过 `setEditorText` 写入，检查会话和编辑器是否�
 
 语音识别在本机运行。AI 润色支持 `omp`、`openai-compatible` 和 `prompt-ai` 三类提供者；新配置默认为 `unconfigured`。开启云端润色时，转录文本及配置的术语会发送给你选择的模型服务。
 
-本地配置位于 `~/.config/voice-prompt/config.json`，其中有本地访问令牌；API key 从指定的环境变量读取。不要提交个人配置或转录历史。仓库不附带任何人的账户权限、API key 或云服务额度。
+本地配置位于 `~/.config/voice-prompt/config.json`，其中有本地访问令牌；API key 从指定的环境变量读取。不要提交个人配置或转录历史。仓库不附带任何人的账户权限或 API Key。默认免费润色由后端统一提供，客户端只持有独立凭证。
 
-`prompt-ai` 适配器复用本项目的保真润色策略；Worker 接口代码见 `worker/` 和 `plugin/lib/worker-voice.mjs`，不表示已提供公共托管服务。配置方法见 [安装指南](docs/installation.md#配置-ai-润色)。
+`prompt-ai` 适配器复用本项目的保真润色策略；Worker 接口代码见 `worker/` 和 `plugin/lib/worker-voice.mjs`，默认公共服务使用 https://api.voiceprompt.work，开发配置方法见 [安装指南](docs/installation.md#配置-ai-润色)。
 
 ## 开发与当前边界
 

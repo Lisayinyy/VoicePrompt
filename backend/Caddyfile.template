@@ -19,6 +19,17 @@ __VOICE_PROMPT_DOMAIN__ {
         reverse_proxy 127.0.0.1:8787
     }
 
+    @activation {
+        method POST
+        path /client/enroll
+    }
+    handle @activation {
+        reverse_proxy 127.0.0.1:8787 {
+            # Overwrite client-supplied values; only this loopback proxy is trusted.
+            header_up X-Voice-Prompt-Client-IP {remote_host}
+        }
+    }
+
     @polish {
         method POST
         path /voice/prepare

@@ -36,4 +36,4 @@ def build(output):
     print(hashlib.sha256(output.read_bytes()).hexdigest() + "  " + output.name)
 
 if __name__ == "__main__":
-    build(ROOT / "dist/voice-prompt-setup-0.7.1.zip")
+    build(ROOT / "dist/voice-prompt-setup-0.8.0.zip")

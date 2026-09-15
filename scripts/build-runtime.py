@@ -16,7 +16,7 @@ app = build / 'Voice Prompt.app'
 if app.exists(): shutil.rmtree(app)
 contents = app / 'Contents'; resources = contents / 'Resources'
 for d in [contents / 'MacOS', resources / 'bin', resources / 'models', resources / 'licenses']: d.mkdir(parents=True, exist_ok=True)
-subprocess.run(['swiftc', '-swift-version', '5', '-parse-as-library', '-target', 'arm64-apple-macosx13.0', '-O', str(root/'native/VoicePrompt.swift'), str(root/'native/VoicePromptUI.swift'), str(root/'native/VoiceHotkey.swift'), str(root/'native/VoiceInputReadiness.swift'), str(root/'native/VoiceDirectEdit.swift'), str(root/'native/VoicePasteboard.swift'), str(root/'native/VoiceInputGuard.swift'), str(root/'native/VoiceLivePreview.swift'), str(root/'native/VoiceAppAppearance.swift'), '-o', str(contents/'MacOS/VoicePrompt'), '-framework', 'AppKit', '-framework', 'AVFoundation', '-framework', 'Carbon'], check=True)
+subprocess.run(['swiftc', '-swift-version', '5', '-parse-as-library', '-target', 'arm64-apple-macosx13.0', '-O', str(root/'native/VoicePrompt.swift'), str(root/'native/VoicePromptUI.swift'), str(root/'native/VoiceHotkey.swift'), str(root/'native/VoiceInputReadiness.swift'), str(root/'native/VoiceDirectEdit.swift'), str(root/'native/VoicePasteboard.swift'), str(root/'native/VoiceInputGuard.swift'), str(root/'native/VoiceLivePreview.swift'), str(root/'native/VoiceAppAppearance.swift'), str(root/'native/VoiceBeta.swift'), '-o', str(contents/'MacOS/VoicePrompt'), '-framework', 'AppKit', '-framework', 'AVFoundation', '-framework', 'Carbon'], check=True)
 shutil.copy2(node/'bin/node', resources/'bin/node')
 shutil.copy2(build/'compiled/bin/transcribe-cli', resources/'bin/voice-asr')
 shutil.copy2(model, resources/'models/sensevoice-small.gguf')

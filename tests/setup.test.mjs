@@ -10,6 +10,8 @@ test('first-use inspection works without desktop/config and never creates files'
   const result = await setupStatus({ home, config: {}, system: 'darwin', machine: 'arm64' });
   assert.equal(result.desktopInstalled, false); assert.equal(result.pythonInstalled, false);
   assert.equal(result.weightsPresent, false); assert.equal(result.aiProviderConfigured, false);
+  assert.equal(result.aiSetupMode, 'automatic_free'); assert.equal(result.aiConnectionVerified, false);
+  assert.match(result.aiNextStep, /No user API Key/);
   assert.deepEqual(await readdir(home), []);
 });
 test('readiness separates installed files from actual inference, AI and input verification', async t => {
@@ -22,9 +24,18 @@ test('readiness separates installed files from actual inference, AI and input ve
   const result = await setupStatus({ home, config, system: 'darwin', machine: 'arm64' });
   assert.equal(result.desktopInstalled, true); assert.equal(result.desktopVersion, '0.7.0');
   assert.equal(result.weightsPresent, false); assert.equal(result.aiProviderConfigured, true);
+  assert.equal(result.aiSetupMode, 'existing_custom_provider'); assert.equal(result.aiConnectionVerified, false);
   assert.ok(!JSON.stringify(result).includes(config.token)); assert.match(result.verification, /Does not verify/);
   const unsupported = await setupStatus({ home, config, system: 'win32', machine: 'x64' });
   assert.equal(unsupported.supportedHardware, false);
+});
+test('saved free activation is configuration evidence, not a current connection check', async t => {
+  const home = await mkdtemp(path.join(tmpdir(), 'voice-free-status-')); t.after(() => rm(home, { recursive: true }));
+  const result = await setupStatus({ home, config: { provider: 'prompt-ai', hostedFree: true, betaActivated: true } });
+  assert.equal(result.aiSetupMode, 'automatic_free');
+  assert.equal(result.aiProviderConfigured, true);
+  assert.equal(result.aiConnectionVerified, false);
+  assert.match(result.aiNextStep, /No user API Key/);
 });
 test('both import formats include the same first-use instructions without the desktop runtime', async () => {
   const root = new URL('../', import.meta.url);

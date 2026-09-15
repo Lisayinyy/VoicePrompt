@@ -21,14 +21,17 @@ stage=$(mktemp -d "${TMPDIR:-/tmp}/voice-prompt-setup.XXXXXX")
 trap 'rm -rf "$stage"' EXIT HUP INT TERM
 fetch_checked() {
   url=$1; destination=$2; expected=$3
+  if [ -f "$destination" ] && [ "$(/usr/bin/shasum -a 256 "$destination" | cut -d ' ' -f 1)" = "$expected" ]; then
+    return 0
+  fi
   /usr/bin/curl --fail --location --retry 3 --connect-timeout 30 --max-time 1800 "$url" -o "$destination"
   actual=$(/usr/bin/shasum -a 256 "$destination" | cut -d ' ' -f 1)
   [ "$actual" = "$expected" ] || { echo 'Download checksum mismatch; stopped without executing it'; exit 1; }
 }
 mkdir -p "$root/dist"
 echo '1/4 Downloading verified desktop app (about 268 MiB)'
-fetch_checked 'https://github.com/Lisayinyy/VoicePrompt/releases/download/v0.7.1-beta.1/voice-prompt-desktop-0.7.1-macos-arm64.zip' "$root/dist/voice-prompt-desktop-0.7.1-macos-arm64.zip" '2126f47db1996d9e078fa99ac501371d73d19b2045fccc43ad6741346393bc97'
-/usr/bin/ditto -x -k "$root/dist/voice-prompt-desktop-0.7.1-macos-arm64.zip" "$stage/desktop"
+fetch_checked 'https://github.com/Lisayinyy/VoicePrompt/releases/download/v0.8.0/voice-prompt-desktop-0.8.0-macos-arm64.zip' "$root/dist/voice-prompt-desktop-0.8.0-macos-arm64.zip" '4d19ea0fb4ea3bc1b894e883587194c5974673436db14e6d79c7596bffe03e2b'
+/usr/bin/ditto -x -k "$root/dist/voice-prompt-desktop-0.8.0-macos-arm64.zip" "$stage/desktop"
 app="$stage/desktop/Voice Prompt.app"
 /usr/bin/codesign --verify --deep --strict "$app"
 # The publisher ships an ad-hoc signed beta, not a notarized app. Keep quarantine intact.
@@ -45,4 +48,4 @@ echo '3/4 Installing locked dependencies and Qwen weights (about 2.46 GB plus de
 PATH="$uvbin:$PATH" "$uvbin/uv" run --python 3.12 python "$root/scripts/setup-local-asr.py"
 echo '4/4 Selecting the verified local model; preserving your AI settings'
 "$HOME/Applications/Voice Prompt.app/Contents/Resources/bin/node" "$root/scripts/select-local-asr.mjs"
-echo 'Installation finished. Open Voice Prompt, complete macOS permissions and configure your own AI provider. The Agent must verify recording, polishing and insertion separately.'
+echo 'Installation finished. Open Voice Prompt, complete macOS permissions and wait for automatic free AI setup; no invitation or API key needed. The Agent must verify recording, polishing and insertion separately.'

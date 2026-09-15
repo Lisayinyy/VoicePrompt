@@ -1,0 +1,44 @@
+{
+  "checkedAt": "2026-09-15T04:27:40.993377+00:00",
+  "instance": "lhins-n5to623x",
+  "ip": "150.109.64.145",
+  "sourceRetained": "106.52.92.17",
+  "sshBinding": "verified",
+  "migrationArchive": "server-private",
+  "services": "active",
+  "serverLocalValidatedTLS": true,
+  "newDeviceEnrollment": 200,
+  "chinesePolishing": {
+    "status": 200,
+    "fallback": false,
+    "elapsedMs": 2652,
+    "constraintsPreserved": true
+  },
+  "englishPolishing": {
+    "status": 200,
+    "fallback": false,
+    "elapsedMs": 2096,
+    "constraintsPreserved": true
+  },
+  "public443": "verified-public-TLS-health-200",
+  "dnsSwitch": "saved-api-A-150.109.64.145",
+  "physicalSecondMac": "not-tested",
+  "marketplaceUpdate": "not-submitted",
+  "mainlandPublicTest": {
+    "origin": "https://api.voiceprompt.work",
+    "source": "Guangzhou-server",
+    "enrollment": 200,
+    "chinese": {
+      "status": 200,
+      "fallback": false,
+      "elapsedMs": 2473
+    },
+    "english": {
+      "status": 200,
+      "fallback": false,
+      "elapsedMs": 2451
+    },
+    "constraintsPreserved": true
+  },
+  "currentMac": "network-DNS-caches-old-IP; desktop-not-yet-verified"
+}

@@ -1,6 +1,6 @@
 {
   "name": "voice-prompt",
-  "version": "0.7.1",
+  "version": "0.8.0",
   "description": "Voice Prompt: hotkey dictation with faithful AI prompt polishing",
   "type": "module",
   "license": "MIT",

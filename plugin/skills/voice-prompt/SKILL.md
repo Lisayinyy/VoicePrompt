@@ -28,7 +28,7 @@ For Chinese users, render the following welcome guide as normal Markdown (not a 
 文字填入后，你检查并发送。按 **Esc** 可以取消
 
 **③ 让表达更清楚**\
-在桌面应用中配置 AI 服务，开启「录音后自动润色」，就能去掉口头禅、整理重点
+打开桌面应用后，免费 AI 润色自动开通，无需邀请码或 API Key；录音结束后去掉口头禅、整理重点，再填入输入框
 
 平时录音不用每次 @。想整理已有文字，可以 **@Voice Prompt ＋ 文字**发送给我
 
