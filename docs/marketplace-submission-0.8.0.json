@@ -1,0 +1,21 @@
+{
+  "submittedAtObserved": "2026-09-15T17:19:17.117938+00:00",
+  "plugin": "voice-prompt",
+  "version": "0.8.0",
+  "operation": "update",
+  "region": [
+    "CN"
+  ],
+  "delivery": [
+    "Desktop"
+  ],
+  "source": "ZIP",
+  "zip": "voice-prompt-minimax-0.8.0.zip",
+  "sha256": "ab02e8f6b09920b9b2af84426fc3c5cfb36868a790149c48c6e43d8552026932",
+  "formUrl": "https://vrfi1sk8a0.feishu.cn/share/base/form/shrcnbnpeor3z72fUkeHzrOE7vb",
+  "receiptText": "Submitted",
+  "submissionId": null,
+  "marketplaceApproval": "not-yet-verified",
+  "validation": "User confirmed local polished insertion without sending; separate physical Mac fresh install unverified",
+  "mySubmissionsReadback": "voice-prompt / 更新插件 / ZIP / 1 attachment"
+}

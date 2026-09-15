@@ -9,23 +9,25 @@
   "installedMiniMaxMcpActualPolish": {
     "passed": true,
     "fallback": false,
-    "elapsedMs": 3769,
-    "versionAndDatabaseConstraintPreserved": true
+    "elapsedMs": 1845,
+    "versionAndDatabaseConstraintPreserved": true,
+    "checkedAt": "2026-09-15T17:18:58.865002+00:00"
   },
   "desktopUIFreeReady": "observed",
   "installedExecutableMatchesPackagedExecutable": true,
   "actualMiniMaxInputInsertion": "passed-user-confirmed-current-mac",
   "userPermissionRefreshRequested": true,
   "separatePhysicalMac": "not-tested",
-  "publicDownloads": "not-yet-published-verified",
-  "marketplaceSubmitted": false,
+  "publicDownloads": "passed-full-anonymous-download-and-sha256-check",
+  "marketplaceSubmitted": true,
   "githubDraftRelease": {
     "id": 388959310,
     "tag": "v0.8.0",
-    "published": false,
+    "published": true,
     "desktopUpload": "uploaded-sha256-matches",
     "assetId": 565605056,
-    "allFourAssetsUploaded": true
+    "allFourAssetsUploaded": true,
+    "url": "https://github.com/Lisayinyy/VoicePrompt/releases/tag/v0.8.0"
   },
   "permissionRefresh": {
     "oldEntryRemoved": true,
@@ -42,5 +44,6 @@
     "marketSubmissionBlocked": false,
     "limitation": "Not an independent fresh installation on a separate physical Mac",
     "userRequestedSubmissionAfterPassing": true
-  }
+  },
+  "marketplaceApproved": false
 }

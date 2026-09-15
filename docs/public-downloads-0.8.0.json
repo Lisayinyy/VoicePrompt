@@ -1,0 +1,37 @@
+{
+  "version": "0.8.0",
+  "status": "passed",
+  "checkedAt": "2026-09-15T17:18:44.107269+00:00",
+  "desktopSha256": "4d19ea0fb4ea3bc1b894e883587194c5974673436db14e6d79c7596bffe03e2b",
+  "pluginSha256": "ab02e8f6b09920b9b2af84426fc3c5cfb36868a790149c48c6e43d8552026932",
+  "assets": [
+    {
+      "name": "voice-prompt-desktop-0.8.0-macos-arm64.zip",
+      "status": "passed",
+      "sha256": "4d19ea0fb4ea3bc1b894e883587194c5974673436db14e6d79c7596bffe03e2b",
+      "expected": "4d19ea0fb4ea3bc1b894e883587194c5974673436db14e6d79c7596bffe03e2b",
+      "curlExit": 0
+    },
+    {
+      "name": "voice-prompt-setup-0.8.0.zip",
+      "status": "passed",
+      "sha256": "e20561faf0f23e3d8f963e326cfaef55a4606abffbdd540bd58526e58c8addde",
+      "expected": "e20561faf0f23e3d8f963e326cfaef55a4606abffbdd540bd58526e58c8addde",
+      "curlExit": 0
+    },
+    {
+      "name": "voice-prompt-minimax-0.8.0.zip",
+      "status": "passed",
+      "sha256": "ab02e8f6b09920b9b2af84426fc3c5cfb36868a790149c48c6e43d8552026932",
+      "expected": "ab02e8f6b09920b9b2af84426fc3c5cfb36868a790149c48c6e43d8552026932",
+      "curlExit": 0
+    },
+    {
+      "name": "SHA256SUMS-0.8.0",
+      "status": "passed",
+      "sha256": "ecda08ba1882c924ca37654e84b1361de2053a15e75eb4386c1f54a36ca484df",
+      "expected": "ecda08ba1882c924ca37654e84b1361de2053a15e75eb4386c1f54a36ca484df",
+      "curlExit": 0
+    }
+  ]
+}
